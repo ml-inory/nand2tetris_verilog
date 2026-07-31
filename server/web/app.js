@@ -188,7 +188,15 @@ window.addEventListener('DOMContentLoaded', () => {
   else setTimeout(setupEditor, 4000);
 });
 
-function getSaved(id) { try { return localStorage.getItem('n2t-code-' + id); } catch (e) { return null; } }
+function getSaved(id) {
+  // 历史代码只在“包含模块声明”时才恢复；空代码或残缺片段一律回到
+  // 带模块定义的初始模板，保证作业骨架不被顶掉。
+  try {
+    const v = localStorage.getItem('n2t-code-' + id);
+    if (!v || !v.trim() || !/\bmodule\s+n2t_/.test(v)) return null;
+    return v;
+  } catch (e) { return null; }
+}
 function saveCode(id, code) { try { localStorage.setItem('n2t-code-' + id, code); } catch (e) {} }
 
 // ---------------- 题目详情 ----------------
