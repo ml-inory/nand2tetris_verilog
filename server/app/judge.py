@@ -64,6 +64,33 @@ def _run(cmd, cwd, timeout):
         return None, '', 'timeout'
 
 
+MODULE_DECL_RE = re.compile(r'\bmodule\s+(\w+)')
+
+
+def module_header(prob):
+    """从初始模板里提取 module 声明头（含参数与端口列表，直到第一个 );）。"""
+    m = re.search(r'\bmodule\b[\s\S]*?\)\s*;', prob['initial_code'])
+    return m.group(0) if m else 'module %s ();' % prob['module']
+
+
+def normalize_code(prob, code):
+    """返回 (规范后的代码, 友好错误或 None)。
+
+    - 已包含正确模块声明 -> 原样返回
+    - 模块名写错 -> 返回友好错误（不自动改）
+    - 完全没有模块声明（只写了实现体，如 assign out = ~in;）-> 自动用
+      模板的模块头包裹成完整模块，避免初学者把模板删掉后直接报语法错误
+    """
+    m = MODULE_DECL_RE.search(code)
+    if m:
+        if m.group(1) == prob['module']:
+            return code, None
+        return code, '模块名应为 %s（你写的是 %s）——请保留模板里的 module 声明，只填写实现' % (
+            prob['module'], m.group(1))
+    wrapped = '%s\n\n%s\n\nendmodule' % (module_header(prob), code)
+    return wrapped, None
+
+
 def judge(problem_id, code):
     t0 = time.time()
     prob = BY_ID.get(problem_id)
@@ -77,6 +104,11 @@ def judge(problem_id, code):
     workdir = tempfile.mkdtemp(prefix='n2t_judge_')
     try:
         # ---- 组装文件 ----
+        code, friendly = normalize_code(prob, code)
+        if friendly:
+            result['status'] = 'error'
+            result['error'] = friendly
+            return result
         with open(os.path.join(workdir, 'user.v'), 'w', encoding='utf-8') as f:
             f.write(code)
         for i, dep in enumerate(prob['deps']):
