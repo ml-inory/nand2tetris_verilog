@@ -187,7 +187,7 @@ function setupEditor() {
   fb.classList.add('hidden');
   el.classList.remove('hidden');
   // 与 fallback 一致：编辑即存草稿，防止刷新/误操作丢代码
-  editor.onDidChangeContent(() => { if (currentId) saveCode(currentId, editor.getValue()); });
+  editor.onDidChangeModelContent(() => { if (currentId) saveCode(currentId, editor.getValue()); });
   if (!carry && detail) setCode(getSaved(detail.id) || detail.initial_code);
 }
 window.addEventListener('monaco-ready', () => setupEditor());
@@ -197,15 +197,29 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 function getSaved(id) {
-  // 历史代码只在“包含模块声明”时才恢复；空代码或残缺片段一律回到
-  // 带模块定义的初始模板，保证作业骨架不被顶掉。
+  // 空历史/纯空白 -> 回到带模块定义的初始模板（骨架不被顶掉）。
+  // 只写了实现体（如 assign out = ~in;）-> 用模板模块头补齐再恢复，刷新不丢代码。
   try {
     const v = localStorage.getItem('n2t-code-' + id);
-    if (!v || !v.trim() || !/\bmodule\s+n2t_/.test(v)) return null;
+    if (!v || !v.trim()) return null;
+    if (/\bmodule\s+n2t_/.test(v)) return v;
+    if (detail && detail.initial_code) {
+      const m = detail.initial_code.match(/\bmodule\b[\s\S]*?\)\s*;/);
+      if (m) return m[0] + '\n    ' + v.trim() + '\nendmodule\n';
+    }
     return v;
   } catch (e) { return null; }
 }
-function saveCode(id, code) { try { localStorage.setItem('n2t-code-' + id, code); } catch (e) {} }
+function saveCode(id, code) {
+  try {
+    let v = code;
+    if (v && v.trim() && !/\bmodule\s+n2t_/.test(v) && detail && detail.initial_code) {
+      const m = detail.initial_code.match(/\bmodule\b[\s\S]*?\)\s*;/);
+      if (m) v = m[0] + '\n    ' + v.trim() + '\nendmodule\n';
+    }
+    localStorage.setItem('n2t-code-' + id, v);
+  } catch (e) {}
+}
 
 // ---------------- 题目详情 ----------------
 function renderPorts() {
@@ -271,15 +285,14 @@ function showResult(r) {
 async function loadProblem(id) {
   currentId = id;
   localStorage.setItem('n2t-last', id);
-  const saved = getSaved(id);
-  if (saved != null) setCode(saved);
   detail = await api('/api/problems/' + id);
+  const saved = getSaved(id);
+  setCode(saved != null ? saved : detail.initial_code);
   $('p-title').textContent = detail.title;
   $('p-badge').textContent = 'Project ' + detail.project;
   $('p-module').textContent = detail.module;
   $('p-desc').textContent = detail.description || '（无说明）';
   renderPorts();
-  if (!saved) setCode(detail.initial_code);
   renderList();
   $('result').classList.add('hidden');
   $('status-msg').textContent = '';
