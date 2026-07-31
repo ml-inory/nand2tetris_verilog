@@ -231,8 +231,10 @@ function renderWave(waveJson) {
   holder.id = 'wave0';
   box.appendChild(holder);
   try {
-    if (window.WaveDrom && window.WaveDrom.renderWaveForm) {
-      WaveDrom.renderWaveForm(0, waveJson, 'wave');
+    // WaveDrom 3.x 暴露 RenderWaveForm（大写 R），2.x 为 renderWaveForm
+    const wf = window.WaveDrom && (window.WaveDrom.RenderWaveForm || window.WaveDrom.renderWaveForm);
+    if (wf) {
+      wf.call(window.WaveDrom, 0, waveJson, 'wave');
     } else {
       holder.textContent = JSON.stringify(waveJson);
     }
