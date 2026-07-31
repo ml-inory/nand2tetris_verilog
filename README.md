@@ -21,6 +21,20 @@ sim/             仿真输出（vvp 二进制、VCD 波形）
 Makefile         一键仿真 / 测试 / 波形 / 生成作业
 ```
 
+## 在线练习（server 分支）
+
+仓库的 `server` 分支附带一个类似 [HDLBits](https://hdlbits.01xz.net/) 的在线判题小站：
+浏览器里写 Verilog，服务端用 iverilog 跑官方 testbench 实时判分。
+
+```bash
+git checkout server          # 切到在线判题分支
+python3 server/gen_problems.py
+docker build -f server/Dockerfile -t n2t-server .
+docker run --rm -p 8000:8000 n2t-server
+```
+
+详见 [`server/README.md`](server/README.md)（架构、本地运行、Docker 部署、安全边界）。
+
 ## 环境要求
 
 - **iverilog**（>= 12.0，支持 `-g2012`）

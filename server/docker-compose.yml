@@ -1,0 +1,17 @@
+# 用法：cd server && docker compose up -d
+# 注意：`docker compose` 为独立插件，旧 Docker 用 `docker-compose up -d`
+services:
+  judge:
+    build:
+      context: ..
+      dockerfile: server/Dockerfile
+    ports:
+      - "8000:8000"
+    tmpfs:
+      - /tmp:size=64m
+    read_only: true
+    pids_limit: 64
+    mem_limit: 1g
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    restart: unless-stopped

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>nand2tetris Verilog 在线练习</title>
+<link rel="stylesheet" href="style.css">
+<script>
+// Monaco 多 CDN 加载：jsdelivr 失败时切 npmmirror（国内镜像）
+var MONACO_CDNS = [
+  'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs',
+  'https://registry.npmmirror.com/monaco-editor/0.52.2/min/vs'
+];
+(function loadMonaco(i) {
+  if (i >= MONACO_CDNS.length) return;
+  var s = document.createElement('script');
+  s.src = MONACO_CDNS[i] + '/loader.js';
+  s.onerror = function () { loadMonaco(i + 1); };
+  s.onload = function () {
+    if (window.require) {
+      require.config({ paths: { vs: MONACO_CDNS[i] } });
+      require(['vs/editor/editor.main'], function () {
+        window.dispatchEvent(new Event('monaco-ready'));
+      }, function () { loadMonaco(i + 1); });
+    }
+  };
+  document.head.appendChild(s);
+})(0);
+</script>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <span class="logo">N2T</span>
+    <div>
+      <h1>nand2tetris Verilog 在线练习</h1>
+      <p>从 Nand 到 CPU —— 用 Verilog 重写 nand2tetris Hardware 项目</p>
+    </div>
+  </div>
+  <a class="gh" href="https://github.com/ml-inory/nand2tetris_verilog" target="_blank">GitHub</a>
+</header>
+
+<div class="layout">
+  <nav id="sidebar">
+    <div class="sidebar-head">题目列表</div>
+    <div id="problem-list"></div>
+  </nav>
+
+  <main id="main">
+    <div id="problem-view">
+      <div class="p-head">
+        <h2 id="p-title">加载中…</h2>
+        <span id="p-badge" class="badge"></span>
+        <span id="p-module" class="mono"></span>
+      </div>
+      <div id="p-desc" class="desc"></div>
+
+      <div class="section-title">端口 <span class="muted">（必须保持与模块声明一致）</span></div>
+      <table id="p-ports" class="ports"></table>
+      <div id="p-probes-wrap" class="hidden">
+        <div class="section-title">测试探针（测试台按层级路径读取）</div>
+        <div id="p-probes" class="probes mono"></div>
+      </div>
+
+      <div class="section-title">代码</div>
+      <div class="editor-row">
+        <div id="editor"></div>
+        <textarea id="editor-fallback" class="hidden" spellcheck="false"></textarea>
+      </div>
+
+      <div class="actions">
+        <button id="btn-submit" class="primary">提交判题</button>
+        <button id="btn-reset">重置代码</button>
+        <span id="status-msg" class="status"></span>
+      </div>
+
+      <div id="result" class="hidden">
+        <div class="result-head">
+          <span id="res-badge" class="badge"></span>
+          <span id="res-summary"></span>
+          <span id="res-time" class="muted"></span>
+        </div>
+        <pre id="res-log"></pre>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,1637 @@
+{
+  "problems": [
+    {
+      "id": "Not",
+      "title": "Not",
+      "project": "01",
+      "module": "n2t_not",
+      "ports": [
+        {
+          "name": "in",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 1,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "Not：out = ~in，由 Nand(a, a) 构成\n对应 nand2tetris Project 1 的 Not.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// Not：out = ~in，由 Nand(a, a) 构成\n// 对应 nand2tetris Project 1 的 Not.hdl\nmodule n2t_not (\n    input  in,\n    output out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/Nand.v"
+      ],
+      "tb": "tb/01/Not_tb.v",
+      "tb_top": "Not_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "And",
+      "title": "And",
+      "project": "01",
+      "module": "n2t_and",
+      "ports": [
+        {
+          "name": "a",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "b",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 1,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "And：out = a & b，由 Nand + Not 构成\n对应 nand2tetris Project 1 的 And.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// And：out = a & b，由 Nand + Not 构成\n// 对应 nand2tetris Project 1 的 And.hdl\nmodule n2t_and (\n    input  a,\n    input  b,\n    output out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/Nand.v",
+        "solution/01/Not.v"
+      ],
+      "tb": "tb/01/And_tb.v",
+      "tb_top": "And_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "Or",
+      "title": "Or",
+      "project": "01",
+      "module": "n2t_or",
+      "ports": [
+        {
+          "name": "a",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "b",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 1,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "Or：out = a | b，由 Not + Nand 构成\n对应 nand2tetris Project 1 的 Or.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// Or：out = a | b，由 Not + Nand 构成\n// 对应 nand2tetris Project 1 的 Or.hdl\nmodule n2t_or (\n    input  a,\n    input  b,\n    output out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/Nand.v",
+        "solution/01/Not.v"
+      ],
+      "tb": "tb/01/Or_tb.v",
+      "tb_top": "Or_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "Xor",
+      "title": "Xor",
+      "project": "01",
+      "module": "n2t_xor",
+      "ports": [
+        {
+          "name": "a",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "b",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 1,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "Xor：out = a ^ b = (a & ~b) | (~a & b)\n对应 nand2tetris Project 1 的 Xor.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// Xor：out = a ^ b = (a & ~b) | (~a & b)\n// 对应 nand2tetris Project 1 的 Xor.hdl\nmodule n2t_xor (\n    input  a,\n    input  b,\n    output out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Or.v"
+      ],
+      "tb": "tb/01/Xor_tb.v",
+      "tb_top": "Xor_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "Mux",
+      "title": "Mux",
+      "project": "01",
+      "module": "n2t_mux",
+      "ports": [
+        {
+          "name": "a",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "b",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "sel",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 1,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "Mux（2 选 1）：sel=0 时 out=a，sel=1 时 out=b\n对应 nand2tetris Project 1 的 Mux.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// Mux（2 选 1）：sel=0 时 out=a，sel=1 时 out=b\n// 对应 nand2tetris Project 1 的 Mux.hdl\nmodule n2t_mux (\n    input  a,\n    input  b,\n    input  sel,\n    output out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Or.v"
+      ],
+      "tb": "tb/01/Mux_tb.v",
+      "tb_top": "Mux_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "DMux",
+      "title": "DMux",
+      "project": "01",
+      "module": "n2t_dmux",
+      "ports": [
+        {
+          "name": "in",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "sel",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "a",
+          "width": 1,
+          "dir": "out"
+        },
+        {
+          "name": "b",
+          "width": 1,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "DMux（1 分 2）：sel=0 时 in→a，sel=1 时 in→b\n对应 nand2tetris Project 1 的 DMux.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// DMux（1 分 2）：sel=0 时 in→a，sel=1 时 in→b\n// 对应 nand2tetris Project 1 的 DMux.hdl\nmodule n2t_dmux (\n    input  in,\n    input  sel,\n    output a,\n    output b\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v"
+      ],
+      "tb": "tb/01/DMux_tb.v",
+      "tb_top": "DMux_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "Not16",
+      "title": "Not16",
+      "project": "01",
+      "module": "n2t_not16",
+      "ports": [
+        {
+          "name": "in",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 16,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "Not16：16 位按位取反\n对应 nand2tetris Project 1 的 Not16.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// Not16：16 位按位取反\n// 对应 nand2tetris Project 1 的 Not16.hdl\nmodule n2t_not16 (\n    input  [15:0] in,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/Nand.v",
+        "solution/01/Not.v"
+      ],
+      "tb": "tb/01/Not16_tb.v",
+      "tb_top": "Not16_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "And16",
+      "title": "And16",
+      "project": "01",
+      "module": "n2t_and16",
+      "ports": [
+        {
+          "name": "a",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "b",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 16,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "And16：16 位按位与\n对应 nand2tetris Project 1 的 And16.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// And16：16 位按位与\n// 对应 nand2tetris Project 1 的 And16.hdl\nmodule n2t_and16 (\n    input  [15:0] a,\n    input  [15:0] b,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v"
+      ],
+      "tb": "tb/01/And16_tb.v",
+      "tb_top": "And16_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "Or16",
+      "title": "Or16",
+      "project": "01",
+      "module": "n2t_or16",
+      "ports": [
+        {
+          "name": "a",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "b",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 16,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "Or16：16 位按位或\n对应 nand2tetris Project 1 的 Or16.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// Or16：16 位按位或\n// 对应 nand2tetris Project 1 的 Or16.hdl\nmodule n2t_or16 (\n    input  [15:0] a,\n    input  [15:0] b,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Or.v"
+      ],
+      "tb": "tb/01/Or16_tb.v",
+      "tb_top": "Or16_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "Mux16",
+      "title": "Mux16",
+      "project": "01",
+      "module": "n2t_mux16",
+      "ports": [
+        {
+          "name": "a",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "b",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "sel",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 16,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "Mux16：16 位 2 选 1，sel 共用\n对应 nand2tetris Project 1 的 Mux16.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// Mux16：16 位 2 选 1，sel 共用\n// 对应 nand2tetris Project 1 的 Mux16.hdl\nmodule n2t_mux16 (\n    input  [15:0] a,\n    input  [15:0] b,\n    input         sel,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/Mux.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Or.v"
+      ],
+      "tb": "tb/01/Mux16_tb.v",
+      "tb_top": "Mux16_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "Or8Way",
+      "title": "Or8Way",
+      "project": "01",
+      "module": "n2t_or8way",
+      "ports": [
+        {
+          "name": "in",
+          "width": 8,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 1,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "Or8Way：8 输入或门（树形）\n对应 nand2tetris Project 1 的 Or8Way.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// Or8Way：8 输入或门（树形）\n// 对应 nand2tetris Project 1 的 Or8Way.hdl\nmodule n2t_or8way (\n    input  [7:0] in,\n    output       out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Or.v"
+      ],
+      "tb": "tb/01/Or8Way_tb.v",
+      "tb_top": "Or8Way_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "Mux4Way16",
+      "title": "Mux4Way16",
+      "project": "01",
+      "module": "n2t_mux4way16",
+      "ports": [
+        {
+          "name": "a",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "b",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "c",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "d",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "sel",
+          "width": 2,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 16,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "Mux4Way16：4 路 16 位选择器，sel[1] 为高位\n对应 nand2tetris Project 1 的 Mux4Way16.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// Mux4Way16：4 路 16 位选择器，sel[1] 为高位\n// 对应 nand2tetris Project 1 的 Mux4Way16.hdl\nmodule n2t_mux4way16 (\n    input  [15:0] a,\n    input  [15:0] b,\n    input  [15:0] c,\n    input  [15:0] d,\n    input  [1:0]  sel,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/Mux.v",
+        "solution/01/Mux16.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Or.v"
+      ],
+      "tb": "tb/01/Mux4Way16_tb.v",
+      "tb_top": "Mux4Way16_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "Mux8Way16",
+      "title": "Mux8Way16",
+      "project": "01",
+      "module": "n2t_mux8way16",
+      "ports": [
+        {
+          "name": "a",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "b",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "c",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "d",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "e",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "f",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "g",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "h",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "sel",
+          "width": 3,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 16,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "Mux8Way16：8 路 16 位选择器，sel[2] 为高位\n对应 nand2tetris Project 1 的 Mux8Way16.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// Mux8Way16：8 路 16 位选择器，sel[2] 为高位\n// 对应 nand2tetris Project 1 的 Mux8Way16.hdl\nmodule n2t_mux8way16 (\n    input  [15:0] a,\n    input  [15:0] b,\n    input  [15:0] c,\n    input  [15:0] d,\n    input  [15:0] e,\n    input  [15:0] f,\n    input  [15:0] g,\n    input  [15:0] h,\n    input  [2:0]  sel,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/Mux.v",
+        "solution/01/Mux16.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Or.v"
+      ],
+      "tb": "tb/01/Mux8Way16_tb.v",
+      "tb_top": "Mux8Way16_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "DMux4Way",
+      "title": "DMux4Way",
+      "project": "01",
+      "module": "n2t_dmux4way",
+      "ports": [
+        {
+          "name": "in",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "sel",
+          "width": 2,
+          "dir": "in"
+        },
+        {
+          "name": "a",
+          "width": 1,
+          "dir": "out"
+        },
+        {
+          "name": "b",
+          "width": 1,
+          "dir": "out"
+        },
+        {
+          "name": "c",
+          "width": 1,
+          "dir": "out"
+        },
+        {
+          "name": "d",
+          "width": 1,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "DMux4Way：1 分 4，sel[1] 为高位\n对应 nand2tetris Project 1 的 DMux4Way.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// DMux4Way：1 分 4，sel[1] 为高位\n// 对应 nand2tetris Project 1 的 DMux4Way.hdl\nmodule n2t_dmux4way (\n    input  in,\n    input  [1:0] sel,\n    output a,\n    output b,\n    output c,\n    output d\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/DMux.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v"
+      ],
+      "tb": "tb/01/DMux4Way_tb.v",
+      "tb_top": "DMux4Way_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "DMux8Way",
+      "title": "DMux8Way",
+      "project": "01",
+      "module": "n2t_dmux8way",
+      "ports": [
+        {
+          "name": "in",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "sel",
+          "width": 3,
+          "dir": "in"
+        },
+        {
+          "name": "a",
+          "width": 1,
+          "dir": "out"
+        },
+        {
+          "name": "b",
+          "width": 1,
+          "dir": "out"
+        },
+        {
+          "name": "c",
+          "width": 1,
+          "dir": "out"
+        },
+        {
+          "name": "d",
+          "width": 1,
+          "dir": "out"
+        },
+        {
+          "name": "e",
+          "width": 1,
+          "dir": "out"
+        },
+        {
+          "name": "f",
+          "width": 1,
+          "dir": "out"
+        },
+        {
+          "name": "g",
+          "width": 1,
+          "dir": "out"
+        },
+        {
+          "name": "h",
+          "width": 1,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "DMux8Way：1 分 8，sel[2] 为高位\n对应 nand2tetris Project 1 的 DMux8Way.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// DMux8Way：1 分 8，sel[2] 为高位\n// 对应 nand2tetris Project 1 的 DMux8Way.hdl\nmodule n2t_dmux8way (\n    input  in,\n    input  [2:0] sel,\n    output a,\n    output b,\n    output c,\n    output d,\n    output e,\n    output f,\n    output g,\n    output h\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/DMux.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v"
+      ],
+      "tb": "tb/01/DMux8Way_tb.v",
+      "tb_top": "DMux8Way_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "HalfAdder",
+      "title": "HalfAdder",
+      "project": "02",
+      "module": "n2t_half_adder",
+      "ports": [
+        {
+          "name": "a",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "b",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "sum",
+          "width": 1,
+          "dir": "out"
+        },
+        {
+          "name": "carry",
+          "width": 1,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "HalfAdder：sum = a^b, carry = a&b\n对应 nand2tetris Project 2 的 HalfAdder.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// HalfAdder：sum = a^b, carry = a&b\n// 对应 nand2tetris Project 2 的 HalfAdder.hdl\nmodule n2t_half_adder (\n    input  a,\n    input  b,\n    output sum,\n    output carry\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Or.v",
+        "solution/01/Xor.v"
+      ],
+      "tb": "tb/02/HalfAdder_tb.v",
+      "tb_top": "HalfAdder_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "FullAdder",
+      "title": "FullAdder",
+      "project": "02",
+      "module": "n2t_full_adder",
+      "ports": [
+        {
+          "name": "a",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "b",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "c",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "sum",
+          "width": 1,
+          "dir": "out"
+        },
+        {
+          "name": "carry",
+          "width": 1,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "FullAdder：三个输入的全加器，由两个半加器 + 或门构成\n对应 nand2tetris Project 2 的 FullAdder.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// FullAdder：三个输入的全加器，由两个半加器 + 或门构成\n// 对应 nand2tetris Project 2 的 FullAdder.hdl\nmodule n2t_full_adder (\n    input  a,\n    input  b,\n    input  c,\n    output sum,\n    output carry\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Or.v",
+        "solution/01/Xor.v",
+        "solution/02/HalfAdder.v"
+      ],
+      "tb": "tb/02/FullAdder_tb.v",
+      "tb_top": "FullAdder_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "Add16",
+      "title": "Add16",
+      "project": "02",
+      "module": "n2t_add16",
+      "ports": [
+        {
+          "name": "a",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "b",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 16,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "Add16：16 位行波进位加法器\n对应 nand2tetris Project 2 的 Add16.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// Add16：16 位行波进位加法器\n// 对应 nand2tetris Project 2 的 Add16.hdl\nmodule n2t_add16 (\n    input  [15:0] a,\n    input  [15:0] b,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Or.v",
+        "solution/01/Xor.v",
+        "solution/02/FullAdder.v",
+        "solution/02/HalfAdder.v"
+      ],
+      "tb": "tb/02/Add16_tb.v",
+      "tb_top": "Add16_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "Inc16",
+      "title": "Inc16",
+      "project": "02",
+      "module": "n2t_inc16",
+      "ports": [
+        {
+          "name": "in",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 16,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "Inc16：加 1，即 Add16(in, 1)\n对应 nand2tetris Project 2 的 Inc16.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// Inc16：加 1，即 Add16(in, 1)\n// 对应 nand2tetris Project 2 的 Inc16.hdl\nmodule n2t_inc16 (\n    input  [15:0] in,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Or.v",
+        "solution/01/Xor.v",
+        "solution/02/Add16.v",
+        "solution/02/FullAdder.v",
+        "solution/02/HalfAdder.v"
+      ],
+      "tb": "tb/02/Inc16_tb.v",
+      "tb_top": "Inc16_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "ALU",
+      "title": "ALU",
+      "project": "02",
+      "module": "n2t_alu",
+      "ports": [
+        {
+          "name": "x",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "y",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "zx",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "nx",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "zy",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "ny",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "f",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "no",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 16,
+          "dir": "out"
+        },
+        {
+          "name": "zr",
+          "width": 1,
+          "dir": "out"
+        },
+        {
+          "name": "ng",
+          "width": 1,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "ALU：Hack 芯片的核心算术逻辑单元，按课程方式用门级/部件级搭建\n对应 nand2tetris Project 2 的 ALU.hdl\n功能：\nzx: x 置 0       nx: x 取反     zy: y 置 0\nny: y 取反       f: 1=加 0=与   no: 输出取反\nzr: out==0       ng: out<0（最高位）",
+      "initial_code": "`timescale 1ns/1ps\n\n// ALU：Hack 芯片的核心算术逻辑单元，按课程方式用门级/部件级搭建\n// 对应 nand2tetris Project 2 的 ALU.hdl\n//\n// 功能：\n//   zx: x 置 0       nx: x 取反     zy: y 置 0\n//   ny: y 取反       f: 1=加 0=与   no: 输出取反\n//   zr: out==0       ng: out<0（最高位）\nmodule n2t_alu (\n    input  [15:0] x,\n    input  [15:0] y,\n    input         zx,\n    input         nx,\n    input         zy,\n    input         ny,\n    input         f,\n    input         no,\n    output [15:0] out,\n    output        zr,\n    output        ng\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/And16.v",
+        "solution/01/Mux.v",
+        "solution/01/Mux16.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Not16.v",
+        "solution/01/Or.v",
+        "solution/01/Or8Way.v",
+        "solution/01/Xor.v",
+        "solution/02/Add16.v",
+        "solution/02/FullAdder.v",
+        "solution/02/HalfAdder.v"
+      ],
+      "tb": "tb/02/ALU_tb.v",
+      "tb_top": "ALU_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "Bit",
+      "title": "Bit",
+      "project": "03",
+      "module": "n2t_bit",
+      "ports": [
+        {
+          "name": "clk",
+          "width": 1,
+          "dir": "clk"
+        },
+        {
+          "name": "in",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "load",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 1,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "Bit：1 位数据位。\n课程硬件模拟器在 tick（时钟 0->1）采样输入、tock（1->0）提交输出，\n官方测试向量也是“tick 后看旧值、tock 后看新值”。\n为与官方向量逐行一致，这里在下降沿提交（真实 FPGA 一般用上升沿，\n想改成 posedge 的话需要同步调整测试台的采样点）。\n对应 nand2tetris Project 3 的 Bit.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// Bit：1 位数据位。\n// 课程硬件模拟器在 tick（时钟 0->1）采样输入、tock（1->0）提交输出，\n// 官方测试向量也是“tick 后看旧值、tock 后看新值”。\n// 为与官方向量逐行一致，这里在下降沿提交（真实 FPGA 一般用上升沿，\n// 想改成 posedge 的话需要同步调整测试台的采样点）。\n// 对应 nand2tetris Project 3 的 Bit.hdl\nmodule n2t_bit (\n    input  clk,\n    input  in,\n    input  load,\n    output reg out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [],
+      "tb": "tb/03/Bit_tb.v",
+      "tb_top": "Bit_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "Register",
+      "title": "Register",
+      "project": "03",
+      "module": "n2t_register",
+      "ports": [
+        {
+          "name": "clk",
+          "width": 1,
+          "dir": "clk"
+        },
+        {
+          "name": "in",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "load",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 16,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "Register：16 位寄存器，由 16 个 Bit 组成\n对应 nand2tetris Project 3 的 Register.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// Register：16 位寄存器，由 16 个 Bit 组成\n// 对应 nand2tetris Project 3 的 Register.hdl\nmodule n2t_register (\n    input         clk,\n    input  [15:0] in,\n    input         load,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/03/Bit.v"
+      ],
+      "tb": "tb/03/Register_tb.v",
+      "tb_top": "Register_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "RAM8",
+      "title": "RAM8",
+      "project": "03",
+      "module": "n2t_ram8",
+      "ports": [
+        {
+          "name": "clk",
+          "width": 1,
+          "dir": "clk"
+        },
+        {
+          "name": "in",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "load",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "address",
+          "width": 3,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 16,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "RAM8：8 个 16 位寄存器，DMux8Way 译码写使能，Mux8Way16 读\n对应 nand2tetris Project 3 的 RAM8.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// RAM8：8 个 16 位寄存器，DMux8Way 译码写使能，Mux8Way16 读\n// 对应 nand2tetris Project 3 的 RAM8.hdl\nmodule n2t_ram8 (\n    input         clk,\n    input  [15:0] in,\n    input         load,\n    input  [2:0]  address,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/DMux.v",
+        "solution/01/DMux8Way.v",
+        "solution/01/Mux.v",
+        "solution/01/Mux16.v",
+        "solution/01/Mux8Way16.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Or.v",
+        "solution/03/Bit.v",
+        "solution/03/Register.v"
+      ],
+      "tb": "tb/03/RAM8_tb.v",
+      "tb_top": "RAM8_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "RAM64",
+      "title": "RAM64",
+      "project": "03",
+      "module": "n2t_ram64",
+      "ports": [
+        {
+          "name": "clk",
+          "width": 1,
+          "dir": "clk"
+        },
+        {
+          "name": "in",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "load",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "address",
+          "width": 6,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 16,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "RAM64：8 个 RAM8，address[5:3] 译码，address[2:0] 片内寻址\n对应 nand2tetris Project 3 的 RAM64.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// RAM64：8 个 RAM8，address[5:3] 译码，address[2:0] 片内寻址\n// 对应 nand2tetris Project 3 的 RAM64.hdl\nmodule n2t_ram64 (\n    input         clk,\n    input  [15:0] in,\n    input         load,\n    input  [5:0]  address,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/DMux.v",
+        "solution/01/DMux8Way.v",
+        "solution/01/Mux.v",
+        "solution/01/Mux16.v",
+        "solution/01/Mux8Way16.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Or.v",
+        "solution/03/Bit.v",
+        "solution/03/RAM8.v",
+        "solution/03/Register.v"
+      ],
+      "tb": "tb/03/RAM64_tb.v",
+      "tb_top": "RAM64_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "RAM512",
+      "title": "RAM512",
+      "project": "03",
+      "module": "n2t_ram512",
+      "ports": [
+        {
+          "name": "clk",
+          "width": 1,
+          "dir": "clk"
+        },
+        {
+          "name": "in",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "load",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "address",
+          "width": 9,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 16,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "RAM512：512 x 16\n课程里由 8 个 RAM64 拼成；这里用扁平存储阵列实现，\n避免仿真器把层级 RAM 展开成数十万触发器（贴近真实 RTL 的 BRAM 推断）。\n对应 nand2tetris Project 3 的 RAM512.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// RAM512：512 x 16\n// 课程里由 8 个 RAM64 拼成；这里用扁平存储阵列实现，\n// 避免仿真器把层级 RAM 展开成数十万触发器（贴近真实 RTL 的 BRAM 推断）。\n// 对应 nand2tetris Project 3 的 RAM512.hdl\nmodule n2t_ram512 (\n    input         clk,\n    input  [15:0] in,\n    input         load,\n    input  [8:0]  address,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [],
+      "tb": "tb/03/RAM512_tb.v",
+      "tb_top": "RAM512_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "RAM4K",
+      "title": "RAM4K",
+      "project": "03",
+      "module": "n2t_ram4k",
+      "ports": [
+        {
+          "name": "clk",
+          "width": 1,
+          "dir": "clk"
+        },
+        {
+          "name": "in",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "load",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "address",
+          "width": 12,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 16,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "RAM4K：4096 x 16\n课程里由 8 个 RAM512 拼成；这里用扁平存储阵列实现，\n避免仿真器把层级 RAM 展开成数十万触发器（贴近真实 RTL 的 BRAM 推断）。\n对应 nand2tetris Project 3 的 RAM4K.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// RAM4K：4096 x 16\n// 课程里由 8 个 RAM512 拼成；这里用扁平存储阵列实现，\n// 避免仿真器把层级 RAM 展开成数十万触发器（贴近真实 RTL 的 BRAM 推断）。\n// 对应 nand2tetris Project 3 的 RAM4K.hdl\nmodule n2t_ram4k (\n    input         clk,\n    input  [15:0] in,\n    input         load,\n    input  [11:0] address,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [],
+      "tb": "tb/03/RAM4K_tb.v",
+      "tb_top": "RAM4K_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "RAM16K",
+      "title": "RAM16K",
+      "project": "03",
+      "module": "n2t_ram16k",
+      "ports": [
+        {
+          "name": "clk",
+          "width": 1,
+          "dir": "clk"
+        },
+        {
+          "name": "in",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "load",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "address",
+          "width": 15,
+          "dir": "in"
+        },
+        {
+          "name": "dbg_we",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "dbg_addr",
+          "width": 14,
+          "dir": "in"
+        },
+        {
+          "name": "dbg_wdata",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 16,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "RAM16K：16K x 16 主内存\n课程里由 4 个 RAM4K 拼成；这里用扁平存储阵列实现，\n更接近真实 RTL（综合工具会把它推断为 Block RAM），\n并通过参数 INIT_FILE / 背板写口支持测试预置。\n对应 nand2tetris Project 3 的 RAM16K.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// RAM16K：16K x 16 主内存\n// 课程里由 4 个 RAM4K 拼成；这里用扁平存储阵列实现，\n// 更接近真实 RTL（综合工具会把它推断为 Block RAM），\n// 并通过参数 INIT_FILE / 背板写口支持测试预置。\n// 对应 nand2tetris Project 3 的 RAM16K.hdl\nmodule n2t_ram16k #(\n    parameter INIT_FILE = \"\"   // 十六进制初始化文件（可选，仅仿真用）\n) (\n    input         clk,\n    input  [15:0] in,\n    input         load,\n    input  [14:0] address,     // 与课程一致：address[14] 未使用\n    // 测试背板写口（仅仿真，综合时忽略）\n    input         dbg_we,\n    input  [13:0] dbg_addr,\n    input  [15:0] dbg_wdata,\n    output [15:0] out\n);\n    // 测试台按层级路径读取 u_comp.u_mem.u_ram.mem[i]，\n    // 存储数组必须命名为 mem（对应课程内置 RAM16K）。\n    reg [15:0] mem [0:16383];\n\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [],
+      "tb": "tb/03/RAM16K_tb.v",
+      "tb_top": "RAM16K_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "PC",
+      "title": "PC",
+      "project": "03",
+      "module": "n2t_pc",
+      "ports": [
+        {
+          "name": "clk",
+          "width": 1,
+          "dir": "clk"
+        },
+        {
+          "name": "in",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "load",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "inc",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "reset",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 16,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "PC：16 位程序计数器（带 load/inc/reset），由 Mux16 + Inc16 + Register 构成\n优先级：reset > load > inc > 保持；状态在下降沿提交（与课程模拟器一致）\n对应 nand2tetris Project 3 的 PC.hdl",
+      "initial_code": "`timescale 1ns/1ps\n\n// PC：16 位程序计数器（带 load/inc/reset），由 Mux16 + Inc16 + Register 构成\n// 优先级：reset > load > inc > 保持；状态在下降沿提交（与课程模拟器一致）\n// 对应 nand2tetris Project 3 的 PC.hdl\nmodule n2t_pc (\n    input         clk,\n    input  [15:0] in,\n    input         load,\n    input         inc,\n    input         reset,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/Mux.v",
+        "solution/01/Mux16.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Or.v",
+        "solution/01/Xor.v",
+        "solution/02/Add16.v",
+        "solution/02/FullAdder.v",
+        "solution/02/HalfAdder.v",
+        "solution/02/Inc16.v",
+        "solution/03/Bit.v",
+        "solution/03/Register.v"
+      ],
+      "tb": "tb/03/PC_tb.v",
+      "tb_top": "PC_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "CPU",
+      "title": "CPU",
+      "project": "05",
+      "module": "n2t_cpu",
+      "ports": [
+        {
+          "name": "clk",
+          "width": 1,
+          "dir": "clk"
+        },
+        {
+          "name": "inM",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "instruction",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "reset",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "outM",
+          "width": 16,
+          "dir": "out"
+        },
+        {
+          "name": "writeM",
+          "width": 1,
+          "dir": "out"
+        },
+        {
+          "name": "addressM",
+          "width": 15,
+          "dir": "out"
+        },
+        {
+          "name": "pc",
+          "width": 15,
+          "dir": "out"
+        }
+      ],
+      "probes": [
+        {
+          "name": "DRegister[]",
+          "width": 16
+        }
+      ],
+      "description": "CPU：Hack CPU，包含 A/D 寄存器、ALU 与程序计数器 PC\n对应 nand2tetris Project 5 的 CPU.hdl\n时序模型与官方硬件模拟器逐拍一致（参考 nand2tetris 官方实现）：\ntick（上升沿）：\n- D 寄存器采样 ALU 结果（用更新前的 D/A 计算）\n- outM 更新为 tick 时刻的 ALU 结果；writeM 为组合输出\n- 暂存 tick 时刻的 ALU 结果与标志位（供 tock 使用）\ntock（下降沿）：\n- A 寄存器、PC 提交\n- outM 用“更新后的 D + 新 A”重算并提交（与官方一致）\nDRegister[] 探针读到的是 tick 时刻采样的 D 值（与官方测试一致）",
+      "initial_code": "`timescale 1ns/1ps\n\n// CPU：Hack CPU，包含 A/D 寄存器、ALU 与程序计数器 PC\n// 对应 nand2tetris Project 5 的 CPU.hdl\n//\n// 时序模型与官方硬件模拟器逐拍一致（参考 nand2tetris 官方实现）：\n//   tick（上升沿）：\n//     - D 寄存器采样 ALU 结果（用更新前的 D/A 计算）\n//     - outM 更新为 tick 时刻的 ALU 结果；writeM 为组合输出\n//     - 暂存 tick 时刻的 ALU 结果与标志位（供 tock 使用）\n//   tock（下降沿）：\n//     - A 寄存器、PC 提交\n//     - outM 用“更新后的 D + 新 A”重算并提交（与官方一致）\n//   DRegister[] 探针读到的是 tick 时刻采样的 D 值（与官方测试一致）\nmodule n2t_cpu (\n    input         clk,\n    input  [15:0] inM,\n    input  [15:0] instruction,\n    input         reset,\n    output reg [15:0] outM,\n    output        writeM,\n    output [14:0] addressM,\n    output [14:0] pc\n);\n    // 测试台按层级路径读取 cpu.a_reg / cpu.d_reg / cpu.pc_reg，\n    // 请保留这三个寄存器命名（对应课程中的 ARegister / DRegister / PC）。\n    reg [15:0] a_reg;\n    reg [15:0] d_reg;\n    reg [14:0] pc_reg;\n\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/And16.v",
+        "solution/01/Mux.v",
+        "solution/01/Mux16.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Not16.v",
+        "solution/01/Or.v",
+        "solution/01/Or8Way.v",
+        "solution/01/Xor.v",
+        "solution/02/ALU.v",
+        "solution/02/Add16.v",
+        "solution/02/FullAdder.v",
+        "solution/02/HalfAdder.v"
+      ],
+      "tb": "tb/05/CPU_tb.v",
+      "tb_top": "CPU_tb",
+      "runtime_files": []
+    },
+    {
+      "id": "ComputerAdd",
+      "title": "ComputerAdd",
+      "project": "05",
+      "module": "n2t_computer",
+      "ports": [
+        {
+          "name": "clk",
+          "width": 1,
+          "dir": "clk"
+        },
+        {
+          "name": "reset",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "outM",
+          "width": 16,
+          "dir": "out"
+        },
+        {
+          "name": "writeM",
+          "width": 1,
+          "dir": "out"
+        },
+        {
+          "name": "addressM",
+          "width": 15,
+          "dir": "out"
+        },
+        {
+          "name": "pc",
+          "width": 15,
+          "dir": "out"
+        },
+        {
+          "name": "dbg_we",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "dbg_addr",
+          "width": 14,
+          "dir": "in"
+        },
+        {
+          "name": "dbg_wdata",
+          "width": 16,
+          "dir": "in"
+        }
+      ],
+      "probes": [
+        {
+          "name": "ARegister[]",
+          "width": 16
+        },
+        {
+          "name": "ARegister[0]",
+          "width": 16
+        },
+        {
+          "name": "DRegister[]",
+          "width": 16
+        },
+        {
+          "name": "DRegister[0]",
+          "width": 16
+        },
+        {
+          "name": "PC[]",
+          "width": 15
+        },
+        {
+          "name": "RAM16K[0]",
+          "width": 16
+        },
+        {
+          "name": "RAM16K[1]",
+          "width": 16
+        },
+        {
+          "name": "RAM16K[2]",
+          "width": 16
+        }
+      ],
+      "description": "Computer：Hack 整机 = ROM32K + CPU + Memory\n对应 nand2tetris Project 5 的 Computer.hdl\n接口在课程版本（仅 reset 输入）基础上增加了 outM/writeM/addressM/pc\n输出（当前教材版本即如此），以及测试背板写口。",
+      "initial_code": "`timescale 1ns/1ps\n\n// Computer：Hack 整机 = ROM32K + CPU + Memory\n// 对应 nand2tetris Project 5 的 Computer.hdl\n// 接口在课程版本（仅 reset 输入）基础上增加了 outM/writeM/addressM/pc\n// 输出（当前教材版本即如此），以及测试背板写口。\nmodule n2t_computer #(\n    parameter ROM_INIT_FILE = \"\",   // 机器码 .hack 文件\n    parameter RAM_INIT_FILE = \"\"    // RAM 初始化文件（可选）\n) (\n    input  clk,\n    input  reset,\n    output [15:0] outM,\n    output        writeM,\n    output [14:0] addressM,\n    output [14:0] pc,\n    // 测试背板写口（仅仿真）\n    input         dbg_we,\n    input  [13:0] dbg_addr,\n    input  [15:0] dbg_wdata\n);\n    // Computer 就是把 ROM / CPU / Memory 三块部件接起来（接线本身也是作业，\n    // 但必须保留例化名 u_rom / u_cpu / u_mem：测试台按层级路径读取内部寄存器与内存）。\n    wire [15:0] instr, inM;\n\n    n2t_rom32k #(.INIT_FILE(ROM_INIT_FILE)) u_rom(\n        .address(pc), .out(instr)\n    );\n\n    n2t_cpu u_cpu(\n        .clk(clk), .inM(inM), .instruction(instr), .reset(reset),\n        .outM(outM), .writeM(writeM), .addressM(addressM), .pc(pc)\n    );\n\n    n2t_memory #(.RAM_INIT_FILE(RAM_INIT_FILE)) u_mem(\n        .clk(clk), .in(outM), .load(writeM), .address(addressM),\n        .keyboard_in(16'h0000),\n        .dbg_we(dbg_we), .dbg_addr(dbg_addr), .dbg_wdata(dbg_wdata),\n        .out(inM)\n    );\n\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/And16.v",
+        "solution/01/Mux.v",
+        "solution/01/Mux16.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Not16.v",
+        "solution/01/Or.v",
+        "solution/01/Or8Way.v",
+        "solution/01/Xor.v",
+        "solution/02/ALU.v",
+        "solution/02/Add16.v",
+        "solution/02/FullAdder.v",
+        "solution/02/HalfAdder.v",
+        "solution/03/RAM16K.v",
+        "solution/05/CPU.v",
+        "solution/05/Memory.v",
+        "solution/05/ROM32K.v"
+      ],
+      "tb": "tb/05/ComputerAdd_tb.v",
+      "tb_top": "ComputerAdd_tb",
+      "runtime_files": [
+        "programs/Add.hack"
+      ]
+    },
+    {
+      "id": "ComputerMax",
+      "title": "ComputerMax",
+      "project": "05",
+      "module": "n2t_computer",
+      "ports": [
+        {
+          "name": "clk",
+          "width": 1,
+          "dir": "clk"
+        },
+        {
+          "name": "reset",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "outM",
+          "width": 16,
+          "dir": "out"
+        },
+        {
+          "name": "writeM",
+          "width": 1,
+          "dir": "out"
+        },
+        {
+          "name": "addressM",
+          "width": 15,
+          "dir": "out"
+        },
+        {
+          "name": "pc",
+          "width": 15,
+          "dir": "out"
+        },
+        {
+          "name": "dbg_we",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "dbg_addr",
+          "width": 14,
+          "dir": "in"
+        },
+        {
+          "name": "dbg_wdata",
+          "width": 16,
+          "dir": "in"
+        }
+      ],
+      "probes": [
+        {
+          "name": "ARegister[]",
+          "width": 16
+        },
+        {
+          "name": "DRegister[]",
+          "width": 16
+        },
+        {
+          "name": "PC[]",
+          "width": 15
+        },
+        {
+          "name": "RAM16K[0]",
+          "width": 16
+        },
+        {
+          "name": "RAM16K[1]",
+          "width": 16
+        },
+        {
+          "name": "RAM16K[2]",
+          "width": 16
+        }
+      ],
+      "description": "Computer：Hack 整机 = ROM32K + CPU + Memory\n对应 nand2tetris Project 5 的 Computer.hdl\n接口在课程版本（仅 reset 输入）基础上增加了 outM/writeM/addressM/pc\n输出（当前教材版本即如此），以及测试背板写口。",
+      "initial_code": "`timescale 1ns/1ps\n\n// Computer：Hack 整机 = ROM32K + CPU + Memory\n// 对应 nand2tetris Project 5 的 Computer.hdl\n// 接口在课程版本（仅 reset 输入）基础上增加了 outM/writeM/addressM/pc\n// 输出（当前教材版本即如此），以及测试背板写口。\nmodule n2t_computer #(\n    parameter ROM_INIT_FILE = \"\",   // 机器码 .hack 文件\n    parameter RAM_INIT_FILE = \"\"    // RAM 初始化文件（可选）\n) (\n    input  clk,\n    input  reset,\n    output [15:0] outM,\n    output        writeM,\n    output [14:0] addressM,\n    output [14:0] pc,\n    // 测试背板写口（仅仿真）\n    input         dbg_we,\n    input  [13:0] dbg_addr,\n    input  [15:0] dbg_wdata\n);\n    // Computer 就是把 ROM / CPU / Memory 三块部件接起来（接线本身也是作业，\n    // 但必须保留例化名 u_rom / u_cpu / u_mem：测试台按层级路径读取内部寄存器与内存）。\n    wire [15:0] instr, inM;\n\n    n2t_rom32k #(.INIT_FILE(ROM_INIT_FILE)) u_rom(\n        .address(pc), .out(instr)\n    );\n\n    n2t_cpu u_cpu(\n        .clk(clk), .inM(inM), .instruction(instr), .reset(reset),\n        .outM(outM), .writeM(writeM), .addressM(addressM), .pc(pc)\n    );\n\n    n2t_memory #(.RAM_INIT_FILE(RAM_INIT_FILE)) u_mem(\n        .clk(clk), .in(outM), .load(writeM), .address(addressM),\n        .keyboard_in(16'h0000),\n        .dbg_we(dbg_we), .dbg_addr(dbg_addr), .dbg_wdata(dbg_wdata),\n        .out(inM)\n    );\n\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/And16.v",
+        "solution/01/Mux.v",
+        "solution/01/Mux16.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Not16.v",
+        "solution/01/Or.v",
+        "solution/01/Or8Way.v",
+        "solution/01/Xor.v",
+        "solution/02/ALU.v",
+        "solution/02/Add16.v",
+        "solution/02/FullAdder.v",
+        "solution/02/HalfAdder.v",
+        "solution/03/RAM16K.v",
+        "solution/05/CPU.v",
+        "solution/05/Memory.v",
+        "solution/05/ROM32K.v"
+      ],
+      "tb": "tb/05/ComputerMax_tb.v",
+      "tb_top": "ComputerMax_tb",
+      "runtime_files": [
+        "programs/Max.hack"
+      ]
+    },
+    {
+      "id": "ComputerRect",
+      "title": "ComputerRect",
+      "project": "05",
+      "module": "n2t_computer",
+      "ports": [
+        {
+          "name": "clk",
+          "width": 1,
+          "dir": "clk"
+        },
+        {
+          "name": "reset",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "outM",
+          "width": 16,
+          "dir": "out"
+        },
+        {
+          "name": "writeM",
+          "width": 1,
+          "dir": "out"
+        },
+        {
+          "name": "addressM",
+          "width": 15,
+          "dir": "out"
+        },
+        {
+          "name": "pc",
+          "width": 15,
+          "dir": "out"
+        },
+        {
+          "name": "dbg_we",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "dbg_addr",
+          "width": 14,
+          "dir": "in"
+        },
+        {
+          "name": "dbg_wdata",
+          "width": 16,
+          "dir": "in"
+        }
+      ],
+      "probes": [
+        {
+          "name": "ARegister[]",
+          "width": 16
+        },
+        {
+          "name": "DRegister[]",
+          "width": 16
+        },
+        {
+          "name": "PC[]",
+          "width": 15
+        },
+        {
+          "name": "RAM16K[0]",
+          "width": 16
+        },
+        {
+          "name": "RAM16K[1]",
+          "width": 16
+        },
+        {
+          "name": "RAM16K[2]",
+          "width": 16
+        }
+      ],
+      "description": "Computer：Hack 整机 = ROM32K + CPU + Memory\n对应 nand2tetris Project 5 的 Computer.hdl\n接口在课程版本（仅 reset 输入）基础上增加了 outM/writeM/addressM/pc\n输出（当前教材版本即如此），以及测试背板写口。",
+      "initial_code": "`timescale 1ns/1ps\n\n// Computer：Hack 整机 = ROM32K + CPU + Memory\n// 对应 nand2tetris Project 5 的 Computer.hdl\n// 接口在课程版本（仅 reset 输入）基础上增加了 outM/writeM/addressM/pc\n// 输出（当前教材版本即如此），以及测试背板写口。\nmodule n2t_computer #(\n    parameter ROM_INIT_FILE = \"\",   // 机器码 .hack 文件\n    parameter RAM_INIT_FILE = \"\"    // RAM 初始化文件（可选）\n) (\n    input  clk,\n    input  reset,\n    output [15:0] outM,\n    output        writeM,\n    output [14:0] addressM,\n    output [14:0] pc,\n    // 测试背板写口（仅仿真）\n    input         dbg_we,\n    input  [13:0] dbg_addr,\n    input  [15:0] dbg_wdata\n);\n    // Computer 就是把 ROM / CPU / Memory 三块部件接起来（接线本身也是作业，\n    // 但必须保留例化名 u_rom / u_cpu / u_mem：测试台按层级路径读取内部寄存器与内存）。\n    wire [15:0] instr, inM;\n\n    n2t_rom32k #(.INIT_FILE(ROM_INIT_FILE)) u_rom(\n        .address(pc), .out(instr)\n    );\n\n    n2t_cpu u_cpu(\n        .clk(clk), .inM(inM), .instruction(instr), .reset(reset),\n        .outM(outM), .writeM(writeM), .addressM(addressM), .pc(pc)\n    );\n\n    n2t_memory #(.RAM_INIT_FILE(RAM_INIT_FILE)) u_mem(\n        .clk(clk), .in(outM), .load(writeM), .address(addressM),\n        .keyboard_in(16'h0000),\n        .dbg_we(dbg_we), .dbg_addr(dbg_addr), .dbg_wdata(dbg_wdata),\n        .out(inM)\n    );\n\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/And16.v",
+        "solution/01/Mux.v",
+        "solution/01/Mux16.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Not16.v",
+        "solution/01/Or.v",
+        "solution/01/Or8Way.v",
+        "solution/01/Xor.v",
+        "solution/02/ALU.v",
+        "solution/02/Add16.v",
+        "solution/02/FullAdder.v",
+        "solution/02/HalfAdder.v",
+        "solution/03/RAM16K.v",
+        "solution/05/CPU.v",
+        "solution/05/Memory.v",
+        "solution/05/ROM32K.v"
+      ],
+      "tb": "tb/05/ComputerRect_tb.v",
+      "tb_top": "ComputerRect_tb",
+      "runtime_files": [
+        "programs/Rect.hack"
+      ]
+    }
+  ]
+}

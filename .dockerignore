@@ -1,0 +1,7 @@
+.git
+.gitignore
+sim
+iverilog_*.deb
+server/.venv
+__pycache__
+*.pyc
