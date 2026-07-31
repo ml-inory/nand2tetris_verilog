@@ -73,6 +73,15 @@ def module_header(prob):
     return m.group(0) if m else 'module %s ();' % prob['module']
 
 
+def body_is_empty(prob, code):
+    """去掉注释/指令/模块头/endmodule 后没有内容 -> 实现体为空。"""
+    text = re.sub(r'//[^\n]*|/\*.*?\*/', '', code, flags=re.S)
+    text = re.sub(r'`[^\n]*', '', text)
+    text = re.sub(r'\bmodule\b[\s\S]*?\)\s*;', '', text, count=1)
+    text = re.sub(r'\bendmodule\b', '', text)
+    return not re.sub(r'\s+', '', text)
+
+
 def normalize_code(prob, code):
     """返回 (规范后的代码, 友好错误或 None)。
 
@@ -84,6 +93,9 @@ def normalize_code(prob, code):
     m = MODULE_DECL_RE.search(code)
     if m:
         if m.group(1) == prob['module']:
+            if body_is_empty(prob, code):
+                return code, ('还没有填写实现：请在 module 内添加逻辑，'
+                              '例如 assign out = ~in;。也可以只提交这一行实现，系统会自动补齐模块声明。')
             return code, None
         return code, '模块名应为 %s（你写的是 %s）——请保留模板里的 module 声明，只填写实现' % (
             prob['module'], m.group(1))

@@ -163,24 +163,32 @@ function setCode(code) {
   else $('editor-fallback').value = code;
 }
 
+let editorSetupDone = false;
 function setupEditor() {
   const el = $('editor');
-  if (window.monaco && window.monaco.editor) {
-    editor = window.monaco.editor.create(el, {
-      value: '', language: 'verilog', theme: 'vs-dark',
-      automaticLayout: true, minimap: {enabled: false},
-      fontSize: 14, scrollBeyondLastLine: false,
-    });
-    editorReady = true;
-    $('editor-fallback').classList.add('hidden');
-    el.classList.remove('hidden');
-    if (detail) setCode(getSaved(detail.id) || detail.initial_code);
-  } else {
+  const fb = $('editor-fallback');
+  if (!(window.monaco && window.monaco.editor)) {
+    // Monaco 尚未就绪：先退回 textarea，monaco-ready 到来后再升级为 Monaco
     editorReady = false;
-    $('editor').classList.add('hidden');
-    $('editor-fallback').classList.remove('hidden');
-    if (detail) $('editor-fallback').value = getSaved(detail.id) || detail.initial_code;
+    el.classList.add('hidden');
+    fb.classList.remove('hidden');
+    if (detail) fb.value = getSaved(detail.id) || detail.initial_code;
+    return;
   }
+  if (editorSetupDone) return;   // monaco-ready 与 DOMContentLoaded 可能各触发一次
+  editorSetupDone = true;
+  const carry = (!fb.classList.contains('hidden') && fb.value) ? fb.value : '';
+  editor = window.monaco.editor.create(el, {
+    value: carry, language: 'verilog', theme: 'vs-dark',
+    automaticLayout: true, minimap: {enabled: false},
+    fontSize: 14, scrollBeyondLastLine: false,
+  });
+  editorReady = true;
+  fb.classList.add('hidden');
+  el.classList.remove('hidden');
+  // 与 fallback 一致：编辑即存草稿，防止刷新/误操作丢代码
+  editor.onDidChangeContent(() => { if (currentId) saveCode(currentId, editor.getValue()); });
+  if (!carry && detail) setCode(getSaved(detail.id) || detail.initial_code);
 }
 window.addEventListener('monaco-ready', () => setupEditor());
 window.addEventListener('DOMContentLoaded', () => {
