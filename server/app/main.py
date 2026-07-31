@@ -201,6 +201,7 @@ def recent(request: Request):
 
 
 @app.get('/')
+@app.head('/')
 def index():
     return FileResponse(os.path.join(WEB, 'index.html'))
 
