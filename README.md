@@ -27,9 +27,6 @@ Makefile         一键仿真 / 测试 / 波形 / 生成作业
 浏览器里写 Verilog，服务端用 iverilog 跑官方 testbench 实时判分，支持波形可视化
 （WaveDrom）、进度统计、测试台查看与最近判题。
 
-线上实例：**http://43.153.202.142/**（腾讯云 Ubuntu 24.04 + Docker，容器内非 root
-加固运行；部署/更新步骤见 `server/README.md` 与服务器上的 `DEPLOY-NOTES.md`）。
-
 ```bash
 git checkout server          # 切到在线判题分支
 python3 server/gen_problems.py
