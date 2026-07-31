@@ -4,3 +4,4 @@ __pycache__/
 *.vcd
 *.deb
 .venv/
+server/data/

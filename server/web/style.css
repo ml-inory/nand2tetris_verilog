@@ -86,3 +86,22 @@ button:disabled { opacity: .55; cursor: wait; }
   #sidebar { width: 100%; border-right: 0; border-bottom: 1px solid var(--border); max-height: 260px; }
   main { padding: 16px; }
 }
+
+.auth { display: flex; align-items: center; gap: 6px; margin-right: 12px; }
+.auth-input { background: var(--panel2); color: var(--fg); border: 1px solid var(--border);
+  border-radius: 6px; padding: 6px 10px; width: 110px; font-size: 13px; }
+.auth-input::placeholder { color: var(--muted); }
+.auth-user { color: var(--ok); font-size: 13px; font-weight: 600; }
+button.mini { padding: 3px 10px; font-size: 12px; }
+.sub-row { display: block; width: 100%; text-align: left; background: none; border: 0;
+  color: var(--fg); padding: 6px 8px; border-radius: 6px; cursor: pointer; font-size: 12.5px; }
+.sub-row:hover { background: var(--panel2); }
+.sub-row .top { display: flex; justify-content: space-between; }
+.sub-row .meta { color: var(--muted); font-size: 11px; }
+.sub-row .st-pass { color: var(--ok); }
+.sub-row .st-fail { color: var(--bad); }
+.sub-row .st-error { color: #ffaa3c; }
+@media (max-width: 860px) {
+  .auth { flex-wrap: wrap; }
+  .auth-input { width: 90px; }
+}

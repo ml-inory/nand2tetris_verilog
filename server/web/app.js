@@ -5,19 +5,28 @@ let detail = null;
 let editor = null;
 let editorReady = false;
 let currentId = null;
+let authUser = null;
 
 const $ = (id) => document.getElementById(id);
 const dirName = (d) => ({in: '输入', out: '输出', clk: '时钟'}[d] || d);
+const TOKEN_KEY = 'n2t-token';
+const USER_KEY = 'n2t-user';
 
 function esc(s) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-async function api(path, opts) {
-  const r = await fetch(path, opts);
+function getToken() { try { return localStorage.getItem(TOKEN_KEY); } catch (e) { return null; } }
+
+async function api(path, opts = {}) {
+  const headers = Object.assign({'Content-Type': 'application/json'}, opts.headers || {});
+  const token = getToken();
+  if (token) headers['Authorization'] = 'Bearer ' + token;
+  const r = await fetch(path, Object.assign({}, opts, {headers}));
   if (!r.ok) {
     let msg = 'HTTP ' + r.status;
-    try { const j = await r.json(); if (j.error) msg = j.error; } catch (e) {}
+    try { const j = await r.json(); if (j.detail) msg = j.detail; else if (j.error) msg = j.error; } catch (e) {}
+    if (r.status === 401) onAuthExpired();
     throw new Error(msg);
   }
   return r.json();
@@ -30,6 +39,56 @@ function getSolved() {
 function setSolved(id) {
   const s = getSolved();
   if (!s.includes(id)) { s.push(id); localStorage.setItem('n2t-solved', JSON.stringify(s)); }
+}
+
+// ---------------- 认证 ----------------
+function renderAuth() {
+  const logged = !!authUser;
+  $('auth-user').textContent = authUser ? '你好，' + authUser : '';
+  $('auth-user').classList.toggle('hidden', !logged);
+  $('auth-user-input').classList.toggle('hidden', logged);
+  $('auth-pass-input').classList.toggle('hidden', logged);
+  $('btn-login').classList.toggle('hidden', logged);
+  $('btn-register').classList.toggle('hidden', logged);
+  $('btn-logout').classList.toggle('hidden', !logged);
+  if (logged) refreshSubmissions();
+}
+
+async function doAuth(action) {
+  const username = $('auth-user-input').value.trim();
+  const password = $('auth-pass-input').value;
+  if (!username || !password) { $('status-msg').textContent = '请输入用户名和密码'; return; }
+  try {
+    const r = await api('/api/' + action, {method: 'POST', body: JSON.stringify({username, password})});
+    localStorage.setItem(TOKEN_KEY, r.token);
+    localStorage.setItem(USER_KEY, r.username);
+    authUser = r.username;
+    $('auth-pass-input').value = '';
+    renderAuth();
+    refreshSubmissions();
+    $('status-msg').textContent = action === 'login' ? '登录成功' : '注册成功，已登录';
+  } catch (e) {
+    $('status-msg').textContent = (action === 'login' ? '登录失败: ' : '注册失败: ') + e.message;
+  }
+}
+
+function onAuthExpired() {
+  if (authUser) {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+    authUser = null;
+    renderAuth();
+    $('status-msg').textContent = '登录已过期，请重新登录';
+  }
+}
+
+async function logout() {
+  try { await api('/api/logout', {method: 'POST'}); } catch (e) {}
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(USER_KEY);
+  authUser = null;
+  renderAuth();
+  renderSubList();
 }
 
 // ---------------- 题目列表 ----------------
@@ -55,21 +114,42 @@ function renderList() {
   }
 }
 
-// ---------------- 最近判题 ----------------
-async function refreshRecent() {
+// ---------------- 我的提交 ----------------
+function renderSubList(list) {
+  const box = $('sub-list');
+  if (!authUser) { box.innerHTML = '<span class="muted">登录后可查看提交历史</span>'; return; }
+  if (!list || !list.length) { box.innerHTML = '<span class="muted">还没有提交记录</span>'; return; }
+  box.innerHTML = '';
+  for (const s of list.slice(0, 20)) {
+    const btn = document.createElement('button');
+    btn.className = 'sub-row';
+    const cls = s.status === 'pass' ? 'st-pass' : s.status === 'fail' ? 'st-fail' : 'st-error';
+    const label = s.status === 'pass' ? '通过' : s.status === 'fail' ? '未过' : '错误';
+    const t = new Date(s.created_at * 1000);
+    const hh = String(t.getHours()).padStart(2, '0');
+    const mm = String(t.getMinutes()).padStart(2, '0');
+    btn.innerHTML = `<div class="top"><span>${esc(s.problem)}</span><span class="${cls}">${label}</span></div>
+      <div class="meta">${s.summary ? s.summary.passed + '/' + s.summary.total + ' 项' : ''} ${hh}:${mm}</div>`;
+    btn.onclick = () => openSubmission(s);
+    box.appendChild(btn);
+  }
+}
+
+async function refreshSubmissions() {
+  if (!authUser) return;
+  try { renderSubList(await api('/api/submissions')); } catch (e) {}
+}
+
+async function openSubmission(s) {
   try {
-    const list = await api('/api/recent');
-    const box = $('recent-list');
-    if (!list.length) { box.innerHTML = '<span class="muted">暂无</span>'; return; }
-    box.innerHTML = list.slice(0, 10).map(r => {
-      const cls = r.status === 'pass' ? 'ok' : r.status === 'fail' ? 'no' : 'er';
-      const label = r.status === 'pass' ? '通过' : r.status === 'fail' ? '未过' : '错误';
-      const t = new Date(r.time * 1000);
-      const hh = String(t.getHours()).padStart(2, '0');
-      const mm = String(t.getMinutes()).padStart(2, '0');
-      return `<div class="row"><span>${esc(r.problem)}</span><span class="${cls}">${label} ${hh}:${mm}</span></div>`;
-    }).join('');
-  } catch (e) { /* 忽略 */ }
+    const full = await api('/api/submissions/' + s.id);
+    await loadProblem(full.problem);
+    setCode(full.code || detail.initial_code);
+    if (full.result) showResult(full.result);
+    $('status-msg').textContent = '已载入提交 #' + s.id;
+  } catch (e) {
+    $('status-msg').textContent = '加载提交失败: ' + e.message;
+  }
 }
 
 // ---------------- 编辑器 ----------------
@@ -202,6 +282,11 @@ async function showTb() {
 // ---------------- 判题 ----------------
 async function submit() {
   if (!currentId) return;
+  if (!authUser) {
+    $('status-msg').textContent = '请先登录/注册再提交';
+    $('auth-user-input').focus();
+    return;
+  }
   const btn = $('btn-submit');
   btn.disabled = true;
   const status = $('status-msg');
@@ -210,8 +295,7 @@ async function submit() {
     const code = getCode();
     saveCode(currentId, code);
     const r = await api('/api/submit', {
-      method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({id: currentId, code}),
+      method: 'POST', body: JSON.stringify({id: currentId, code}),
     });
     showResult(r);
     status.textContent = '完成';
@@ -219,7 +303,7 @@ async function submit() {
       setSolved(currentId);
       renderList();
     }
-    refreshRecent();
+    refreshSubmissions();
   } catch (e) {
     status.textContent = '请求失败: ' + e.message;
   } finally {
@@ -237,9 +321,19 @@ async function init() {
       localStorage.removeItem('n2t-code-' + detail.id);
     }
   };
+  $('btn-login').onclick = () => doAuth('login');
+  $('btn-register').onclick = () => doAuth('register');
+  $('btn-logout').onclick = logout;
+  $('btn-refresh-sub').onclick = refreshSubmissions;
   $('modal-close').onclick = () => $('modal').classList.add('hidden');
   $('modal').onclick = (e) => { if (e.target === $('modal')) $('modal').classList.add('hidden'); };
   $('editor-fallback').addEventListener('input', () => { if (currentId) saveCode(currentId, $('editor-fallback').value); });
+  $('auth-pass-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') doAuth('login'); });
+  try {
+    authUser = localStorage.getItem(USER_KEY) || null;
+    if (authUser) { const me = await api('/api/me'); authUser = me.username; localStorage.setItem(USER_KEY, authUser); }
+  } catch (e) { authUser = null; }
+  renderAuth();
   try {
     problems = await api('/api/problems');
   } catch (e) {
@@ -248,6 +342,6 @@ async function init() {
   }
   const first = localStorage.getItem('n2t-last') || problems[0].id;
   await loadProblem(first);
-  refreshRecent();
+  renderSubList([]);
 }
 window.addEventListener('DOMContentLoaded', init);

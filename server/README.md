@@ -44,7 +44,10 @@ server/.venv/bin/uvicorn app.main:app --port 8000   # 在 server/ 目录下
 
 ```bash
 docker build -f server/Dockerfile -t n2t-server .
+# 数据卷 /opt/n2t-data 用于持久化 SQLite（用户/会话/提交历史）
+sudo mkdir -p /opt/n2t-data && sudo chown 10001:10001 /opt/n2t-data
 docker run --rm -d -p 8000:8000 \
+  -v /opt/n2t-data:/srv/app/server/data \
   --tmpfs /tmp:size=64m --pids-limit 64 --memory 1g \
   --cap-drop ALL --security-opt no-new-privileges n2t-server
 # 或
@@ -65,11 +68,25 @@ cd server && docker compose up -d
 
 | 方法 | 路径 | 说明 |
 |---|---|---|
+| POST | /api/register | 注册 `{username, password}` → `{token, username}` |
+| POST | /api/login | 登录 → `{token, username}` |
+| POST | /api/logout | 退出（Bearer token） |
+| GET | /api/me | 当前用户 |
 | GET | /api/problems | 题目列表 |
 | GET | /api/problems/{id} | 单题详情（端口/说明/初始代码） |
 | GET | /api/problems/{id}/tb | 官方 testbench 原文（前端“查看测试台”） |
-| GET | /api/recent | 最近判题（内存，匿名） |
-| POST | /api/submit | `{id, code}` → `{status, summary, log, compile, wave}` |
+| POST | /api/submit | 判题（需登录）→ `{status, summary, log, compile, wave}` |
+| GET | /api/submissions | 我的提交历史（含每次结果摘要） |
+| GET | /api/submissions/{id} | 某次提交详情（代码 + 完整结果，可回看波形） |
+| GET | /api/recent | 全局最近判题（内存，匿名） |
+
+## 用户与提交历史
+
+- 注册/登录：用户名 3-24 位（字母/数字/下划线），密码至少 6 位；
+  密码 PBKDF2-HMAC-SHA256 加盐哈希，会话 token 存 SQLite，30 天有效。
+- 提交历史：每次判题记录（代码 + 结果含波形）写入 `server/data/judge.db`，
+  登录后在侧栏“我的提交”查看，点击可载入该次代码与结果回看。
+- 数据持久化：Docker 部署需挂载数据卷（见下），否则重启容器历史丢失。
 
 ## 进阶功能
 

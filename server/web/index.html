@@ -39,6 +39,14 @@ var MONACO_CDNS = [
       <p>从 Nand 到 CPU —— 用 Verilog 重写 nand2tetris Hardware 项目</p>
     </div>
   </div>
+  <div class="auth">
+    <span id="auth-user" class="auth-user hidden"></span>
+    <input id="auth-user-input" class="auth-input" placeholder="用户名" autocomplete="username">
+    <input id="auth-pass-input" class="auth-input" type="password" placeholder="密码" autocomplete="current-password">
+    <button id="btn-login">登录</button>
+    <button id="btn-register">注册</button>
+    <button id="btn-logout" class="hidden">退出</button>
+  </div>
   <a class="gh" href="https://github.com/ml-inory/nand2tetris_verilog" target="_blank">GitHub</a>
 </header>
 
@@ -49,8 +57,11 @@ var MONACO_CDNS = [
       <span id="progress" class="progress"></span>
     </div>
     <div id="problem-list"></div>
-    <div class="sidebar-head" style="border-top:1px solid var(--border)">最近判题</div>
-    <div id="recent-list" class="recent"><span class="muted">暂无</span></div>
+    <div class="sidebar-head" style="border-top:1px solid var(--border)">
+      <span>我的提交</span>
+      <button id="btn-refresh-sub" class="mini">刷新</button>
+    </div>
+    <div id="sub-list" class="recent"><span class="muted">登录后可查看提交历史</span></div>
   </nav>
 
   <main id="main">
