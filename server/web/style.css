@@ -105,3 +105,14 @@ button.mini { padding: 3px 10px; font-size: 12px; }
   .auth { flex-wrap: wrap; }
   .auth-input { width: 90px; }
 }
+
+#login-view { min-height: calc(100vh - 60px); display: flex; align-items: center;
+  justify-content: center; padding: 24px; }
+.login-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+  padding: 32px 36px; width: 380px; display: flex; flex-direction: column; gap: 12px; }
+.login-brand { display: flex; gap: 12px; align-items: center; margin-bottom: 8px; }
+.login-brand h2 { margin: 0; font-size: 17px; }
+.auth-input.wide { width: 100%; box-sizing: border-box; padding: 10px 12px; }
+.login-btns { display: flex; gap: 10px; }
+.login-btns button { flex: 1; }
+.login-msg { min-height: 20px; color: var(--bad); font-size: 13px; }

@@ -39,18 +39,30 @@ var MONACO_CDNS = [
       <p>从 Nand 到 CPU —— 用 Verilog 重写 nand2tetris Hardware 项目</p>
     </div>
   </div>
-  <div class="auth">
-    <span id="auth-user" class="auth-user hidden"></span>
-    <input id="auth-user-input" class="auth-input" placeholder="用户名" autocomplete="username">
-    <input id="auth-pass-input" class="auth-input" type="password" placeholder="密码" autocomplete="current-password">
-    <button id="btn-login">登录</button>
-    <button id="btn-register">注册</button>
-    <button id="btn-logout" class="hidden">退出</button>
+  <div id="auth-area" class="auth hidden">
+    <span id="auth-user" class="auth-user"></span>
+    <button id="btn-logout">退出</button>
   </div>
   <a class="gh" href="https://github.com/ml-inory/nand2tetris_verilog" target="_blank">GitHub</a>
 </header>
 
-<div class="layout">
+<div id="login-view">
+  <div class="login-card">
+    <div class="login-brand"><span class="logo">N2T</span>
+      <div><h2>nand2tetris Verilog 在线练习</h2>
+      <p class="muted">从 Nand 到 CPU —— 登录后开始做题</p></div>
+    </div>
+    <input id="login-user" class="auth-input wide" placeholder="用户名（3-24 位字母/数字/下划线）" autocomplete="username">
+    <input id="login-pass" class="auth-input wide" type="password" placeholder="密码（至少 6 位）" autocomplete="current-password">
+    <div class="login-btns">
+      <button id="btn-login" class="primary">登录</button>
+      <button id="btn-register">注册</button>
+    </div>
+    <div id="login-msg" class="login-msg"></div>
+  </div>
+</div>
+
+<div id="layout" class="layout hidden">
   <nav id="sidebar">
     <div class="sidebar-head">
       <span>题目列表</span>

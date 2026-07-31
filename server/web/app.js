@@ -32,53 +32,47 @@ async function api(path, opts = {}) {
   return r.json();
 }
 
-// ---------------- 进度（localStorage）----------------
-function getSolved() {
-  try { return JSON.parse(localStorage.getItem('n2t-solved') || '[]'); } catch (e) { return []; }
+// ---------------- 页面切换：登录页 / 做题页 ----------------
+function showLogin() {
+  $('login-view').classList.remove('hidden');
+  $('layout').classList.add('hidden');
+  $('auth-area').classList.add('hidden');
+  $('login-user').focus();
 }
-function setSolved(id) {
-  const s = getSolved();
-  if (!s.includes(id)) { s.push(id); localStorage.setItem('n2t-solved', JSON.stringify(s)); }
+
+function showApp() {
+  $('login-view').classList.add('hidden');
+  $('layout').classList.remove('hidden');
+  $('auth-area').classList.remove('hidden');
+  $('auth-user').textContent = '你好，' + authUser;
 }
 
 // ---------------- 认证 ----------------
-function renderAuth() {
-  const logged = !!authUser;
-  $('auth-user').textContent = authUser ? '你好，' + authUser : '';
-  $('auth-user').classList.toggle('hidden', !logged);
-  $('auth-user-input').classList.toggle('hidden', logged);
-  $('auth-pass-input').classList.toggle('hidden', logged);
-  $('btn-login').classList.toggle('hidden', logged);
-  $('btn-register').classList.toggle('hidden', logged);
-  $('btn-logout').classList.toggle('hidden', !logged);
-  if (logged) refreshSubmissions();
-}
-
 async function doAuth(action) {
-  const username = $('auth-user-input').value.trim();
-  const password = $('auth-pass-input').value;
-  if (!username || !password) { $('status-msg').textContent = '请输入用户名和密码'; return; }
+  const username = $('login-user').value.trim();
+  const password = $('login-pass').value;
+  $('login-msg').textContent = '';
+  if (!username || !password) { $('login-msg').textContent = '请输入用户名和密码'; return; }
   try {
     const r = await api('/api/' + action, {method: 'POST', body: JSON.stringify({username, password})});
     localStorage.setItem(TOKEN_KEY, r.token);
     localStorage.setItem(USER_KEY, r.username);
     authUser = r.username;
-    $('auth-pass-input').value = '';
-    renderAuth();
-    refreshSubmissions();
-    $('status-msg').textContent = action === 'login' ? '登录成功' : '注册成功，已登录';
+    $('login-pass').value = '';
+    showApp();
+    await initApp();
   } catch (e) {
-    $('status-msg').textContent = (action === 'login' ? '登录失败: ' : '注册失败: ') + e.message;
+    $('login-msg').textContent = (action === 'login' ? '登录失败：' : '注册失败：') + e.message;
   }
 }
 
 function onAuthExpired() {
-  if (authUser) {
+  if (authUser || getToken()) {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
     authUser = null;
-    renderAuth();
-    $('status-msg').textContent = '登录已过期，请重新登录';
+    showLogin();
+    $('login-msg').textContent = '登录已过期，请重新登录';
   }
 }
 
@@ -87,8 +81,17 @@ async function logout() {
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(USER_KEY);
   authUser = null;
-  renderAuth();
-  renderSubList();
+  showLogin();
+  $('login-msg').textContent = '';
+}
+
+// ---------------- 进度（localStorage）----------------
+function getSolved() {
+  try { return JSON.parse(localStorage.getItem('n2t-solved') || '[]'); } catch (e) { return []; }
+}
+function setSolved(id) {
+  const s = getSolved();
+  if (!s.includes(id)) { s.push(id); localStorage.setItem('n2t-solved', JSON.stringify(s)); }
 }
 
 // ---------------- 题目列表 ----------------
@@ -117,7 +120,6 @@ function renderList() {
 // ---------------- 我的提交 ----------------
 function renderSubList(list) {
   const box = $('sub-list');
-  if (!authUser) { box.innerHTML = '<span class="muted">登录后可查看提交历史</span>'; return; }
   if (!list || !list.length) { box.innerHTML = '<span class="muted">还没有提交记录</span>'; return; }
   box.innerHTML = '';
   for (const s of list.slice(0, 20)) {
@@ -136,7 +138,6 @@ function renderSubList(list) {
 }
 
 async function refreshSubmissions() {
-  if (!authUser) return;
   try { renderSubList(await api('/api/submissions')); } catch (e) {}
 }
 
@@ -282,11 +283,6 @@ async function showTb() {
 // ---------------- 判题 ----------------
 async function submit() {
   if (!currentId) return;
-  if (!authUser) {
-    $('status-msg').textContent = '请先登录/注册再提交';
-    $('auth-user-input').focus();
-    return;
-  }
   const btn = $('btn-submit');
   btn.disabled = true;
   const status = $('status-msg');
@@ -312,6 +308,19 @@ async function submit() {
 }
 
 // ---------------- 初始化 ----------------
+async function initApp() {
+  try {
+    problems = await api('/api/problems');
+  } catch (e) {
+    $('p-title').textContent = '无法连接后端服务';
+    return;
+  }
+  const first = localStorage.getItem('n2t-last') || problems[0].id;
+  await loadProblem(first);
+  renderSubList([]);
+  refreshSubmissions();
+}
+
 async function init() {
   $('btn-submit').onclick = submit;
   $('btn-tb').onclick = showTb;
@@ -328,20 +337,26 @@ async function init() {
   $('modal-close').onclick = () => $('modal').classList.add('hidden');
   $('modal').onclick = (e) => { if (e.target === $('modal')) $('modal').classList.add('hidden'); };
   $('editor-fallback').addEventListener('input', () => { if (currentId) saveCode(currentId, $('editor-fallback').value); });
-  $('auth-pass-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') doAuth('login'); });
-  try {
-    authUser = localStorage.getItem(USER_KEY) || null;
-    if (authUser) { const me = await api('/api/me'); authUser = me.username; localStorage.setItem(USER_KEY, authUser); }
-  } catch (e) { authUser = null; }
-  renderAuth();
-  try {
-    problems = await api('/api/problems');
-  } catch (e) {
-    $('p-title').textContent = '无法连接后端服务';
-    return;
+  $('login-pass').addEventListener('keydown', (e) => { if (e.key === 'Enter') doAuth('login'); });
+
+  // 恢复登录态
+  authUser = null;
+  const savedUser = localStorage.getItem(USER_KEY);
+  const savedToken = getToken();
+  if (savedToken) {
+    try {
+      const me = await api('/api/me');
+      authUser = me.username;
+      localStorage.setItem(USER_KEY, authUser);
+    } catch (e) { /* token 失效，走登录页 */ }
+  } else if (savedUser) {
+    localStorage.removeItem(USER_KEY);
   }
-  const first = localStorage.getItem('n2t-last') || problems[0].id;
-  await loadProblem(first);
-  renderSubList([]);
+  if (authUser) {
+    showApp();
+    await initApp();
+  } else {
+    showLogin();
+  }
 }
 window.addEventListener('DOMContentLoaded', init);

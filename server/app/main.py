@@ -113,13 +113,17 @@ def me(request: Request):
 
 # ---------------- 题目 ----------------
 @app.get('/api/problems')
-def list_problems():
+def list_problems(request: Request):
+    if current_user(request) is None:
+        raise HTTPException(401, '请先登录')
     return [{'id': p['id'], 'title': p['title'], 'project': p['project'], 'module': p['module']}
             for p in PROBLEMS]
 
 
 @app.get('/api/problems/{pid}')
-def get_problem(pid: str):
+def get_problem(pid: str, request: Request):
+    if current_user(request) is None:
+        raise HTTPException(401, '请先登录')
     p = BY_ID.get(pid)
     if p is None:
         raise HTTPException(404, 'problem not found')
@@ -131,7 +135,9 @@ def get_problem(pid: str):
 
 
 @app.get('/api/problems/{pid}/tb')
-def get_tb(pid: str):
+def get_tb(pid: str, request: Request):
+    if current_user(request) is None:
+        raise HTTPException(401, '请先登录')
     p = BY_ID.get(pid)
     if p is None:
         raise HTTPException(404, 'problem not found')
@@ -188,7 +194,9 @@ def submission_detail(sid: int, request: Request):
 
 
 @app.get('/api/recent')
-def recent():
+def recent(request: Request):
+    if current_user(request) is None:
+        raise HTTPException(401, '请先登录')
     return list(RECENT)
 
 
