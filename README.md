@@ -24,7 +24,8 @@ Makefile         一键仿真 / 测试 / 波形 / 生成作业
 ## 在线练习（server 分支）
 
 仓库的 `server` 分支附带一个类似 [HDLBits](https://hdlbits.01xz.net/) 的在线判题小站：
-浏览器里写 Verilog，服务端用 iverilog 跑官方 testbench 实时判分。
+浏览器里写 Verilog，服务端用 iverilog 跑官方 testbench 实时判分，支持波形可视化
+（WaveDrom）、进度统计、测试台查看与最近判题。
 
 ```bash
 git checkout server          # 切到在线判题分支

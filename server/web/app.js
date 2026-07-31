@@ -1,8 +1,8 @@
 'use strict';
 
-let problems = [];          // [{id,title,project,module}]
-let detail = null;          // 当前题目详情
-let editor = null;          // Monaco 实例（或 textarea）
+let problems = [];
+let detail = null;
+let editor = null;
 let editorReady = false;
 let currentId = null;
 
@@ -15,12 +15,27 @@ function esc(s) {
 
 async function api(path, opts) {
   const r = await fetch(path, opts);
-  if (!r.ok) throw new Error('HTTP ' + r.status);
+  if (!r.ok) {
+    let msg = 'HTTP ' + r.status;
+    try { const j = await r.json(); if (j.error) msg = j.error; } catch (e) {}
+    throw new Error(msg);
+  }
   return r.json();
+}
+
+// ---------------- 进度（localStorage）----------------
+function getSolved() {
+  try { return JSON.parse(localStorage.getItem('n2t-solved') || '[]'); } catch (e) { return []; }
+}
+function setSolved(id) {
+  const s = getSolved();
+  if (!s.includes(id)) { s.push(id); localStorage.setItem('n2t-solved', JSON.stringify(s)); }
 }
 
 // ---------------- 题目列表 ----------------
 function renderList() {
+  const solved = getSolved();
+  $('progress').textContent = solved.length + '/' + problems.length;
   const box = $('problem-list');
   box.innerHTML = '';
   const byProj = {};
@@ -33,11 +48,28 @@ function renderList() {
     for (const p of byProj[proj]) {
       const b = document.createElement('button');
       b.className = 'proj-item' + (p.id === currentId ? ' active' : '');
-      b.textContent = p.title;
+      b.innerHTML = (solved.includes(p.id) ? '<span class="done">✓</span> ' : '') + esc(p.title);
       b.onclick = () => loadProblem(p.id);
       box.appendChild(b);
     }
   }
+}
+
+// ---------------- 最近判题 ----------------
+async function refreshRecent() {
+  try {
+    const list = await api('/api/recent');
+    const box = $('recent-list');
+    if (!list.length) { box.innerHTML = '<span class="muted">暂无</span>'; return; }
+    box.innerHTML = list.slice(0, 10).map(r => {
+      const cls = r.status === 'pass' ? 'ok' : r.status === 'fail' ? 'no' : 'er';
+      const label = r.status === 'pass' ? '通过' : r.status === 'fail' ? '未过' : '错误';
+      const t = new Date(r.time * 1000);
+      const hh = String(t.getHours()).padStart(2, '0');
+      const mm = String(t.getMinutes()).padStart(2, '0');
+      return `<div class="row"><span>${esc(r.problem)}</span><span class="${cls}">${label} ${hh}:${mm}</span></div>`;
+    }).join('');
+  } catch (e) { /* 忽略 */ }
 }
 
 // ---------------- 编辑器 ----------------
@@ -72,7 +104,7 @@ function setupEditor() {
 window.addEventListener('monaco-ready', () => setupEditor());
 window.addEventListener('DOMContentLoaded', () => {
   if (window.monaco && window.monaco.editor) setupEditor();
-  else setTimeout(setupEditor, 4000);   // CDN 慢/失败时兜底为 textarea
+  else setTimeout(setupEditor, 4000);
 });
 
 function getSaved(id) { try { return localStorage.getItem('n2t-code-' + id); } catch (e) { return null; } }
@@ -94,6 +126,24 @@ function renderPorts() {
   } else pw.classList.add('hidden');
 }
 
+function renderWave(waveJson) {
+  const box = $('wave');
+  box.innerHTML = '';
+  if (!waveJson || !waveJson.signal || !waveJson.signal.length) return;
+  const holder = document.createElement('div');
+  holder.id = 'wave0';
+  box.appendChild(holder);
+  try {
+    if (window.WaveDrom && window.WaveDrom.renderWaveForm) {
+      WaveDrom.renderWaveForm(0, waveJson, 'wave');
+    } else {
+      holder.textContent = JSON.stringify(waveJson);
+    }
+  } catch (e) {
+    holder.textContent = JSON.stringify(waveJson);
+  }
+}
+
 function showResult(r) {
   const box = $('result');
   box.classList.remove('hidden');
@@ -110,10 +160,18 @@ function showResult(r) {
   if (r.compile && !r.compile.ok) logParts.push('--- 编译错误 ---\n' + r.compile.log);
   if (r.log) logParts.push('--- 仿真输出 ---\n' + r.log);
   $('res-log').textContent = logParts.join('\n\n') || '(无输出)';
+  const wb = $('wave-box');
+  if (r.wave && r.wave.signal && r.wave.signal.length) {
+    wb.classList.remove('hidden');
+    renderWave(r.wave);
+  } else {
+    wb.classList.add('hidden');
+  }
 }
 
 async function loadProblem(id) {
   currentId = id;
+  localStorage.setItem('n2t-last', id);
   const saved = getSaved(id);
   if (saved != null) setCode(saved);
   detail = await api('/api/problems/' + id);
@@ -126,6 +184,19 @@ async function loadProblem(id) {
   renderList();
   $('result').classList.add('hidden');
   $('status-msg').textContent = '';
+}
+
+// ---------------- 测试台查看 ----------------
+async function showTb() {
+  if (!currentId) return;
+  try {
+    const r = await api('/api/problems/' + currentId + '/tb');
+    $('modal-title').textContent = detail.title + ' 官方测试台';
+    $('modal-body').textContent = r.tb;
+    $('modal').classList.remove('hidden');
+  } catch (e) {
+    $('status-msg').textContent = '获取测试台失败: ' + e.message;
+  }
 }
 
 // ---------------- 判题 ----------------
@@ -144,6 +215,11 @@ async function submit() {
     });
     showResult(r);
     status.textContent = '完成';
+    if (r.status === 'pass') {
+      setSolved(currentId);
+      renderList();
+    }
+    refreshRecent();
   } catch (e) {
     status.textContent = '请求失败: ' + e.message;
   } finally {
@@ -154,12 +230,15 @@ async function submit() {
 // ---------------- 初始化 ----------------
 async function init() {
   $('btn-submit').onclick = submit;
+  $('btn-tb').onclick = showTb;
   $('btn-reset').onclick = () => {
     if (detail && confirm('恢复初始模板？当前代码将被覆盖。')) {
       setCode(detail.initial_code);
       localStorage.removeItem('n2t-code-' + detail.id);
     }
   };
+  $('modal-close').onclick = () => $('modal').classList.add('hidden');
+  $('modal').onclick = (e) => { if (e.target === $('modal')) $('modal').classList.add('hidden'); };
   $('editor-fallback').addEventListener('input', () => { if (currentId) saveCode(currentId, $('editor-fallback').value); });
   try {
     problems = await api('/api/problems');
@@ -169,6 +248,6 @@ async function init() {
   }
   const first = localStorage.getItem('n2t-last') || problems[0].id;
   await loadProblem(first);
-  localStorage.setItem('n2t-last', currentId);
+  refreshRecent();
 }
 window.addEventListener('DOMContentLoaded', init);

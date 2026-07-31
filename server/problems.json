@@ -25,6 +25,7 @@
       ],
       "tb": "tb/01/Not_tb.v",
       "tb_top": "Not_tb",
+      "wave_tb": "server/wave_tb/01/Not.v",
       "runtime_files": []
     },
     {
@@ -58,6 +59,7 @@
       ],
       "tb": "tb/01/And_tb.v",
       "tb_top": "And_tb",
+      "wave_tb": "server/wave_tb/01/And.v",
       "runtime_files": []
     },
     {
@@ -91,6 +93,7 @@
       ],
       "tb": "tb/01/Or_tb.v",
       "tb_top": "Or_tb",
+      "wave_tb": "server/wave_tb/01/Or.v",
       "runtime_files": []
     },
     {
@@ -126,6 +129,7 @@
       ],
       "tb": "tb/01/Xor_tb.v",
       "tb_top": "Xor_tb",
+      "wave_tb": "server/wave_tb/01/Xor.v",
       "runtime_files": []
     },
     {
@@ -166,6 +170,7 @@
       ],
       "tb": "tb/01/Mux_tb.v",
       "tb_top": "Mux_tb",
+      "wave_tb": "server/wave_tb/01/Mux.v",
       "runtime_files": []
     },
     {
@@ -205,6 +210,7 @@
       ],
       "tb": "tb/01/DMux_tb.v",
       "tb_top": "DMux_tb",
+      "wave_tb": "server/wave_tb/01/DMux.v",
       "runtime_files": []
     },
     {
@@ -233,6 +239,7 @@
       ],
       "tb": "tb/01/Not16_tb.v",
       "tb_top": "Not16_tb",
+      "wave_tb": "server/wave_tb/01/Not16.v",
       "runtime_files": []
     },
     {
@@ -267,6 +274,7 @@
       ],
       "tb": "tb/01/And16_tb.v",
       "tb_top": "And16_tb",
+      "wave_tb": "server/wave_tb/01/And16.v",
       "runtime_files": []
     },
     {
@@ -301,6 +309,7 @@
       ],
       "tb": "tb/01/Or16_tb.v",
       "tb_top": "Or16_tb",
+      "wave_tb": "server/wave_tb/01/Or16.v",
       "runtime_files": []
     },
     {
@@ -342,6 +351,7 @@
       ],
       "tb": "tb/01/Mux16_tb.v",
       "tb_top": "Mux16_tb",
+      "wave_tb": "server/wave_tb/01/Mux16.v",
       "runtime_files": []
     },
     {
@@ -371,6 +381,7 @@
       ],
       "tb": "tb/01/Or8Way_tb.v",
       "tb_top": "Or8Way_tb",
+      "wave_tb": "server/wave_tb/01/Or8Way.v",
       "runtime_files": []
     },
     {
@@ -423,6 +434,7 @@
       ],
       "tb": "tb/01/Mux4Way16_tb.v",
       "tb_top": "Mux4Way16_tb",
+      "wave_tb": "server/wave_tb/01/Mux4Way16.v",
       "runtime_files": []
     },
     {
@@ -495,6 +507,7 @@
       ],
       "tb": "tb/01/Mux8Way16_tb.v",
       "tb_top": "Mux8Way16_tb",
+      "wave_tb": "server/wave_tb/01/Mux8Way16.v",
       "runtime_files": []
     },
     {
@@ -545,6 +558,7 @@
       ],
       "tb": "tb/01/DMux4Way_tb.v",
       "tb_top": "DMux4Way_tb",
+      "wave_tb": "server/wave_tb/01/DMux4Way.v",
       "runtime_files": []
     },
     {
@@ -615,6 +629,7 @@
       ],
       "tb": "tb/01/DMux8Way_tb.v",
       "tb_top": "DMux8Way_tb",
+      "wave_tb": "server/wave_tb/01/DMux8Way.v",
       "runtime_files": []
     },
     {
@@ -656,6 +671,7 @@
       ],
       "tb": "tb/02/HalfAdder_tb.v",
       "tb_top": "HalfAdder_tb",
+      "wave_tb": "server/wave_tb/02/HalfAdder.v",
       "runtime_files": []
     },
     {
@@ -703,6 +719,7 @@
       ],
       "tb": "tb/02/FullAdder_tb.v",
       "tb_top": "FullAdder_tb",
+      "wave_tb": "server/wave_tb/02/FullAdder.v",
       "runtime_files": []
     },
     {
@@ -741,6 +758,7 @@
       ],
       "tb": "tb/02/Add16_tb.v",
       "tb_top": "Add16_tb",
+      "wave_tb": "server/wave_tb/02/Add16.v",
       "runtime_files": []
     },
     {
@@ -775,6 +793,7 @@
       ],
       "tb": "tb/02/Inc16_tb.v",
       "tb_top": "Inc16_tb",
+      "wave_tb": "server/wave_tb/02/Inc16.v",
       "runtime_files": []
     },
     {
@@ -859,6 +878,7 @@
       ],
       "tb": "tb/02/ALU_tb.v",
       "tb_top": "ALU_tb",
+      "wave_tb": "server/wave_tb/02/ALU.v",
       "runtime_files": []
     },
     {
@@ -894,6 +914,7 @@
       "deps": [],
       "tb": "tb/03/Bit_tb.v",
       "tb_top": "Bit_tb",
+      "wave_tb": "server/wave_tb/03/Bit.v",
       "runtime_files": []
     },
     {
@@ -931,6 +952,7 @@
       ],
       "tb": "tb/03/Register_tb.v",
       "tb_top": "Register_tb",
+      "wave_tb": "server/wave_tb/03/Register.v",
       "runtime_files": []
     },
     {
@@ -983,6 +1005,7 @@
       ],
       "tb": "tb/03/RAM8_tb.v",
       "tb_top": "RAM8_tb",
+      "wave_tb": "server/wave_tb/03/RAM8.v",
       "runtime_files": []
     },
     {
@@ -1036,6 +1059,7 @@
       ],
       "tb": "tb/03/RAM64_tb.v",
       "tb_top": "RAM64_tb",
+      "wave_tb": "server/wave_tb/03/RAM64.v",
       "runtime_files": []
     },
     {
@@ -1076,6 +1100,7 @@
       "deps": [],
       "tb": "tb/03/RAM512_tb.v",
       "tb_top": "RAM512_tb",
+      "wave_tb": "server/wave_tb/03/RAM512.v",
       "runtime_files": []
     },
     {
@@ -1116,6 +1141,7 @@
       "deps": [],
       "tb": "tb/03/RAM4K_tb.v",
       "tb_top": "RAM4K_tb",
+      "wave_tb": "server/wave_tb/03/RAM4K.v",
       "runtime_files": []
     },
     {
@@ -1171,6 +1197,7 @@
       "deps": [],
       "tb": "tb/03/RAM16K_tb.v",
       "tb_top": "RAM16K_tb",
+      "wave_tb": "server/wave_tb/03/RAM16K.v",
       "runtime_files": []
     },
     {
@@ -1230,6 +1257,7 @@
       ],
       "tb": "tb/03/PC_tb.v",
       "tb_top": "PC_tb",
+      "wave_tb": "server/wave_tb/03/PC.v",
       "runtime_files": []
     },
     {
@@ -1305,6 +1333,7 @@
       ],
       "tb": "tb/05/CPU_tb.v",
       "tb_top": "CPU_tb",
+      "wave_tb": "server/wave_tb/05/CPU.v",
       "runtime_files": []
     },
     {
@@ -1417,6 +1446,7 @@
       ],
       "tb": "tb/05/ComputerAdd_tb.v",
       "tb_top": "ComputerAdd_tb",
+      "wave_tb": "server/wave_tb/05/ComputerAdd.v",
       "runtime_files": [
         "programs/Add.hack"
       ]
@@ -1523,6 +1553,7 @@
       ],
       "tb": "tb/05/ComputerMax_tb.v",
       "tb_top": "ComputerMax_tb",
+      "wave_tb": "server/wave_tb/05/ComputerMax.v",
       "runtime_files": [
         "programs/Max.hack"
       ]
@@ -1629,6 +1660,7 @@
       ],
       "tb": "tb/05/ComputerRect_tb.v",
       "tb_top": "ComputerRect_tb",
+      "wave_tb": "server/wave_tb/05/ComputerRect.v",
       "runtime_files": [
         "programs/Rect.hack"
       ]

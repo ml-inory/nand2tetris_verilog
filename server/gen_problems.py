@@ -102,6 +102,7 @@ def main():
         sol_file = os.path.join(SOL, proj, fname)
         asg_file = os.path.join(ASG, proj, fname)
         tb_file = os.path.join(TB, proj, chip + '_tb.v')
+        wave_file = os.path.join(HERE, 'wave_tb', proj, chip + '.v')
         assert os.path.exists(sol_file), sol_file
         assert os.path.exists(asg_file), asg_file
         assert os.path.exists(tb_file), tb_file
@@ -120,6 +121,7 @@ def main():
             'deps': collect_deps(chip),
             'tb': os.path.relpath(tb_file, ROOT),
             'tb_top': chip + '_tb',
+            'wave_tb': os.path.relpath(wave_file, ROOT),
             'runtime_files': runtime_files(tb_file),
         })
 

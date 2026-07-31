@@ -114,15 +114,23 @@ def judge(problem_id, code):
         if m:
             result['status'] = 'pass'
             result['summary'] = {'total': int(m.group(1)), 'passed': int(m.group(1)), 'failed': 0}
-            return result
-        m = FAIL_SUM_RE.search(out)
-        if m:
-            nfail, ntotal = int(m.group(1)), int(m.group(2))
-            result['status'] = 'fail'
-            result['summary'] = {'total': ntotal, 'passed': ntotal - nfail, 'failed': nfail}
-            return result
-        result['status'] = 'error'
-        result['error'] = 'no test summary in output'
+        else:
+            m = FAIL_SUM_RE.search(out)
+            if m:
+                nfail, ntotal = int(m.group(1)), int(m.group(2))
+                result['status'] = 'fail'
+                result['summary'] = {'total': ntotal, 'passed': ntotal - nfail, 'failed': nfail}
+            else:
+                result['status'] = 'error'
+                result['error'] = 'no test summary in output'
+                return result
+
+        # 附带波形（只 dump 端口，VCD 很小；失败不影响判题结果）
+        try:
+            from .wave import run_wave
+            result['wave'] = run_wave(prob, workdir)
+        except Exception:
+            result['wave'] = None
         return result
     finally:
         shutil.rmtree(workdir, ignore_errors=True)

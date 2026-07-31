@@ -1,0 +1,122 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+wave.py — 波形：跑“波形演示 testbench”生成 wave.vcd，解析成 WaveDrom JSON。
+
+只 dump 端口信号，VCD 很小；解析也只关心 $var 声明的端口。
+返回结构（WaveDrom 兼容）：
+    {'signal': [{'name': 'a', 'wave': '01.10'}, {'name': 'out', 'wave': '=..=', 'data': ['0','f']}]}
+"""
+import os
+import re
+
+from .judge import _run, IVERILOG, VVP, ROOT
+
+HEX = '0123456789abcdef'
+
+
+def parse_vcd(path):
+    """返回 {信号名: [(time, value_str), ...]}。value_str 为二进制串或 '0'/'1'/'x'/'z'。"""
+    var_id = {}
+    events = {}
+    cur = 0
+    with open(path, 'r', encoding='utf-8', errors='replace') as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            if line.startswith('$var'):
+                # $var wire 16 ! name $end
+                parts = line.split()
+                if len(parts) >= 5:
+                    var_id[parts[3]] = parts[4]
+            elif line.startswith('$enddefinitions'):
+                break
+    for name in var_id.values():
+        events[name] = []
+
+    with open(path, 'r', encoding='utf-8', errors='replace') as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            if line.startswith('#'):
+                cur = int(line[1:])
+            elif line.startswith('b'):
+                m = re.match(r'b([01xzXZ]+)\s+(\S+)', line)
+                if m:
+                    vid = m.group(2)
+                    if vid in var_id:
+                        events[var_id[vid]].append((cur, m.group(1).lower()))
+            elif len(line) >= 2 and line[0] in '01xXzZ' and line[1] in var_id:
+                events[var_id[line[1]]].append((cur, line[0].lower()))
+    return {k: v for k, v in events.items() if v}
+
+
+def _to_hex(binstr):
+    """二进制串（可能含 x/z）-> 小写十六进制串。"""
+    while len(binstr) % 4:
+        binstr = '0' + binstr
+    out = []
+    for i in range(0, len(binstr), 4):
+        nib = binstr[i:i + 4]
+        if 'x' in nib:
+            out.append('x')
+        elif 'z' in nib:
+            out.append('z')
+        else:
+            out.append(HEX[int(nib, 2)])
+    return ''.join(out)
+
+
+def to_wavedrom(events, port_names):
+    """按端口顺序生成 WaveDrom signal 行。"""
+    times = sorted(set(t for ev in events.values() for (t, _) in ev))
+    rows = []
+    for name in port_names:
+        ev = events.get(name, [])
+        if not ev:
+            continue
+        idx = 0
+        wave = []
+        data = []
+        for t in times:
+            if idx < len(ev) and ev[idx][0] == t:
+                val = ev[idx][1]
+                idx += 1
+            # 保持 idx 指向 >= 当前时间的事件
+            while idx < len(ev) and ev[idx][0] <= t:
+                idx += 1
+            if len(val) == 1 and val in '01xz':
+                wave.append(val)
+            elif len(val) == 1:
+                wave.append('x')
+            else:
+                wave.append('=')
+                data.append(_to_hex(val))
+        row = {'name': name, 'wave': ''.join(wave)}
+        if data:
+            row['data'] = data
+        rows.append(row)
+    return {'signal': rows}
+
+
+def run_wave(prob, workdir):
+    """在已有 user.v + 依赖模块的 workdir 里跑波形 tb，返回 WaveDrom JSON（失败返回 None）。"""
+    import shutil
+    wave_tb = os.path.join(workdir, 'wave_tb.v')
+    shutil.copy(os.path.join(ROOT, prob['wave_tb']), wave_tb)
+    cmd = [IVERILOG, '-g2012', '-s', prob['id'] + '_wave_tb', '-o', 'wave.vvp',
+           'user.v', 'wave_tb.v'] + sorted(f for f in os.listdir(workdir) if f.startswith('dep'))
+    rc, out, err = _run(cmd, workdir, 15)
+    if rc != 0:
+        return None
+    rc, out, err = _run([VVP, 'wave.vvp'], workdir, 30)
+    if rc != 0:
+        return None
+    vcd = os.path.join(workdir, 'wave.vcd')
+    if not os.path.exists(vcd):
+        return None
+    events = parse_vcd(vcd)
+    ports = [p['name'] for p in prob['ports']]
+    return to_wavedrom(events, ports)

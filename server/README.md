@@ -67,18 +67,33 @@ cd server && docker compose up -d
 |---|---|---|
 | GET | /api/problems | 题目列表 |
 | GET | /api/problems/{id} | 单题详情（端口/说明/初始代码） |
-| POST | /api/submit | `{id, code}` → `{status: pass\|fail\|error, summary, log, compile}` |
+| GET | /api/problems/{id}/tb | 官方 testbench 原文（前端“查看测试台”） |
+| GET | /api/recent | 最近判题（内存，匿名） |
+| POST | /api/submit | `{id, code}` → `{status, summary, log, compile, wave}` |
+
+## 进阶功能
+
+- **波形可视化**：判题通过/未通过都会附带 `wave`（WaveDrom JSON，只含端口信号）。
+  前端用仓库内 vendored 的 WaveDrom（`server/web/vendor/`，MIT）本地渲染，无需外部 CDN。
+- **进度统计**：题目列表显示 `已完成 X/32`，通过的题目标 ✓（localStorage，本机记录）。
+- **测试台查看**：每题可查看官方 testbench 原文，了解测试向量与期望。
+- **最近判题**：侧栏显示最近 10 条判题结果（服务端内存，重启清空）。
+- **提交限流**：每 IP 每 60s 最多 `SUBMIT_LIMIT` 次（默认 60，环境变量可调，超限返回 429）。
+
+## 题库更新
 
 ## 题库更新
 
 ```bash
 make assign          # 从 solution 重新生成 assignment（tools/gen_assignment.py）
 make tb              # 重新生成 testbench（tools/tst2tb.py）
-python3 server/gen_problems.py   # 重新生成题库 JSON
+python3 server/gen_wave.py      # 重新生成波形演示激励（server/wave_tb/）
+python3 server/gen_problems.py  # 重新生成题库 JSON（含 wave_tb 路径）
 ```
 
 ## 已知限制 / 后续可做
 
-- 未做波形可视化（可加 VCD → WaveDrom）。
-- 未做用户/进度持久化（前端仅用 localStorage 记忆代码）。
-- 判题并发默认不限，可加 `--limit-concurrency` 或队列。
+- 无账号体系：进度在 localStorage、最近判题在服务端内存，换浏览器/重启即丢失；
+  要做排行榜/提交历史需加用户系统与数据库。
+- 判题为同步执行，高并发时建议加队列或 `--limit-concurrency`。
+- 波形为“演示激励”（官方 .tst 开头若干步），不是完整回归波形。
