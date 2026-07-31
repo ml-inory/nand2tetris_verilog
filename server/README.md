@@ -3,6 +3,8 @@
 把仓库里的 32 道 Verilog 作业发布成类似 HDLBits 的在线练习：浏览器里写代码，
 服务端用 Icarus Verilog 跑官方 testbench，实时返回 PASS/FAIL 与不匹配行。
 
+**线上地址：http://43.153.202.142/**（腾讯云，端口 80；建议尽快绑定域名 + HTTPS）
+
 ## 架构
 
 ```
