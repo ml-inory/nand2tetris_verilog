@@ -172,6 +172,15 @@ def get_submission(user_id, sid):
     return d
 
 
+def get_last_submission(user_id, problem):
+    """该用户某题最近一次提交（code/status/created_at），无则 None。"""
+    row = _conn().execute(
+        'SELECT code, status, created_at FROM submissions '
+        'WHERE user_id = ? AND problem = ? ORDER BY id DESC LIMIT 1',
+        (user_id, problem)).fetchone()
+    return dict(row) if row else None
+
+
 # ---------------- 进度 / 草稿（按账号，跨浏览器同步）----------------
 def list_solved(user_id):
     """该用户所有通过（status='pass'）的题目 id。"""

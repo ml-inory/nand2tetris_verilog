@@ -313,7 +313,9 @@ async function loadProblem(id) {
     }
   }
   const saved = getSaved(id);
-  setCode(saved != null ? saved : detail.initial_code);
+  const last = detail.last_submission || null;
+  // 默认显示最近一次提交的代码（草稿优先于最近提交，再回退到初始模板）
+  setCode(saved != null ? saved : (last && last.code ? last.code : detail.initial_code));
   $('p-title').textContent = detail.title;
   $('p-badge').textContent = 'Project ' + detail.project;
   $('p-module').textContent = detail.module;
@@ -321,7 +323,16 @@ async function loadProblem(id) {
   renderPorts();
   renderList();
   $('result').classList.add('hidden');
-  $('status-msg').textContent = '';
+  if (last) {
+    const st = last.status === 'pass' ? '通过' : last.status === 'fail' ? '未通过' : '错误';
+    const t = new Date(last.created_at * 1000);
+    const pad = (n) => String(n).padStart(2, '0');
+    const label = '最近提交：' + st + '（' +
+      (t.getMonth() + 1) + '-' + pad(t.getDate()) + ' ' + pad(t.getHours()) + ':' + pad(t.getMinutes()) + '）';
+    $('status-msg').textContent = label;
+  } else {
+    $('status-msg').textContent = '';
+  }
 }
 
 // ---------------- 测试台查看 ----------------

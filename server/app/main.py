@@ -129,15 +129,18 @@ def list_problems(request: Request):
 
 @app.get('/api/problems/{pid}')
 def get_problem(pid: str, request: Request):
-    if current_user(request) is None:
+    u = current_user(request)
+    if u is None:
         raise HTTPException(401, '请先登录')
     p = BY_ID.get(pid)
     if p is None:
         raise HTTPException(404, 'problem not found')
+    last = db.get_last_submission(u['id'], pid)
     return {
         'id': p['id'], 'title': p['title'], 'project': p['project'], 'module': p['module'],
         'ports': p['ports'], 'probes': p['probes'], 'description': p['description'],
         'initial_code': p['initial_code'], 'deps': len(p['deps']),
+        'last_submission': last,
     }
 
 
