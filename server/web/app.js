@@ -6,6 +6,9 @@ let editor = null;
 let editorReady = false;
 let currentId = null;
 let authUser = null;
+let solvedSet = new Set();          // 已通过题目（后端按账号同步）
+let draftCache = {};                // id -> 后端草稿（null 表示无）
+let draftTimers = {};
 
 const $ = (id) => document.getElementById(id);
 const dirName = (d) => ({in: '输入', out: '输出', clk: '时钟'}[d] || d);
@@ -85,19 +88,12 @@ async function logout() {
   $('login-msg').textContent = '';
 }
 
-// ---------------- 进度（localStorage）----------------
-function getSolved() {
-  try { return JSON.parse(localStorage.getItem('n2t-solved') || '[]'); } catch (e) { return []; }
-}
-function setSolved(id) {
-  const s = getSolved();
-  if (!s.includes(id)) { s.push(id); localStorage.setItem('n2t-solved', JSON.stringify(s)); }
-}
+// ---------------- 进度（后端按账号，跨浏览器同步）----------------
+function markSolved(id) { solvedSet.add(id); }
 
 // ---------------- 题目列表 ----------------
 function renderList() {
-  const solved = getSolved();
-  $('progress').textContent = solved.length + '/' + problems.length;
+  $('progress').textContent = solvedSet.size + '/' + problems.length;
   const box = $('problem-list');
   box.innerHTML = '';
   const byProj = {};
@@ -110,7 +106,7 @@ function renderList() {
     for (const p of byProj[proj]) {
       const b = document.createElement('button');
       b.className = 'proj-item' + (p.id === currentId ? ' active' : '');
-      b.innerHTML = (solved.includes(p.id) ? '<span class="done">✓</span> ' : '') + esc(p.title);
+      b.innerHTML = (solvedSet.has(p.id) ? '<span class="done">✓</span> ' : '') + esc(p.title);
       b.onclick = () => loadProblem(p.id);
       box.appendChild(b);
     }
@@ -196,9 +192,9 @@ window.addEventListener('DOMContentLoaded', () => {
   else setTimeout(setupEditor, 4000);
 });
 
-function getSaved(id) {
-  // 空历史/纯空白 -> 回到带模块定义的初始模板（骨架不被顶掉）。
-  // 只写了实现体（如 assign out = ~in;）-> 用模板模块头补齐再恢复，刷新不丢代码。
+function getLocalSaved(id) {
+  // localStorage 兜底草稿：空历史/纯空白返回 null（用初始模板）；
+  // 只写了实现体（如 assign out = ~in;）-> 用模板模块头补齐再恢复。
   try {
     const v = localStorage.getItem('n2t-code-' + id);
     if (!v || !v.trim()) return null;
@@ -210,6 +206,20 @@ function getSaved(id) {
     return v;
   } catch (e) { return null; }
 }
+
+function getSaved(id) {
+  // 优先后端草稿（draftCache 在 loadProblem 时填充），其次 localStorage 兜底。
+  if (draftCache.hasOwnProperty(id)) return draftCache[id] || null;
+  return getLocalSaved(id);
+}
+
+function scheduleDraftSync(id, code) {
+  clearTimeout(draftTimers[id]);
+  draftTimers[id] = setTimeout(() => {
+    api('/api/drafts/' + id, {method: 'PUT', body: JSON.stringify({code})}).catch(() => {});
+  }, 500);
+}
+
 function saveCode(id, code) {
   try {
     let v = code;
@@ -218,6 +228,8 @@ function saveCode(id, code) {
       if (m) v = m[0] + '\n    ' + v.trim() + '\nendmodule\n';
     }
     localStorage.setItem('n2t-code-' + id, v);
+    draftCache[id] = v;
+    scheduleDraftSync(id, v);
   } catch (e) {}
 }
 
@@ -286,6 +298,20 @@ async function loadProblem(id) {
   currentId = id;
   localStorage.setItem('n2t-last', id);
   detail = await api('/api/problems/' + id);
+  // 拉后端草稿；没有则把旧 localStorage 草稿迁移到后端（跨浏览器可见）
+  try {
+    const d = await api('/api/drafts/' + id);
+    draftCache[id] = d.code || null;
+  } catch (e) {
+    draftCache[id] = null;
+  }
+  if (!draftCache[id]) {
+    const local = getLocalSaved(id);
+    if (local) {
+      draftCache[id] = local;
+      scheduleDraftSync(id, local);
+    }
+  }
   const saved = getSaved(id);
   setCode(saved != null ? saved : detail.initial_code);
   $('p-title').textContent = detail.title;
@@ -327,7 +353,7 @@ async function submit() {
     showResult(r);
     status.textContent = '完成';
     if (r.status === 'pass') {
-      setSolved(currentId);
+      markSolved(currentId);
       renderList();
     }
     refreshSubmissions();
@@ -346,6 +372,9 @@ async function initApp() {
     $('p-title').textContent = '无法连接后端服务';
     return;
   }
+  try {
+    solvedSet = new Set((await api('/api/solved')).solved);
+  } catch (e) { solvedSet = new Set(); }
   const first = localStorage.getItem('n2t-last') || problems[0].id;
   await loadProblem(first);
   renderSubList([]);

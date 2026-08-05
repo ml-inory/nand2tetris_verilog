@@ -60,6 +60,13 @@ def init_db():
             created_at INTEGER NOT NULL
         );
         CREATE INDEX IF NOT EXISTS idx_submissions_user ON submissions(user_id, id DESC);
+        CREATE TABLE IF NOT EXISTS drafts (
+            user_id    INTEGER NOT NULL REFERENCES users(id),
+            problem    TEXT NOT NULL,
+            code       TEXT NOT NULL,
+            updated_at INTEGER NOT NULL,
+            PRIMARY KEY (user_id, problem)
+        );
         ''')
 
 
@@ -163,6 +170,30 @@ def get_submission(user_id, sid):
     d = dict(row)
     d['result'] = json.loads(d['result']) if d['result'] else None
     return d
+
+
+# ---------------- 进度 / 草稿（按账号，跨浏览器同步）----------------
+def list_solved(user_id):
+    """该用户所有通过（status='pass'）的题目 id。"""
+    rows = _conn().execute(
+        'SELECT DISTINCT problem FROM submissions WHERE user_id = ? AND status = ?',
+        (user_id, 'pass')).fetchall()
+    return [r['problem'] for r in rows]
+
+
+def get_draft(user_id, problem):
+    row = _conn().execute('SELECT code FROM drafts WHERE user_id = ? AND problem = ?',
+                          (user_id, problem)).fetchone()
+    return row['code'] if row else None
+
+
+def set_draft(user_id, problem, code):
+    with _conn() as c:
+        c.execute(
+            'INSERT INTO drafts (user_id, problem, code, updated_at) VALUES (?,?,?,?) '
+            'ON CONFLICT(user_id, problem) DO UPDATE SET '
+            'code = excluded.code, updated_at = excluded.updated_at',
+            (user_id, problem, code, int(time.time())))
 
 
 init_db()

@@ -13,6 +13,9 @@
   POST /api/submit              判题 {id, code}（需登录）
   GET  /api/submissions         我的提交历史
   GET  /api/submissions/{sid}   某次提交详情（代码 + 结果）
+  GET  /api/solved              我已通过的题目（跨浏览器同步）
+  GET  /api/drafts/{id}         我的题目草稿
+  PUT  /api/drafts/{id}         保存我的题目草稿
   GET  /api/recent              全局最近判题（匿名）
   GET  /                        前端单页（web/）
 """
@@ -50,6 +53,10 @@ class AuthBody(BaseModel):
 
 class Submit(BaseModel):
     id: str
+    code: str
+
+
+class DraftBody(BaseModel):
     code: str
 
 
@@ -191,6 +198,33 @@ def submission_detail(sid: int, request: Request):
     if row is None:
         raise HTTPException(404, 'submission not found')
     return row
+
+
+@app.get('/api/solved')
+def my_solved(request: Request):
+    u = current_user(request)
+    if u is None:
+        raise HTTPException(401, 'not logged in')
+    return {'solved': db.list_solved(u['id'])}
+
+
+@app.get('/api/drafts/{pid}')
+def get_draft(pid: str, request: Request):
+    u = current_user(request)
+    if u is None:
+        raise HTTPException(401, 'not logged in')
+    return {'code': db.get_draft(u['id'], pid)}
+
+
+@app.put('/api/drafts/{pid}')
+def put_draft(pid: str, body: DraftBody, request: Request):
+    u = current_user(request)
+    if u is None:
+        raise HTTPException(401, 'not logged in')
+    if len(body.code) > 64 * 1024:
+        raise HTTPException(400, '草稿过长')
+    db.set_draft(u['id'], pid, body.code)
+    return {'ok': True}
 
 
 @app.get('/api/recent')
