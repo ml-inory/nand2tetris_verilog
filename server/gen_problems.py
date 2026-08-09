@@ -29,7 +29,6 @@ TB = os.path.join(ROOT, 'tb')
 OUT = os.path.join(HERE, 'problems.json')
 
 MODULE_RE = re.compile(r'\bmodule\s+(n2t_[a-z0-9_]+)')
-INST_RE = re.compile(r'\bn2t_[a-z0-9_]+\b')
 COMMENT_RE = re.compile(r'//[^\n]*|/\*.*?\*/', re.S)
 
 
@@ -51,25 +50,16 @@ def module_file_map():
 
 
 def collect_deps(chip):
-    """BFS：从 solution 里该芯片文件的例化关系收集依赖模块文件。"""
+    """依赖 = 所有其他已发布模块的文件（按模块名去重，排除自身）。
+
+    学生可以按任意合法结构实现（例化更小的 n2t_* 模块，如 Mux8Way16 例化
+    Mux4Way16），因此 deps 不限于 solution 的实际例化关系：后面的题应能
+    引用前面任何模块。同模块名（如 Computer 三变体都叫 n2t_computer）
+    只保留一个定义文件，且不包含用户自己要实现的模块。
+    """
     modmap = module_file_map()
-    own = modmap[tst2tb.MODULE[chip]]
-    needed_files, seen = set(), set()
-    queue = [own]
-    while queue:
-        f = queue.pop()
-        if f in needed_files:
-            continue
-        needed_files.add(f)
-        text = open(os.path.join(ROOT, f), encoding='utf-8').read()
-        for name in INST_RE.findall(strip_comments(text)):
-            if name in seen:
-                continue
-            seen.add(name)
-            dep = modmap.get(name)
-            if dep and dep != own and dep not in needed_files:
-                queue.append(dep)
-    return sorted(needed_files - {own})
+    own = tst2tb.MODULE[chip]
+    return sorted({f for name, f in modmap.items() if name != own})
 
 
 def read_header_comment(path):
