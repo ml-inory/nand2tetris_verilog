@@ -111,6 +111,14 @@ var MONACO_CDNS = [
           <span id="res-summary"></span>
           <span id="res-time" class="muted"></span>
         </div>
+        <div id="fail-detail" class="hidden">
+          <div class="section-title">失败详情 <span class="muted">（step 对应官方测试向量）</span></div>
+          <div class="fail-scroll">
+            <table id="fail-table" class="fail-table">
+              <tr><th>step</th><th>信号</th><th>期望</th><th>实际</th></tr>
+            </table>
+          </div>
+        </div>
         <div id="wave-box" class="hidden">
           <div class="section-title">波形</div>
           <div id="wave" class="wave"></div>

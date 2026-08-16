@@ -409,8 +409,11 @@ def gen_tb(chip_name, cfg):
         L.append('                npass = npass + 1;')
         L.append('            end else begin')
         L.append('                if (%s !== exp_%s) begin' % (v, v))
-        L.append('                    $display("FAIL [step %%0d] %%s: got %%h exp %%h", step, "%s", %s, exp_%s);'
-                 % (pin, v, v))
+        dbg_fmt = ' '.join('%s=%%h exp=%%h' % p for p, _ in check_pins)
+        dbg_args = ', '.join('%s, exp_%s' % (vname(p), vname(p)) for p, _ in check_pins)
+        L.append('                    $display("FAIL [step %%0d] %%s: got %%h exp %%h    [%%s]", '
+                 'step, "%s", %s, exp_%s, $sformatf("%s", %s));'
+                 % (pin, v, v, dbg_fmt, dbg_args))
         L.append('                    nfail = nfail + 1;')
         L.append('                end else begin')
         L.append('                    npass = npass + 1;')

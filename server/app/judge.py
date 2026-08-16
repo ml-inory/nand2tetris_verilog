@@ -36,6 +36,8 @@ MAX_CODE = 64 * 1024      # 学生代码上限
 
 PASS_SUM_RE = re.compile(r'PASS: all checks ok \(total (\d+)\)')
 FAIL_SUM_RE = re.compile(r'FAIL: (\d+) errors out of (\d+) checks')
+FAIL_STEP_RE = re.compile(r'FAIL \[step (\d+)\] (\w+): got ([0-9a-fxz]+) exp ([0-9a-fxz]+)')
+MAX_FAILS = 100
 
 
 def _limits():
@@ -164,6 +166,10 @@ def judge(problem_id, code):
                 nfail, ntotal = int(m.group(1)), int(m.group(2))
                 result['status'] = 'fail'
                 result['summary'] = {'total': ntotal, 'passed': ntotal - nfail, 'failed': nfail}
+                result['fails'] = [
+                    {'step': int(s), 'signal': p, 'got': g, 'exp': e}
+                    for s, p, g, e in FAIL_STEP_RE.findall(out)[:MAX_FAILS]
+                ]
             else:
                 result['status'] = 'error'
                 result['error'] = 'no test summary in output'

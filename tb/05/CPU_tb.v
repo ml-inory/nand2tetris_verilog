@@ -49,7 +49,7 @@ module CPU_tb;
                 npass = npass + 1;
             end else begin
                 if (inM !== exp_inM) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "inM", inM, exp_inM);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "inM", inM, exp_inM, $sformatf("inM=%h exp=%h instruction=%h exp=%h reset=%h exp=%h outM=%h exp=%h writeM=%h exp=%h addressM=%h exp=%h pc=%h exp=%h DRegister[]=%h exp=%h", inM, exp_inM, instruction, exp_instruction, reset, exp_reset, outM, exp_outM, writeM, exp_writeM, addressM, exp_addressM, pc, exp_pc, DRegister_, exp_DRegister_));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -59,7 +59,7 @@ module CPU_tb;
                 npass = npass + 1;
             end else begin
                 if (instruction !== exp_instruction) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "instruction", instruction, exp_instruction);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "instruction", instruction, exp_instruction, $sformatf("inM=%h exp=%h instruction=%h exp=%h reset=%h exp=%h outM=%h exp=%h writeM=%h exp=%h addressM=%h exp=%h pc=%h exp=%h DRegister[]=%h exp=%h", inM, exp_inM, instruction, exp_instruction, reset, exp_reset, outM, exp_outM, writeM, exp_writeM, addressM, exp_addressM, pc, exp_pc, DRegister_, exp_DRegister_));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -69,7 +69,7 @@ module CPU_tb;
                 npass = npass + 1;
             end else begin
                 if (reset !== exp_reset) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "reset", reset, exp_reset);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "reset", reset, exp_reset, $sformatf("inM=%h exp=%h instruction=%h exp=%h reset=%h exp=%h outM=%h exp=%h writeM=%h exp=%h addressM=%h exp=%h pc=%h exp=%h DRegister[]=%h exp=%h", inM, exp_inM, instruction, exp_instruction, reset, exp_reset, outM, exp_outM, writeM, exp_writeM, addressM, exp_addressM, pc, exp_pc, DRegister_, exp_DRegister_));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -79,7 +79,7 @@ module CPU_tb;
                 npass = npass + 1;
             end else begin
                 if (outM !== exp_outM) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "outM", outM, exp_outM);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "outM", outM, exp_outM, $sformatf("inM=%h exp=%h instruction=%h exp=%h reset=%h exp=%h outM=%h exp=%h writeM=%h exp=%h addressM=%h exp=%h pc=%h exp=%h DRegister[]=%h exp=%h", inM, exp_inM, instruction, exp_instruction, reset, exp_reset, outM, exp_outM, writeM, exp_writeM, addressM, exp_addressM, pc, exp_pc, DRegister_, exp_DRegister_));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -89,7 +89,7 @@ module CPU_tb;
                 npass = npass + 1;
             end else begin
                 if (writeM !== exp_writeM) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "writeM", writeM, exp_writeM);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "writeM", writeM, exp_writeM, $sformatf("inM=%h exp=%h instruction=%h exp=%h reset=%h exp=%h outM=%h exp=%h writeM=%h exp=%h addressM=%h exp=%h pc=%h exp=%h DRegister[]=%h exp=%h", inM, exp_inM, instruction, exp_instruction, reset, exp_reset, outM, exp_outM, writeM, exp_writeM, addressM, exp_addressM, pc, exp_pc, DRegister_, exp_DRegister_));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -99,7 +99,7 @@ module CPU_tb;
                 npass = npass + 1;
             end else begin
                 if (addressM !== exp_addressM) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "addressM", addressM, exp_addressM);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "addressM", addressM, exp_addressM, $sformatf("inM=%h exp=%h instruction=%h exp=%h reset=%h exp=%h outM=%h exp=%h writeM=%h exp=%h addressM=%h exp=%h pc=%h exp=%h DRegister[]=%h exp=%h", inM, exp_inM, instruction, exp_instruction, reset, exp_reset, outM, exp_outM, writeM, exp_writeM, addressM, exp_addressM, pc, exp_pc, DRegister_, exp_DRegister_));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -109,7 +109,7 @@ module CPU_tb;
                 npass = npass + 1;
             end else begin
                 if (pc !== exp_pc) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "pc", pc, exp_pc);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "pc", pc, exp_pc, $sformatf("inM=%h exp=%h instruction=%h exp=%h reset=%h exp=%h outM=%h exp=%h writeM=%h exp=%h addressM=%h exp=%h pc=%h exp=%h DRegister[]=%h exp=%h", inM, exp_inM, instruction, exp_instruction, reset, exp_reset, outM, exp_outM, writeM, exp_writeM, addressM, exp_addressM, pc, exp_pc, DRegister_, exp_DRegister_));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -119,7 +119,7 @@ module CPU_tb;
                 npass = npass + 1;
             end else begin
                 if (DRegister_ !== exp_DRegister_) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "DRegister[]", DRegister_, exp_DRegister_);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "DRegister[]", DRegister_, exp_DRegister_, $sformatf("inM=%h exp=%h instruction=%h exp=%h reset=%h exp=%h outM=%h exp=%h writeM=%h exp=%h addressM=%h exp=%h pc=%h exp=%h DRegister[]=%h exp=%h", inM, exp_inM, instruction, exp_instruction, reset, exp_reset, outM, exp_outM, writeM, exp_writeM, addressM, exp_addressM, pc, exp_pc, DRegister_, exp_DRegister_));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;

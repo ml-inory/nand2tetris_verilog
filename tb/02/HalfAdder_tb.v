@@ -33,7 +33,7 @@ module HalfAdder_tb;
                 npass = npass + 1;
             end else begin
                 if (a !== exp_a) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "a", a, exp_a);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "a", a, exp_a, $sformatf("a=%h exp=%h b=%h exp=%h sum=%h exp=%h carry=%h exp=%h", a, exp_a, b, exp_b, sum, exp_sum, carry, exp_carry));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -43,7 +43,7 @@ module HalfAdder_tb;
                 npass = npass + 1;
             end else begin
                 if (b !== exp_b) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "b", b, exp_b);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "b", b, exp_b, $sformatf("a=%h exp=%h b=%h exp=%h sum=%h exp=%h carry=%h exp=%h", a, exp_a, b, exp_b, sum, exp_sum, carry, exp_carry));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -53,7 +53,7 @@ module HalfAdder_tb;
                 npass = npass + 1;
             end else begin
                 if (sum !== exp_sum) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "sum", sum, exp_sum);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "sum", sum, exp_sum, $sformatf("a=%h exp=%h b=%h exp=%h sum=%h exp=%h carry=%h exp=%h", a, exp_a, b, exp_b, sum, exp_sum, carry, exp_carry));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -63,7 +63,7 @@ module HalfAdder_tb;
                 npass = npass + 1;
             end else begin
                 if (carry !== exp_carry) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "carry", carry, exp_carry);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "carry", carry, exp_carry, $sformatf("a=%h exp=%h b=%h exp=%h sum=%h exp=%h carry=%h exp=%h", a, exp_a, b, exp_b, sum, exp_sum, carry, exp_carry));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;

@@ -281,6 +281,27 @@ function showResult(r) {
     ? `检查 ${r.summary.total} 项，通过 ${r.summary.passed}，失败 ${r.summary.failed}`
     : (r.error || '');
   $('res-time').textContent = r.time_ms != null ? `${r.time_ms} ms` : '';
+  // 失败详情：step / 信号 / 期望 / 实际
+  const fd = $('fail-detail');
+  const ft = $('fail-table');
+  if (r.fails && r.fails.length) {
+    ft.innerHTML = '<tr><th>step</th><th>信号</th><th>期望</th><th>实际</th></tr>';
+    const shown = r.fails.slice(0, 100);
+    for (const f of shown) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${f.step}</td><td><code>${esc(f.signal)}</code></td>` +
+        `<td class="ok">${esc(f.exp)}</td><td class="bad">${esc(f.got)}</td>`;
+      ft.appendChild(tr);
+    }
+    if (r.fails.length > shown.length) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td colspan="4" class="muted">仅显示前 ${shown.length} 条失败（共 ${r.fails.length} 条）</td>`;
+      ft.appendChild(tr);
+    }
+    fd.classList.remove('hidden');
+  } else {
+    fd.classList.add('hidden');
+  }
   const logParts = [];
   if (r.compile && !r.compile.ok) logParts.push('--- 编译错误 ---\n' + r.compile.log);
   if (r.log) logParts.push('--- 仿真输出 ---\n' + r.log);

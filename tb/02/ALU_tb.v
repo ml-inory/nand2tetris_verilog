@@ -61,7 +61,7 @@ module ALU_tb;
                 npass = npass + 1;
             end else begin
                 if (x !== exp_x) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "x", x, exp_x);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "x", x, exp_x, $sformatf("x=%h exp=%h y=%h exp=%h zx=%h exp=%h nx=%h exp=%h zy=%h exp=%h ny=%h exp=%h f=%h exp=%h no=%h exp=%h out=%h exp=%h zr=%h exp=%h ng=%h exp=%h", x, exp_x, y, exp_y, zx, exp_zx, nx, exp_nx, zy, exp_zy, ny, exp_ny, f, exp_f, no, exp_no, out, exp_out, zr, exp_zr, ng, exp_ng));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -71,7 +71,7 @@ module ALU_tb;
                 npass = npass + 1;
             end else begin
                 if (y !== exp_y) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "y", y, exp_y);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "y", y, exp_y, $sformatf("x=%h exp=%h y=%h exp=%h zx=%h exp=%h nx=%h exp=%h zy=%h exp=%h ny=%h exp=%h f=%h exp=%h no=%h exp=%h out=%h exp=%h zr=%h exp=%h ng=%h exp=%h", x, exp_x, y, exp_y, zx, exp_zx, nx, exp_nx, zy, exp_zy, ny, exp_ny, f, exp_f, no, exp_no, out, exp_out, zr, exp_zr, ng, exp_ng));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -81,7 +81,7 @@ module ALU_tb;
                 npass = npass + 1;
             end else begin
                 if (zx !== exp_zx) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "zx", zx, exp_zx);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "zx", zx, exp_zx, $sformatf("x=%h exp=%h y=%h exp=%h zx=%h exp=%h nx=%h exp=%h zy=%h exp=%h ny=%h exp=%h f=%h exp=%h no=%h exp=%h out=%h exp=%h zr=%h exp=%h ng=%h exp=%h", x, exp_x, y, exp_y, zx, exp_zx, nx, exp_nx, zy, exp_zy, ny, exp_ny, f, exp_f, no, exp_no, out, exp_out, zr, exp_zr, ng, exp_ng));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -91,7 +91,7 @@ module ALU_tb;
                 npass = npass + 1;
             end else begin
                 if (nx !== exp_nx) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "nx", nx, exp_nx);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "nx", nx, exp_nx, $sformatf("x=%h exp=%h y=%h exp=%h zx=%h exp=%h nx=%h exp=%h zy=%h exp=%h ny=%h exp=%h f=%h exp=%h no=%h exp=%h out=%h exp=%h zr=%h exp=%h ng=%h exp=%h", x, exp_x, y, exp_y, zx, exp_zx, nx, exp_nx, zy, exp_zy, ny, exp_ny, f, exp_f, no, exp_no, out, exp_out, zr, exp_zr, ng, exp_ng));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -101,7 +101,7 @@ module ALU_tb;
                 npass = npass + 1;
             end else begin
                 if (zy !== exp_zy) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "zy", zy, exp_zy);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "zy", zy, exp_zy, $sformatf("x=%h exp=%h y=%h exp=%h zx=%h exp=%h nx=%h exp=%h zy=%h exp=%h ny=%h exp=%h f=%h exp=%h no=%h exp=%h out=%h exp=%h zr=%h exp=%h ng=%h exp=%h", x, exp_x, y, exp_y, zx, exp_zx, nx, exp_nx, zy, exp_zy, ny, exp_ny, f, exp_f, no, exp_no, out, exp_out, zr, exp_zr, ng, exp_ng));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -111,7 +111,7 @@ module ALU_tb;
                 npass = npass + 1;
             end else begin
                 if (ny !== exp_ny) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "ny", ny, exp_ny);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "ny", ny, exp_ny, $sformatf("x=%h exp=%h y=%h exp=%h zx=%h exp=%h nx=%h exp=%h zy=%h exp=%h ny=%h exp=%h f=%h exp=%h no=%h exp=%h out=%h exp=%h zr=%h exp=%h ng=%h exp=%h", x, exp_x, y, exp_y, zx, exp_zx, nx, exp_nx, zy, exp_zy, ny, exp_ny, f, exp_f, no, exp_no, out, exp_out, zr, exp_zr, ng, exp_ng));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -121,7 +121,7 @@ module ALU_tb;
                 npass = npass + 1;
             end else begin
                 if (f !== exp_f) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "f", f, exp_f);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "f", f, exp_f, $sformatf("x=%h exp=%h y=%h exp=%h zx=%h exp=%h nx=%h exp=%h zy=%h exp=%h ny=%h exp=%h f=%h exp=%h no=%h exp=%h out=%h exp=%h zr=%h exp=%h ng=%h exp=%h", x, exp_x, y, exp_y, zx, exp_zx, nx, exp_nx, zy, exp_zy, ny, exp_ny, f, exp_f, no, exp_no, out, exp_out, zr, exp_zr, ng, exp_ng));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -131,7 +131,7 @@ module ALU_tb;
                 npass = npass + 1;
             end else begin
                 if (no !== exp_no) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "no", no, exp_no);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "no", no, exp_no, $sformatf("x=%h exp=%h y=%h exp=%h zx=%h exp=%h nx=%h exp=%h zy=%h exp=%h ny=%h exp=%h f=%h exp=%h no=%h exp=%h out=%h exp=%h zr=%h exp=%h ng=%h exp=%h", x, exp_x, y, exp_y, zx, exp_zx, nx, exp_nx, zy, exp_zy, ny, exp_ny, f, exp_f, no, exp_no, out, exp_out, zr, exp_zr, ng, exp_ng));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -141,7 +141,7 @@ module ALU_tb;
                 npass = npass + 1;
             end else begin
                 if (out !== exp_out) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "out", out, exp_out);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "out", out, exp_out, $sformatf("x=%h exp=%h y=%h exp=%h zx=%h exp=%h nx=%h exp=%h zy=%h exp=%h ny=%h exp=%h f=%h exp=%h no=%h exp=%h out=%h exp=%h zr=%h exp=%h ng=%h exp=%h", x, exp_x, y, exp_y, zx, exp_zx, nx, exp_nx, zy, exp_zy, ny, exp_ny, f, exp_f, no, exp_no, out, exp_out, zr, exp_zr, ng, exp_ng));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -151,7 +151,7 @@ module ALU_tb;
                 npass = npass + 1;
             end else begin
                 if (zr !== exp_zr) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "zr", zr, exp_zr);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "zr", zr, exp_zr, $sformatf("x=%h exp=%h y=%h exp=%h zx=%h exp=%h nx=%h exp=%h zy=%h exp=%h ny=%h exp=%h f=%h exp=%h no=%h exp=%h out=%h exp=%h zr=%h exp=%h ng=%h exp=%h", x, exp_x, y, exp_y, zx, exp_zx, nx, exp_nx, zy, exp_zy, ny, exp_ny, f, exp_f, no, exp_no, out, exp_out, zr, exp_zr, ng, exp_ng));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -161,7 +161,7 @@ module ALU_tb;
                 npass = npass + 1;
             end else begin
                 if (ng !== exp_ng) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "ng", ng, exp_ng);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "ng", ng, exp_ng, $sformatf("x=%h exp=%h y=%h exp=%h zx=%h exp=%h nx=%h exp=%h zy=%h exp=%h ny=%h exp=%h f=%h exp=%h no=%h exp=%h out=%h exp=%h zr=%h exp=%h ng=%h exp=%h", x, exp_x, y, exp_y, zx, exp_zx, nx, exp_nx, zy, exp_zy, ny, exp_ny, f, exp_f, no, exp_no, out, exp_out, zr, exp_zr, ng, exp_ng));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;

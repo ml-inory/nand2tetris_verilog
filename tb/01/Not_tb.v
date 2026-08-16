@@ -25,7 +25,7 @@ module Not_tb;
                 npass = npass + 1;
             end else begin
                 if (in !== exp_in) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "in", in, exp_in);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "in", in, exp_in, $sformatf("in=%h exp=%h out=%h exp=%h", in, exp_in, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -35,7 +35,7 @@ module Not_tb;
                 npass = npass + 1;
             end else begin
                 if (out !== exp_out) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "out", out, exp_out);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "out", out, exp_out, $sformatf("in=%h exp=%h out=%h exp=%h", in, exp_in, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;

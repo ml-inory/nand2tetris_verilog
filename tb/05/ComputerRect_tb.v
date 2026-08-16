@@ -56,7 +56,7 @@ module ComputerRect_tb;
                 npass = npass + 1;
             end else begin
                 if (ARegister_ !== exp_ARegister_) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "ARegister[]", ARegister_, exp_ARegister_);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "ARegister[]", ARegister_, exp_ARegister_, $sformatf("ARegister[]=%h exp=%h DRegister[]=%h exp=%h PC[]=%h exp=%h RAM16K[0]=%h exp=%h RAM16K[1]=%h exp=%h RAM16K[2]=%h exp=%h", ARegister_, exp_ARegister_, DRegister_, exp_DRegister_, PC_, exp_PC_, RAM16K_0, exp_RAM16K_0, RAM16K_1, exp_RAM16K_1, RAM16K_2, exp_RAM16K_2));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -66,7 +66,7 @@ module ComputerRect_tb;
                 npass = npass + 1;
             end else begin
                 if (DRegister_ !== exp_DRegister_) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "DRegister[]", DRegister_, exp_DRegister_);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "DRegister[]", DRegister_, exp_DRegister_, $sformatf("ARegister[]=%h exp=%h DRegister[]=%h exp=%h PC[]=%h exp=%h RAM16K[0]=%h exp=%h RAM16K[1]=%h exp=%h RAM16K[2]=%h exp=%h", ARegister_, exp_ARegister_, DRegister_, exp_DRegister_, PC_, exp_PC_, RAM16K_0, exp_RAM16K_0, RAM16K_1, exp_RAM16K_1, RAM16K_2, exp_RAM16K_2));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -76,7 +76,7 @@ module ComputerRect_tb;
                 npass = npass + 1;
             end else begin
                 if (PC_ !== exp_PC_) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "PC[]", PC_, exp_PC_);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "PC[]", PC_, exp_PC_, $sformatf("ARegister[]=%h exp=%h DRegister[]=%h exp=%h PC[]=%h exp=%h RAM16K[0]=%h exp=%h RAM16K[1]=%h exp=%h RAM16K[2]=%h exp=%h", ARegister_, exp_ARegister_, DRegister_, exp_DRegister_, PC_, exp_PC_, RAM16K_0, exp_RAM16K_0, RAM16K_1, exp_RAM16K_1, RAM16K_2, exp_RAM16K_2));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -86,7 +86,7 @@ module ComputerRect_tb;
                 npass = npass + 1;
             end else begin
                 if (RAM16K_0 !== exp_RAM16K_0) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "RAM16K[0]", RAM16K_0, exp_RAM16K_0);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "RAM16K[0]", RAM16K_0, exp_RAM16K_0, $sformatf("ARegister[]=%h exp=%h DRegister[]=%h exp=%h PC[]=%h exp=%h RAM16K[0]=%h exp=%h RAM16K[1]=%h exp=%h RAM16K[2]=%h exp=%h", ARegister_, exp_ARegister_, DRegister_, exp_DRegister_, PC_, exp_PC_, RAM16K_0, exp_RAM16K_0, RAM16K_1, exp_RAM16K_1, RAM16K_2, exp_RAM16K_2));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -96,7 +96,7 @@ module ComputerRect_tb;
                 npass = npass + 1;
             end else begin
                 if (RAM16K_1 !== exp_RAM16K_1) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "RAM16K[1]", RAM16K_1, exp_RAM16K_1);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "RAM16K[1]", RAM16K_1, exp_RAM16K_1, $sformatf("ARegister[]=%h exp=%h DRegister[]=%h exp=%h PC[]=%h exp=%h RAM16K[0]=%h exp=%h RAM16K[1]=%h exp=%h RAM16K[2]=%h exp=%h", ARegister_, exp_ARegister_, DRegister_, exp_DRegister_, PC_, exp_PC_, RAM16K_0, exp_RAM16K_0, RAM16K_1, exp_RAM16K_1, RAM16K_2, exp_RAM16K_2));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -106,7 +106,7 @@ module ComputerRect_tb;
                 npass = npass + 1;
             end else begin
                 if (RAM16K_2 !== exp_RAM16K_2) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "RAM16K[2]", RAM16K_2, exp_RAM16K_2);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "RAM16K[2]", RAM16K_2, exp_RAM16K_2, $sformatf("ARegister[]=%h exp=%h DRegister[]=%h exp=%h PC[]=%h exp=%h RAM16K[0]=%h exp=%h RAM16K[1]=%h exp=%h RAM16K[2]=%h exp=%h", ARegister_, exp_ARegister_, DRegister_, exp_DRegister_, PC_, exp_PC_, RAM16K_0, exp_RAM16K_0, RAM16K_1, exp_RAM16K_1, RAM16K_2, exp_RAM16K_2));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;

@@ -57,7 +57,7 @@ module Mux8Way16_tb;
                 npass = npass + 1;
             end else begin
                 if (a !== exp_a) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "a", a, exp_a);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "a", a, exp_a, $sformatf("a=%h exp=%h b=%h exp=%h c=%h exp=%h d=%h exp=%h e=%h exp=%h f=%h exp=%h g=%h exp=%h h=%h exp=%h sel=%h exp=%h out=%h exp=%h", a, exp_a, b, exp_b, c, exp_c, d, exp_d, e, exp_e, f, exp_f, g, exp_g, h, exp_h, sel, exp_sel, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -67,7 +67,7 @@ module Mux8Way16_tb;
                 npass = npass + 1;
             end else begin
                 if (b !== exp_b) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "b", b, exp_b);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "b", b, exp_b, $sformatf("a=%h exp=%h b=%h exp=%h c=%h exp=%h d=%h exp=%h e=%h exp=%h f=%h exp=%h g=%h exp=%h h=%h exp=%h sel=%h exp=%h out=%h exp=%h", a, exp_a, b, exp_b, c, exp_c, d, exp_d, e, exp_e, f, exp_f, g, exp_g, h, exp_h, sel, exp_sel, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -77,7 +77,7 @@ module Mux8Way16_tb;
                 npass = npass + 1;
             end else begin
                 if (c !== exp_c) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "c", c, exp_c);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "c", c, exp_c, $sformatf("a=%h exp=%h b=%h exp=%h c=%h exp=%h d=%h exp=%h e=%h exp=%h f=%h exp=%h g=%h exp=%h h=%h exp=%h sel=%h exp=%h out=%h exp=%h", a, exp_a, b, exp_b, c, exp_c, d, exp_d, e, exp_e, f, exp_f, g, exp_g, h, exp_h, sel, exp_sel, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -87,7 +87,7 @@ module Mux8Way16_tb;
                 npass = npass + 1;
             end else begin
                 if (d !== exp_d) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "d", d, exp_d);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "d", d, exp_d, $sformatf("a=%h exp=%h b=%h exp=%h c=%h exp=%h d=%h exp=%h e=%h exp=%h f=%h exp=%h g=%h exp=%h h=%h exp=%h sel=%h exp=%h out=%h exp=%h", a, exp_a, b, exp_b, c, exp_c, d, exp_d, e, exp_e, f, exp_f, g, exp_g, h, exp_h, sel, exp_sel, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -97,7 +97,7 @@ module Mux8Way16_tb;
                 npass = npass + 1;
             end else begin
                 if (e !== exp_e) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "e", e, exp_e);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "e", e, exp_e, $sformatf("a=%h exp=%h b=%h exp=%h c=%h exp=%h d=%h exp=%h e=%h exp=%h f=%h exp=%h g=%h exp=%h h=%h exp=%h sel=%h exp=%h out=%h exp=%h", a, exp_a, b, exp_b, c, exp_c, d, exp_d, e, exp_e, f, exp_f, g, exp_g, h, exp_h, sel, exp_sel, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -107,7 +107,7 @@ module Mux8Way16_tb;
                 npass = npass + 1;
             end else begin
                 if (f !== exp_f) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "f", f, exp_f);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "f", f, exp_f, $sformatf("a=%h exp=%h b=%h exp=%h c=%h exp=%h d=%h exp=%h e=%h exp=%h f=%h exp=%h g=%h exp=%h h=%h exp=%h sel=%h exp=%h out=%h exp=%h", a, exp_a, b, exp_b, c, exp_c, d, exp_d, e, exp_e, f, exp_f, g, exp_g, h, exp_h, sel, exp_sel, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -117,7 +117,7 @@ module Mux8Way16_tb;
                 npass = npass + 1;
             end else begin
                 if (g !== exp_g) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "g", g, exp_g);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "g", g, exp_g, $sformatf("a=%h exp=%h b=%h exp=%h c=%h exp=%h d=%h exp=%h e=%h exp=%h f=%h exp=%h g=%h exp=%h h=%h exp=%h sel=%h exp=%h out=%h exp=%h", a, exp_a, b, exp_b, c, exp_c, d, exp_d, e, exp_e, f, exp_f, g, exp_g, h, exp_h, sel, exp_sel, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -127,7 +127,7 @@ module Mux8Way16_tb;
                 npass = npass + 1;
             end else begin
                 if (h !== exp_h) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "h", h, exp_h);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "h", h, exp_h, $sformatf("a=%h exp=%h b=%h exp=%h c=%h exp=%h d=%h exp=%h e=%h exp=%h f=%h exp=%h g=%h exp=%h h=%h exp=%h sel=%h exp=%h out=%h exp=%h", a, exp_a, b, exp_b, c, exp_c, d, exp_d, e, exp_e, f, exp_f, g, exp_g, h, exp_h, sel, exp_sel, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -137,7 +137,7 @@ module Mux8Way16_tb;
                 npass = npass + 1;
             end else begin
                 if (sel !== exp_sel) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "sel", sel, exp_sel);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "sel", sel, exp_sel, $sformatf("a=%h exp=%h b=%h exp=%h c=%h exp=%h d=%h exp=%h e=%h exp=%h f=%h exp=%h g=%h exp=%h h=%h exp=%h sel=%h exp=%h out=%h exp=%h", a, exp_a, b, exp_b, c, exp_c, d, exp_d, e, exp_e, f, exp_f, g, exp_g, h, exp_h, sel, exp_sel, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -147,7 +147,7 @@ module Mux8Way16_tb;
                 npass = npass + 1;
             end else begin
                 if (out !== exp_out) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "out", out, exp_out);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "out", out, exp_out, $sformatf("a=%h exp=%h b=%h exp=%h c=%h exp=%h d=%h exp=%h e=%h exp=%h f=%h exp=%h g=%h exp=%h h=%h exp=%h sel=%h exp=%h out=%h exp=%h", a, exp_a, b, exp_b, c, exp_c, d, exp_d, e, exp_e, f, exp_f, g, exp_g, h, exp_h, sel, exp_sel, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;

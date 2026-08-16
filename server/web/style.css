@@ -116,3 +116,15 @@ button.mini { padding: 3px 10px; font-size: 12px; }
 .login-btns { display: flex; gap: 10px; }
 .login-btns button { flex: 1; }
 .login-msg { min-height: 20px; color: var(--bad); font-size: 13px; }
+
+/* 失败详情 */
+.fail-scroll { max-height: 260px; overflow: auto; border: 1px solid var(--border);
+  border-radius: 8px; }
+.fail-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.fail-table th, .fail-table td { padding: 4px 10px; text-align: left;
+  border-bottom: 1px solid var(--border); }
+.fail-table th { position: sticky; top: 0; background: var(--panel2);
+  color: var(--muted); font-weight: 600; }
+.fail-table td.ok { color: var(--ok); font-family: ui-monospace, monospace; }
+.fail-table td.bad { color: var(--bad); font-weight: 600;
+  font-family: ui-monospace, monospace; }

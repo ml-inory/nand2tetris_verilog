@@ -39,7 +39,7 @@ module PC_tb;
                 npass = npass + 1;
             end else begin
                 if (in !== exp_in) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "in", in, exp_in);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "in", in, exp_in, $sformatf("in=%h exp=%h reset=%h exp=%h load=%h exp=%h inc=%h exp=%h out=%h exp=%h", in, exp_in, reset, exp_reset, load, exp_load, inc, exp_inc, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -49,7 +49,7 @@ module PC_tb;
                 npass = npass + 1;
             end else begin
                 if (reset !== exp_reset) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "reset", reset, exp_reset);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "reset", reset, exp_reset, $sformatf("in=%h exp=%h reset=%h exp=%h load=%h exp=%h inc=%h exp=%h out=%h exp=%h", in, exp_in, reset, exp_reset, load, exp_load, inc, exp_inc, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -59,7 +59,7 @@ module PC_tb;
                 npass = npass + 1;
             end else begin
                 if (load !== exp_load) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "load", load, exp_load);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "load", load, exp_load, $sformatf("in=%h exp=%h reset=%h exp=%h load=%h exp=%h inc=%h exp=%h out=%h exp=%h", in, exp_in, reset, exp_reset, load, exp_load, inc, exp_inc, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -69,7 +69,7 @@ module PC_tb;
                 npass = npass + 1;
             end else begin
                 if (inc !== exp_inc) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "inc", inc, exp_inc);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "inc", inc, exp_inc, $sformatf("in=%h exp=%h reset=%h exp=%h load=%h exp=%h inc=%h exp=%h out=%h exp=%h", in, exp_in, reset, exp_reset, load, exp_load, inc, exp_inc, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -79,7 +79,7 @@ module PC_tb;
                 npass = npass + 1;
             end else begin
                 if (out !== exp_out) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "out", out, exp_out);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "out", out, exp_out, $sformatf("in=%h exp=%h reset=%h exp=%h load=%h exp=%h inc=%h exp=%h out=%h exp=%h", in, exp_in, reset, exp_reset, load, exp_load, inc, exp_inc, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;

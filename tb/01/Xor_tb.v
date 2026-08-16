@@ -29,7 +29,7 @@ module Xor_tb;
                 npass = npass + 1;
             end else begin
                 if (a !== exp_a) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "a", a, exp_a);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "a", a, exp_a, $sformatf("a=%h exp=%h b=%h exp=%h out=%h exp=%h", a, exp_a, b, exp_b, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -39,7 +39,7 @@ module Xor_tb;
                 npass = npass + 1;
             end else begin
                 if (b !== exp_b) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "b", b, exp_b);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "b", b, exp_b, $sformatf("a=%h exp=%h b=%h exp=%h out=%h exp=%h", a, exp_a, b, exp_b, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -49,7 +49,7 @@ module Xor_tb;
                 npass = npass + 1;
             end else begin
                 if (out !== exp_out) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "out", out, exp_out);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "out", out, exp_out, $sformatf("a=%h exp=%h b=%h exp=%h out=%h exp=%h", a, exp_a, b, exp_b, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;

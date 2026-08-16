@@ -50,7 +50,7 @@ module RAM16K_tb;
                 npass = npass + 1;
             end else begin
                 if (in !== exp_in) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "in", in, exp_in);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "in", in, exp_in, $sformatf("in=%h exp=%h load=%h exp=%h address=%h exp=%h out=%h exp=%h", in, exp_in, load, exp_load, address, exp_address, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -60,7 +60,7 @@ module RAM16K_tb;
                 npass = npass + 1;
             end else begin
                 if (load !== exp_load) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "load", load, exp_load);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "load", load, exp_load, $sformatf("in=%h exp=%h load=%h exp=%h address=%h exp=%h out=%h exp=%h", in, exp_in, load, exp_load, address, exp_address, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -70,7 +70,7 @@ module RAM16K_tb;
                 npass = npass + 1;
             end else begin
                 if (address !== exp_address) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "address", address, exp_address);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "address", address, exp_address, $sformatf("in=%h exp=%h load=%h exp=%h address=%h exp=%h out=%h exp=%h", in, exp_in, load, exp_load, address, exp_address, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
@@ -80,7 +80,7 @@ module RAM16K_tb;
                 npass = npass + 1;
             end else begin
                 if (out !== exp_out) begin
-                    $display("FAIL [step %0d] %s: got %h exp %h", step, "out", out, exp_out);
+                    $display("FAIL [step %0d] %s: got %h exp %h    [%s]", step, "out", out, exp_out, $sformatf("in=%h exp=%h load=%h exp=%h address=%h exp=%h out=%h exp=%h", in, exp_in, load, exp_load, address, exp_address, out, exp_out));
                     nfail = nfail + 1;
                 end else begin
                     npass = npass + 1;
