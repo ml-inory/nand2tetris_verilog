@@ -128,3 +128,12 @@ button.mini { padding: 3px 10px; font-size: 12px; }
 .fail-table td.ok { color: var(--ok); font-family: ui-monospace, monospace; }
 .fail-table td.bad { color: var(--bad); font-weight: 600;
   font-family: ui-monospace, monospace; }
+
+/* 内部信号波形 */
+.wave-tools { display: flex; gap: 8px; align-items: center; margin-top: 10px;
+  flex-wrap: wrap; }
+.wave-tools input { flex: 1; min-width: 220px; background: var(--panel2);
+  color: var(--fg); border: 1px solid var(--border); border-radius: 6px;
+  padding: 6px 10px; font-size: 12.5px; }
+.wave-tools .status { font-size: 12.5px; }
+#wave-internal { margin-top: 10px; }

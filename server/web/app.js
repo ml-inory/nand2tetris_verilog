@@ -249,18 +249,19 @@ function renderPorts() {
   } else pw.classList.add('hidden');
 }
 
-function renderWave(waveJson) {
-  const box = $('wave');
+function renderWave(waveJson, boxId, index) {
+  index = index || 0;
+  const box = $(boxId);
   box.innerHTML = '';
   if (!waveJson || !waveJson.signal || !waveJson.signal.length) return;
   const holder = document.createElement('div');
-  holder.id = 'wave0';
+  holder.id = boxId + index;
   box.appendChild(holder);
   try {
     // WaveDrom 3.x 暴露 RenderWaveForm（大写 R），2.x 为 renderWaveForm
     const wf = window.WaveDrom && (window.WaveDrom.RenderWaveForm || window.WaveDrom.renderWaveForm);
     if (wf) {
-      wf.call(window.WaveDrom, 0, waveJson, 'wave');
+      wf.call(window.WaveDrom, index, waveJson, boxId);
     } else {
       holder.textContent = JSON.stringify(waveJson);
     }
@@ -309,9 +310,38 @@ function showResult(r) {
   const wb = $('wave-box');
   if (r.wave && r.wave.signal && r.wave.signal.length) {
     wb.classList.remove('hidden');
-    renderWave(r.wave);
+    renderWave(r.wave, 'wave', 0);
+    $('wave-internal').classList.add('hidden');
+    $('wave-signals').value = '';
+    $('wave-msg').textContent = '';
   } else {
     wb.classList.add('hidden');
+  }
+}
+
+// ---------------- 内部信号波形 ----------------
+async function showInternalWave() {
+  if (!currentId) return;
+  const input = $('wave-signals').value;
+  if (!input.trim()) { $('wave-msg').textContent = '请先填写信号路径'; return; }
+  const msg = $('wave-msg');
+  msg.textContent = '生成中…';
+  try {
+    const r = await api('/api/wave', {
+      method: 'POST',
+      body: JSON.stringify({id: currentId, code: getCode(), signals: input}),
+    });
+    const box = $('wave-internal');
+    if (r.signal && r.signal.length) {
+      box.classList.remove('hidden');
+      renderWave(r, 'wave-internal', 1);
+      msg.textContent = '';
+    } else {
+      box.classList.add('hidden');
+      msg.textContent = '没有可显示的变化';
+    }
+  } catch (e) {
+    msg.textContent = e.message;
   }
 }
 
@@ -426,6 +456,7 @@ async function init() {
   $('btn-register').onclick = () => doAuth('register');
   $('btn-logout').onclick = logout;
   $('btn-refresh-sub').onclick = refreshSubmissions;
+  $('btn-wave-signals').onclick = showInternalWave;
   $('modal-close').onclick = () => $('modal').classList.add('hidden');
   $('modal').onclick = (e) => { if (e.target === $('modal')) $('modal').classList.add('hidden'); };
   $('editor-fallback').addEventListener('input', () => { if (currentId) saveCode(currentId, $('editor-fallback').value); });

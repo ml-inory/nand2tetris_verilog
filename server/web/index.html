@@ -122,6 +122,12 @@ var MONACO_CDNS = [
         <div id="wave-box" class="hidden">
           <div class="section-title">波形</div>
           <div id="wave" class="wave"></div>
+          <div class="wave-tools">
+            <input id="wave-signals" placeholder="内部信号（逗号分隔，如 mem[5], u1.out）" spellcheck="false">
+            <button id="btn-wave-signals">显示内部信号</button>
+            <span id="wave-msg" class="status"></span>
+          </div>
+          <div id="wave-internal" class="wave hidden"></div>
         </div>
         <pre id="res-log"></pre>
       </div>

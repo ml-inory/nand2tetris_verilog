@@ -16,6 +16,7 @@
   GET  /api/solved              我已通过的题目（跨浏览器同步）
   GET  /api/drafts/{id}         我的题目草稿
   PUT  /api/drafts/{id}         保存我的题目草稿
+  POST /api/wave                按指定内部信号生成波形 {id, code, signals}
   GET  /api/recent              全局最近判题（匿名）
   GET  /                        前端单页（web/）
 """
@@ -58,6 +59,12 @@ class Submit(BaseModel):
 
 class DraftBody(BaseModel):
     code: str
+
+
+class WaveBody(BaseModel):
+    id: str
+    code: str
+    signals: str = ''
 
 
 def current_user(request: Request):
@@ -228,6 +235,21 @@ def put_draft(pid: str, body: DraftBody, request: Request):
         raise HTTPException(400, '草稿过长')
     db.set_draft(u['id'], pid, body.code)
     return {'ok': True}
+
+
+@app.post('/api/wave')
+def wave_view(body: WaveBody, request: Request):
+    u = current_user(request)
+    if u is None:
+        raise HTTPException(401, 'not logged in')
+    sigs = [s.strip() for s in body.signals.split(',') if s.strip()]
+    if not sigs:
+        raise HTTPException(400, '请填写要查看的信号路径，如 mem[5], u1.out')
+    from .wave import run_wave_for_code
+    r = run_wave_for_code(body.id, body.code, sigs)
+    if r.get('error'):
+        raise HTTPException(400, r['error'])
+    return r
 
 
 @app.get('/api/recent')
