@@ -1,6 +1,9 @@
 `timescale 1ns/1ps
 
-// RAM64：8 个 RAM8，address[5:3] 译码，address[2:0] 片内寻址
+// RAM64：64 x 16
+// 课程里由 8 个 RAM8 拼成；这里用扁平存储阵列实现，
+// 避免被更大 RAM（如 RAM512 例化 8 个 RAM64）展开成数十万触发器
+// 导致编译/仿真资源爆炸（贴近真实 RTL 的 BRAM 推断）。
 // 对应 nand2tetris Project 3 的 RAM64.hdl
 module n2t_ram64 (
     input         clk,

@@ -90,13 +90,6 @@ def main():
         module = tst2tb.MODULE[chip]
         if proj == '05' and chip.startswith('Computer'):
             fname = 'Computer.v'
-        elif proj == '07':
-            fname = {
-                'RAM16K_Posedge': 'RAM16K.v',
-                'CPU_Posedge': 'CPU.v',
-                'Memory_Posedge': 'Memory.v',
-                'ComputerPosedge': 'Computer.v',
-            }[chip]
         else:
             fname = chip + '.v'
         sol_file = os.path.join(SOL, proj, fname)

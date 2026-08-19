@@ -71,8 +71,8 @@ docker run --rm -d -p 8000:8000 \
   ghcr.io/ml-inory/nand2tetris_verilog:latest
 ```
 
-题库已包含 Project 06（PE / SystolicArray）与 Project 07
-（RAM16K_Posedge / CPU_Posedge / Memory_Posedge / ComputerPosedge）。
+题库已包含 Project 06（PE / SystolicArray）。
+Project 07 的 posedge Hack 模块是 NPU 集成的已知库，不作为在线作业发布。
 
 以后更新线上版本，直接在本地跑：
 

@@ -88,6 +88,8 @@ def gen_one(src, dst):
 def main():
     targets = sys.argv[1:] or [d for d in sorted(os.listdir(SOL))
                                if os.path.isdir(os.path.join(SOL, d))]
+    # Project 07（posedge Hack）是给 NPU 用的已知库，不生成作业模板
+    targets = [t for t in targets if t != '07']
     for proj in targets:
         src_dir = os.path.join(SOL, proj)
         if not os.path.isdir(src_dir):
