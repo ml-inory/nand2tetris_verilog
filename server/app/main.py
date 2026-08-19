@@ -271,7 +271,8 @@ def recent(request: Request):
 @app.get('/')
 @app.head('/')
 def index():
-    return FileResponse(os.path.join(WEB, 'index.html'))
+    return FileResponse(os.path.join(WEB, 'index.html'),
+                        headers={'Cache-Control': 'no-store'})
 
 
 app.mount('/', StaticFiles(directory=WEB), name='web')
