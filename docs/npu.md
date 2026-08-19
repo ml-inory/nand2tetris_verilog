@@ -37,6 +37,7 @@ make sim-06                   # 学生模式（需要先补全模板）
 
 ```text
 docs/npu/course/
+├── Chapter00/  预备知识：从二进制到矩阵（高中起点）
 ├── Chapter01/  NPU 与系统架构
 ├── Chapter02/  PE 与脉动阵列（当前 assignment/06）
 ├── Chapter03/  GEMM 控制器与卷积数据通路
@@ -45,8 +46,9 @@ docs/npu/course/
 ```
 
 索引与生成方法见 [`docs/npu/course/README.md`](course/README.md)。
-Lecture 讲义已扩展为零基础版：每个关键概念（MMIO、GEMM、量化、脉动阵列等）
-都有详细讲解、矢量配图、论文引用、术语速查和延伸阅读。
+Lecture 讲义已扩展为“高中生也能看懂”的版本：第 0 章从二进制、内存、
+CPU、矩阵、神经网络、卷积、MMIO 讲起；后面每章都配有生活类比、详细讲解、
+矢量配图、论文引用、术语速查和延伸阅读。
 
 ## 数据布局与时序
 

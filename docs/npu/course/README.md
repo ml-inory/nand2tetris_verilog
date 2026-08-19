@@ -4,13 +4,15 @@
 
 - **Project.pdf**：作业指南（背景、目标、交付物、验收契约、提示）
 - **Lecture.pdf**：PPT 风格讲义（A4 横版），面向零基础读者：
-  每个关键概念都有详细文字讲解、矢量配图、论文引用，末尾附术语速查与延伸阅读
+  按高中生起点讲解：二进制、内存、CPU、矩阵、神经网络、MMIO 全部从零开始，
+  大量生活类比 + 矢量配图 + 论文引用，末尾附术语速查与延伸阅读
 - **Assignment.pdf**：习题集（书面推导 + 提交清单 + 评分表）
 
 ## 章节
 
 | Chapter | 主题 | Project | Lecture | Assignment |
 | --- | --- | --- | --- | --- |
+| 0 | 预备知识：从二进制到矩阵 | [Project.pdf](Chapter00/Project.pdf) | [Lecture.pdf](Chapter00/Lecture.pdf) | [Assignment.pdf](Chapter00/Assignment.pdf) |
 | 1 | NPU 与系统架构 | [Project.pdf](Chapter01/Project.pdf) | [Lecture.pdf](Chapter01/Lecture.pdf) | [Assignment.pdf](Chapter01/Assignment.pdf) |
 | 2 | PE 与脉动阵列 | [Project.pdf](Chapter02/Project.pdf) | [Lecture.pdf](Chapter02/Lecture.pdf) | [Assignment.pdf](Chapter02/Assignment.pdf) |
 | 3 | GEMM 控制器与卷积数据通路 | [Project.pdf](Chapter03/Project.pdf) | [Lecture.pdf](Chapter03/Lecture.pdf) | [Assignment.pdf](Chapter03/Assignment.pdf) |
@@ -36,6 +38,7 @@ python3 -m venv /tmp/pdfenv
 
 | Chapter | 仓库对应内容 |
 | --- | --- |
+| 0 | 预备知识：概念自测与手算练习（无代码） |
 | 1 | 设计文档 + `n2t_npu_top` 端口草案（未实现） |
 | 2 | `assignment/06`：PE 与 SystolicArray（已搭好框架） |
 | 3 | 后续 `assignment/07`：控制器、激活/池化、FC |
