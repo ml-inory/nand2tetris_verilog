@@ -155,6 +155,28 @@ CHIPS = {
                           ports=P(('clk', 1, 'clk'), ('rst', 1, 'in'), ('w_load', 1, 'in'),
                                   ('w_data', 512, 'in'), ('a_data', 64, 'in'),
                                   ('psum_out', 256, 'out'))),
+    # ---------------- Project 7（posedge Hack，供 NPU 集成）----------------
+    'RAM16K_Posedge': dict(manual_tb=True, inst='dut',
+                           ports=P(('clk', 1, 'clk'), ('in', 16, 'in'), ('load', 1, 'in'),
+                                   ('address', 15, 'in'),
+                                   ('dbg_we', 1, 'in'), ('dbg_addr', 14, 'in'),
+                                   ('dbg_wdata', 16, 'in'), ('out', 16, 'out'))),
+    'CPU_Posedge': dict(manual_tb=True, inst='dut',
+                        ports=P(('clk', 1, 'clk'), ('inM', 16, 'in'),
+                                ('instruction', 16, 'in'), ('reset', 1, 'in'),
+                                ('outM', 16, 'out'), ('writeM', 1, 'out'),
+                                ('addressM', 15, 'out'), ('pc', 15, 'out'))),
+    'Memory_Posedge': dict(manual_tb=True, inst='dut',
+                           ports=P(('clk', 1, 'clk'), ('in', 16, 'in'), ('load', 1, 'in'),
+                                   ('address', 15, 'in'), ('keyboard_in', 16, 'in'),
+                                   ('dbg_we', 1, 'in'), ('dbg_addr', 14, 'in'),
+                                   ('dbg_wdata', 16, 'in'), ('out', 16, 'out'))),
+    'ComputerPosedge': dict(manual_tb=True, inst='dut',
+                            ports=P(('clk', 1, 'clk'), ('reset', 1, 'in'),
+                                    ('outM', 16, 'out'), ('writeM', 1, 'out'),
+                                    ('addressM', 15, 'out'), ('pc', 15, 'out'),
+                                    ('dbg_we', 1, 'in'), ('dbg_addr', 14, 'in'),
+                                    ('dbg_wdata', 16, 'in'))),
 }
 
 MODULE = {
@@ -173,6 +195,10 @@ MODULE = {
     'ComputerAdd': 'n2t_computer', 'ComputerMax': 'n2t_computer',
     'ComputerRect': 'n2t_computer',
     'PE': 'n2t_pe', 'SystolicArray': 'n2t_systolic_array',
+    'RAM16K_Posedge': 'n2t_ram16k_posedge',
+    'CPU_Posedge': 'n2t_cpu_posedge',
+    'Memory_Posedge': 'n2t_memory_posedge',
+    'ComputerPosedge': 'n2t_computer_posedge',
 }
 
 PROJECT = {
@@ -184,6 +210,8 @@ PROJECT = {
     'RAM4K': '03', 'RAM16K': '03', 'PC': '03',
     'CPU': '05', 'ComputerAdd': '05', 'ComputerMax': '05', 'ComputerRect': '05',
     'PE': '06', 'SystolicArray': '06',
+    'RAM16K_Posedge': '07', 'CPU_Posedge': '07',
+    'Memory_Posedge': '07', 'ComputerPosedge': '07',
 }
 
 

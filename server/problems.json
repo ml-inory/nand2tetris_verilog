@@ -54,7 +54,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/01/Not_tb.v",
       "tb_top": "Not_tb",
@@ -120,7 +124,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/01/And_tb.v",
       "tb_top": "And_tb",
@@ -186,7 +194,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/01/Or_tb.v",
       "tb_top": "Or_tb",
@@ -252,7 +264,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/01/Xor_tb.v",
       "tb_top": "Xor_tb",
@@ -323,7 +339,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/01/Mux_tb.v",
       "tb_top": "Mux_tb",
@@ -394,7 +414,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/01/DMux_tb.v",
       "tb_top": "DMux_tb",
@@ -455,7 +479,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/01/Not16_tb.v",
       "tb_top": "Not16_tb",
@@ -521,7 +549,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/01/And16_tb.v",
       "tb_top": "And16_tb",
@@ -587,7 +619,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/01/Or16_tb.v",
       "tb_top": "Or16_tb",
@@ -658,7 +694,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/01/Mux16_tb.v",
       "tb_top": "Mux16_tb",
@@ -719,7 +759,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/01/Or8Way_tb.v",
       "tb_top": "Or8Way_tb",
@@ -800,7 +844,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/01/Mux4Way16_tb.v",
       "tb_top": "Mux4Way16_tb",
@@ -901,7 +949,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/01/Mux8Way16_tb.v",
       "tb_top": "Mux8Way16_tb",
@@ -982,7 +1034,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/01/DMux4Way_tb.v",
       "tb_top": "DMux4Way_tb",
@@ -1083,7 +1139,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/01/DMux8Way_tb.v",
       "tb_top": "DMux8Way_tb",
@@ -1154,7 +1214,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/02/HalfAdder_tb.v",
       "tb_top": "HalfAdder_tb",
@@ -1230,7 +1294,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/02/FullAdder_tb.v",
       "tb_top": "FullAdder_tb",
@@ -1296,7 +1364,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/02/Add16_tb.v",
       "tb_top": "Add16_tb",
@@ -1357,7 +1429,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/02/Inc16_tb.v",
       "tb_top": "Inc16_tb",
@@ -1463,7 +1539,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/02/ALU_tb.v",
       "tb_top": "ALU_tb",
@@ -1534,7 +1614,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/03/Bit_tb.v",
       "tb_top": "Bit_tb",
@@ -1605,7 +1689,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/03/Register_tb.v",
       "tb_top": "Register_tb",
@@ -1681,7 +1769,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/03/RAM8_tb.v",
       "tb_top": "RAM8_tb",
@@ -1757,7 +1849,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/03/RAM64_tb.v",
       "tb_top": "RAM64_tb",
@@ -1833,7 +1929,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/03/RAM512_tb.v",
       "tb_top": "RAM512_tb",
@@ -1909,7 +2009,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/03/RAM4K_tb.v",
       "tb_top": "RAM4K_tb",
@@ -2000,7 +2104,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/03/RAM16K_tb.v",
       "tb_top": "RAM16K_tb",
@@ -2081,7 +2189,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/03/PC_tb.v",
       "tb_top": "PC_tb",
@@ -2177,7 +2289,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/05/CPU_tb.v",
       "tb_top": "CPU_tb",
@@ -2306,7 +2422,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/05/ComputerAdd_tb.v",
       "tb_top": "ComputerAdd_tb",
@@ -2429,7 +2549,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/05/ComputerMax_tb.v",
       "tb_top": "ComputerMax_tb",
@@ -2552,7 +2676,11 @@
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
         "solution/06/PE.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/05/ComputerRect_tb.v",
       "tb_top": "ComputerRect_tb",
@@ -2614,8 +2742,8 @@
         }
       ],
       "probes": [],
-      "description": "PE：脉动阵列中的单个乘累加单元（MAC）。\n数据流约定（经典 weight-stationary 脉动阵列）：\na_in    从左侧流入，a_out 向右流出（每拍移动一格）\npsum_in 从上方流入，psum_out 向下方流出（累加结果逐拍下移）\nw_in    在 w_load 为高时写入 PE 内部权重寄存器，之后保持不变\n计算语义（有符号）：\npsum_out = psum_in + a_in * w\n时序：与仓库其他模块一致，统一在 clk 下降沿提交（FPGA 上可改为 posedge，\n只需同步调整测试台采样点）。\nProject 06 为自定义扩展（非官方 nand2tetris 题目），后续模块：\nn2t_systolic_array -> n2t_conv_unit -> n2t_npu",
-      "initial_code": "`timescale 1ns/1ps\n\n// PE：脉动阵列中的单个乘累加单元（MAC）。\n//\n// 数据流约定（经典 weight-stationary 脉动阵列）：\n//   a_in    从左侧流入，a_out 向右流出（每拍移动一格）\n//   psum_in 从上方流入，psum_out 向下方流出（累加结果逐拍下移）\n//   w_in    在 w_load 为高时写入 PE 内部权重寄存器，之后保持不变\n//\n// 计算语义（有符号）：\n//   psum_out = psum_in + a_in * w\n//\n// 时序：与仓库其他模块一致，统一在 clk 下降沿提交（FPGA 上可改为 posedge，\n// 只需同步调整测试台采样点）。\n//\n// Project 06 为自定义扩展（非官方 nand2tetris 题目），后续模块：\n//   n2t_systolic_array -> n2t_conv_unit -> n2t_npu\nmodule n2t_pe #(\n    parameter A_W = 8,   // 激活/输入数据位宽（有符号）\n    parameter W_W = 8,   // 权重位宽（有符号）\n    parameter P_W = 32   // 累加器位宽（有符号）\n) (\n    input  clk,\n    input  rst,\n    input  w_load,\n    input  signed [W_W-1:0] w_in,\n    input  signed [A_W-1:0] a_in,\n    input  signed [P_W-1:0] psum_in,\n    output reg signed [W_W-1:0] w_out,\n    output reg signed [A_W-1:0] a_out,\n    output reg signed [P_W-1:0] psum_out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "description": "PE：脉动阵列中的单个乘累加单元（MAC）。\n数据流约定（经典 weight-stationary 脉动阵列）：\na_in    从左侧流入，a_out 向右流出（每拍移动一格）\npsum_in 从上方流入，psum_out 向下方流出（累加结果逐拍下移）\nw_in    在 w_load 为高时写入 PE 内部权重寄存器，之后保持不变\n计算语义（有符号）：\npsum_out = psum_in + a_in * w\n时序：Project 06 使用正规上升沿（posedge）提交，与真实 FPGA 一致。\n注意：Hack 官方部分（Project 1/2/3/5）为了对齐官方测试向量仍用 negedge。\nProject 06 为自定义扩展（非官方 nand2tetris 题目），后续模块：\nn2t_systolic_array -> n2t_conv_unit -> n2t_npu",
+      "initial_code": "`timescale 1ns/1ps\n\n// PE：脉动阵列中的单个乘累加单元（MAC）。\n//\n// 数据流约定（经典 weight-stationary 脉动阵列）：\n//   a_in    从左侧流入，a_out 向右流出（每拍移动一格）\n//   psum_in 从上方流入，psum_out 向下方流出（累加结果逐拍下移）\n//   w_in    在 w_load 为高时写入 PE 内部权重寄存器，之后保持不变\n//\n// 计算语义（有符号）：\n//   psum_out = psum_in + a_in * w\n//\n// 时序：Project 06 使用正规上升沿（posedge）提交，与真实 FPGA 一致。\n// 注意：Hack 官方部分（Project 1/2/3/5）为了对齐官方测试向量仍用 negedge。\n//\n// Project 06 为自定义扩展（非官方 nand2tetris 题目），后续模块：\n//   n2t_systolic_array -> n2t_conv_unit -> n2t_npu\nmodule n2t_pe #(\n    parameter A_W = 8,   // 激活/输入数据位宽（有符号）\n    parameter W_W = 8,   // 权重位宽（有符号）\n    parameter P_W = 32   // 累加器位宽（有符号）\n) (\n    input  clk,\n    input  rst,\n    input  w_load,\n    input  signed [W_W-1:0] w_in,\n    input  signed [A_W-1:0] a_in,\n    input  signed [P_W-1:0] psum_in,\n    output reg signed [W_W-1:0] w_out,\n    output reg signed [A_W-1:0] a_out,\n    output reg signed [P_W-1:0] psum_out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 docs/npu.md 与 solution/06/ 的完整实现。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-06 RTLDIR=assignment` 验证。\n\nendmodule\n",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -2650,7 +2778,11 @@
         "solution/05/Computer.v",
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
-        "solution/06/SystolicArray.v"
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/06/PE_tb.v",
       "tb_top": "PE_tb",
@@ -2695,8 +2827,8 @@
         }
       ],
       "probes": [],
-      "description": "SystolicArray：N x N 的 weight-stationary 脉动阵列。\n数据布局（行主序，扁平向量）：\nw_data[row*N + col] = W[row][col]\na_data[row]         = A[row][k]（第 k 拍送入第 k 个输入向量）\npsum_out[col]       = C[k][col]（输出已对齐，所有列同一拍出现）\n计算语义：\nC[k][col] = sum_{row=0..N-1} A[row][k] * W[row][col]\n对应到卷积 GEMM：A 的行是输入通道、列是空间位置；W 的行是输入通道、\n列是输出通道；C 的每一拍是一个空间位置上所有输出通道的结果。\n也就是说，这个阵列天然适合“一次输出一个像素点的 N 个输出通道”。\n时序：\n1. w_load 为高时把 w_data 整体写入阵列（真实 NPU 中由 DMA/权重 SRAM\n批量装载）；\n2. 之后每个 clk 下降沿送一个 a_data 向量；\n3. 底部结果先做“输出对齐”：第 col 列额外延迟 N-1-col 拍，\n因此 psum_out 的所有列在同一拍出现；\n4. 最后一个输入送入后再等 N-1 拍，开始逐拍输出完整结果。\n输入对齐：行 i 的输入在阵列内部延迟 i 拍，实现经典脉动阵列的斜输入，\n因此外部不需要自己打 skew，只要按 k 逐拍送数据即可。",
-      "initial_code": "`timescale 1ns/1ps\n\n// SystolicArray：N x N 的 weight-stationary 脉动阵列。\n//\n// 数据布局（行主序，扁平向量）：\n//   w_data[row*N + col] = W[row][col]\n//   a_data[row]         = A[row][k]（第 k 拍送入第 k 个输入向量）\n//   psum_out[col]       = C[k][col]（输出已对齐，所有列同一拍出现）\n//\n// 计算语义：\n//   C[k][col] = sum_{row=0..N-1} A[row][k] * W[row][col]\n//\n// 对应到卷积 GEMM：A 的行是输入通道、列是空间位置；W 的行是输入通道、\n// 列是输出通道；C 的每一拍是一个空间位置上所有输出通道的结果。\n// 也就是说，这个阵列天然适合“一次输出一个像素点的 N 个输出通道”。\n//\n// 时序：\n//   1. w_load 为高时把 w_data 整体写入阵列（真实 NPU 中由 DMA/权重 SRAM\n//      批量装载）；\n//   2. 之后每个 clk 下降沿送一个 a_data 向量；\n//   3. 底部结果先做“输出对齐”：第 col 列额外延迟 N-1-col 拍，\n//      因此 psum_out 的所有列在同一拍出现；\n//   4. 最后一个输入送入后再等 N-1 拍，开始逐拍输出完整结果。\n//\n// 输入对齐：行 i 的输入在阵列内部延迟 i 拍，实现经典脉动阵列的斜输入，\n// 因此外部不需要自己打 skew，只要按 k 逐拍送数据即可。\nmodule n2t_systolic_array #(\n    parameter N    = 8,\n    parameter A_W  = 8,\n    parameter W_W  = 8,\n    parameter P_W  = 32\n) (\n    input  clk,\n    input  rst,\n    input  w_load,\n    input  [N*N*W_W-1:0] w_data, // N x N 权重矩阵，行主序\n    input  [N*A_W-1:0] a_data,   // 每拍一个长度为 N 的输入向量\n    output [N*P_W-1:0] psum_out  // 每拍一个长度为 N 的输出向量\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "description": "SystolicArray：N x N 的 weight-stationary 脉动阵列。\n数据布局（行主序，扁平向量）：\nw_data[row*N + col] = W[row][col]\na_data[row]         = A[row][k]（第 k 拍送入第 k 个输入向量）\npsum_out[col]       = C[k][col]（输出已对齐，所有列同一拍出现）\n计算语义：\nC[k][col] = sum_{row=0..N-1} A[row][k] * W[row][col]\n对应到卷积 GEMM：A 的行是输入通道、列是空间位置；W 的行是输入通道、\n列是输出通道；C 的每一拍是一个空间位置上所有输出通道的结果。\n也就是说，这个阵列天然适合“一次输出一个像素点的 N 个输出通道”。\n时序：\n1. w_load 为高时把 w_data 整体写入阵列（真实 NPU 中由 DMA/权重 SRAM\n批量装载）；\n2. 之后每个 clk 上升沿送一个 a_data 向量；\n3. 底部结果先做“输出对齐”：第 col 列额外延迟 N-1-col 拍，\n因此 psum_out 的所有列在同一拍出现；\n4. 最后一个输入送入后再等 N-1 拍，开始逐拍输出完整结果。\n输入对齐：行 i 的输入在阵列内部延迟 i 拍，实现经典脉动阵列的斜输入，\n因此外部不需要自己打 skew，只要按 k 逐拍送数据即可。",
+      "initial_code": "`timescale 1ns/1ps\n\n// SystolicArray：N x N 的 weight-stationary 脉动阵列。\n//\n// 数据布局（行主序，扁平向量）：\n//   w_data[row*N + col] = W[row][col]\n//   a_data[row]         = A[row][k]（第 k 拍送入第 k 个输入向量）\n//   psum_out[col]       = C[k][col]（输出已对齐，所有列同一拍出现）\n//\n// 计算语义：\n//   C[k][col] = sum_{row=0..N-1} A[row][k] * W[row][col]\n//\n// 对应到卷积 GEMM：A 的行是输入通道、列是空间位置；W 的行是输入通道、\n// 列是输出通道；C 的每一拍是一个空间位置上所有输出通道的结果。\n// 也就是说，这个阵列天然适合“一次输出一个像素点的 N 个输出通道”。\n//\n// 时序：\n//   1. w_load 为高时把 w_data 整体写入阵列（真实 NPU 中由 DMA/权重 SRAM\n//      批量装载）；\n//   2. 之后每个 clk 上升沿送一个 a_data 向量；\n//   3. 底部结果先做“输出对齐”：第 col 列额外延迟 N-1-col 拍，\n//      因此 psum_out 的所有列在同一拍出现；\n//   4. 最后一个输入送入后再等 N-1 拍，开始逐拍输出完整结果。\n//\n// 输入对齐：行 i 的输入在阵列内部延迟 i 拍，实现经典脉动阵列的斜输入，\n// 因此外部不需要自己打 skew，只要按 k 逐拍送数据即可。\nmodule n2t_systolic_array #(\n    parameter N    = 8,\n    parameter A_W  = 8,\n    parameter W_W  = 8,\n    parameter P_W  = 32\n) (\n    input  clk,\n    input  rst,\n    input  w_load,\n    input  [N*N*W_W-1:0] w_data, // N x N 权重矩阵，行主序\n    input  [N*A_W-1:0] a_data,   // 每拍一个长度为 N 的输入向量\n    output [N*P_W-1:0] psum_out  // 每拍一个长度为 N 的输出向量\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 docs/npu.md 与 solution/06/ 的完整实现。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-06 RTLDIR=assignment` 验证。\n\nendmodule\n",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -2731,12 +2863,409 @@
         "solution/05/Computer.v",
         "solution/05/Memory.v",
         "solution/05/ROM32K.v",
-        "solution/06/PE.v"
+        "solution/06/PE.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
       ],
       "tb": "tb/06/SystolicArray_tb.v",
       "tb_top": "SystolicArray_tb",
       "wave_tb": "server/wave_tb/06/SystolicArray.v",
       "runtime_files": []
+    },
+    {
+      "id": "RAM16K_Posedge",
+      "title": "RAM16K_Posedge",
+      "project": "07",
+      "module": "n2t_ram16k_posedge",
+      "ports": [
+        {
+          "name": "clk",
+          "width": 1,
+          "dir": "clk"
+        },
+        {
+          "name": "in",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "load",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "address",
+          "width": 15,
+          "dir": "in"
+        },
+        {
+          "name": "dbg_we",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "dbg_addr",
+          "width": 14,
+          "dir": "in"
+        },
+        {
+          "name": "dbg_wdata",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 16,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "RAM16K（posedge 版）：16K x 16 主内存\n功能与官方 n2t_ram16k 相同，但改为正规上升沿（posedge）提交，\n供 NPU 集成使用；官方测试版本保持 negedge 不变。",
+      "initial_code": "`timescale 1ns/1ps\n\n// RAM16K（posedge 版）：16K x 16 主内存\n// 功能与官方 n2t_ram16k 相同，但改为正规上升沿（posedge）提交，\n// 供 NPU 集成使用；官方测试版本保持 negedge 不变。\nmodule n2t_ram16k_posedge #(\n    parameter INIT_FILE = \"\"\n) (\n    input         clk,\n    input  [15:0] in,\n    input         load,\n    input  [14:0] address,\n    input         dbg_we,\n    input  [13:0] dbg_addr,\n    input  [15:0] dbg_wdata,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/And16.v",
+        "solution/01/DMux.v",
+        "solution/01/DMux4Way.v",
+        "solution/01/DMux8Way.v",
+        "solution/01/Mux.v",
+        "solution/01/Mux16.v",
+        "solution/01/Mux4Way16.v",
+        "solution/01/Mux8Way16.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Not16.v",
+        "solution/01/Or.v",
+        "solution/01/Or16.v",
+        "solution/01/Or8Way.v",
+        "solution/01/Xor.v",
+        "solution/02/ALU.v",
+        "solution/02/Add16.v",
+        "solution/02/FullAdder.v",
+        "solution/02/HalfAdder.v",
+        "solution/02/Inc16.v",
+        "solution/03/Bit.v",
+        "solution/03/PC.v",
+        "solution/03/RAM16K.v",
+        "solution/03/RAM4K.v",
+        "solution/03/RAM512.v",
+        "solution/03/RAM64.v",
+        "solution/03/RAM8.v",
+        "solution/03/Register.v",
+        "solution/05/CPU.v",
+        "solution/05/Computer.v",
+        "solution/05/Memory.v",
+        "solution/05/ROM32K.v",
+        "solution/06/PE.v",
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v"
+      ],
+      "tb": "tb/07/RAM16K_Posedge_tb.v",
+      "tb_top": "RAM16K_Posedge_tb",
+      "wave_tb": "server/wave_tb/07/RAM16K_Posedge.v",
+      "runtime_files": []
+    },
+    {
+      "id": "CPU_Posedge",
+      "title": "CPU_Posedge",
+      "project": "07",
+      "module": "n2t_cpu_posedge",
+      "ports": [
+        {
+          "name": "clk",
+          "width": 1,
+          "dir": "clk"
+        },
+        {
+          "name": "inM",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "instruction",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "reset",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "outM",
+          "width": 16,
+          "dir": "out"
+        },
+        {
+          "name": "writeM",
+          "width": 1,
+          "dir": "out"
+        },
+        {
+          "name": "addressM",
+          "width": 15,
+          "dir": "out"
+        },
+        {
+          "name": "pc",
+          "width": 15,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "CPU（posedge 版）：与官方 Hack CPU 功能等价的单边沿实现。\n设计说明：\n- D / A / PC 全部在 clk 上升沿提交；\n- outM / writeM / addressM 为组合输出；\n- 上升沿到来前，outM 是“tick 值”（用旧 D/A 计算），\n上升沿之后自动变成“tock 值”（用新 D/A 计算）；\n- Memory 在同一上升沿写入时看到的是上升沿前的 outM，\n因此内存写入语义与官方版本一致（M 写入 tick 时刻的 ALU 结果）。\n官方 Hack 测试版本（solution/05）保持 negedge 不变，以对齐 .tst/.cmp；\n本模块供 NPU 集成使用，时钟与 NPU 统一为 posedge。",
+      "initial_code": "`timescale 1ns/1ps\n\n// CPU（posedge 版）：与官方 Hack CPU 功能等价的单边沿实现。\n//\n// 设计说明：\n//   - D / A / PC 全部在 clk 上升沿提交；\n//   - outM / writeM / addressM 为组合输出；\n//   - 上升沿到来前，outM 是“tick 值”（用旧 D/A 计算），\n//     上升沿之后自动变成“tock 值”（用新 D/A 计算）；\n//   - Memory 在同一上升沿写入时看到的是上升沿前的 outM，\n//     因此内存写入语义与官方版本一致（M 写入 tick 时刻的 ALU 结果）。\n//\n// 官方 Hack 测试版本（solution/05）保持 negedge 不变，以对齐 .tst/.cmp；\n// 本模块供 NPU 集成使用，时钟与 NPU 统一为 posedge。\nmodule n2t_cpu_posedge (\n    input         clk,\n    input  [15:0] inM,\n    input  [15:0] instruction,\n    input         reset,\n    output [15:0] outM,\n    output        writeM,\n    output [14:0] addressM,\n    output [14:0] pc\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/And16.v",
+        "solution/01/DMux.v",
+        "solution/01/DMux4Way.v",
+        "solution/01/DMux8Way.v",
+        "solution/01/Mux.v",
+        "solution/01/Mux16.v",
+        "solution/01/Mux4Way16.v",
+        "solution/01/Mux8Way16.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Not16.v",
+        "solution/01/Or.v",
+        "solution/01/Or16.v",
+        "solution/01/Or8Way.v",
+        "solution/01/Xor.v",
+        "solution/02/ALU.v",
+        "solution/02/Add16.v",
+        "solution/02/FullAdder.v",
+        "solution/02/HalfAdder.v",
+        "solution/02/Inc16.v",
+        "solution/03/Bit.v",
+        "solution/03/PC.v",
+        "solution/03/RAM16K.v",
+        "solution/03/RAM4K.v",
+        "solution/03/RAM512.v",
+        "solution/03/RAM64.v",
+        "solution/03/RAM8.v",
+        "solution/03/Register.v",
+        "solution/05/CPU.v",
+        "solution/05/Computer.v",
+        "solution/05/Memory.v",
+        "solution/05/ROM32K.v",
+        "solution/06/PE.v",
+        "solution/06/SystolicArray.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
+      ],
+      "tb": "tb/07/CPU_Posedge_tb.v",
+      "tb_top": "CPU_Posedge_tb",
+      "wave_tb": "server/wave_tb/07/CPU_Posedge.v",
+      "runtime_files": []
+    },
+    {
+      "id": "Memory_Posedge",
+      "title": "Memory_Posedge",
+      "project": "07",
+      "module": "n2t_memory_posedge",
+      "ports": [
+        {
+          "name": "clk",
+          "width": 1,
+          "dir": "clk"
+        },
+        {
+          "name": "in",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "load",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "address",
+          "width": 15,
+          "dir": "in"
+        },
+        {
+          "name": "keyboard_in",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "dbg_we",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "dbg_addr",
+          "width": 14,
+          "dir": "in"
+        },
+        {
+          "name": "dbg_wdata",
+          "width": 16,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 16,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "Memory（posedge 版）：Hack 完整地址空间（RAM16K + Screen + Keyboard）\n与官方 n2t_memory 功能相同，但 RAM/Screen 统一在上升沿提交，\n供 NPU 集成使用。",
+      "initial_code": "`timescale 1ns/1ps\n\n// Memory（posedge 版）：Hack 完整地址空间（RAM16K + Screen + Keyboard）\n// 与官方 n2t_memory 功能相同，但 RAM/Screen 统一在上升沿提交，\n// 供 NPU 集成使用。\nmodule n2t_memory_posedge #(\n    parameter RAM_INIT_FILE = \"\"\n) (\n    input         clk,\n    input  [15:0] in,\n    input         load,\n    input  [14:0] address,\n    input  [15:0] keyboard_in,\n    input         dbg_we,\n    input  [13:0] dbg_addr,\n    input  [15:0] dbg_wdata,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/And16.v",
+        "solution/01/DMux.v",
+        "solution/01/DMux4Way.v",
+        "solution/01/DMux8Way.v",
+        "solution/01/Mux.v",
+        "solution/01/Mux16.v",
+        "solution/01/Mux4Way16.v",
+        "solution/01/Mux8Way16.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Not16.v",
+        "solution/01/Or.v",
+        "solution/01/Or16.v",
+        "solution/01/Or8Way.v",
+        "solution/01/Xor.v",
+        "solution/02/ALU.v",
+        "solution/02/Add16.v",
+        "solution/02/FullAdder.v",
+        "solution/02/HalfAdder.v",
+        "solution/02/Inc16.v",
+        "solution/03/Bit.v",
+        "solution/03/PC.v",
+        "solution/03/RAM16K.v",
+        "solution/03/RAM4K.v",
+        "solution/03/RAM512.v",
+        "solution/03/RAM64.v",
+        "solution/03/RAM8.v",
+        "solution/03/Register.v",
+        "solution/05/CPU.v",
+        "solution/05/Computer.v",
+        "solution/05/Memory.v",
+        "solution/05/ROM32K.v",
+        "solution/06/PE.v",
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/RAM16K.v"
+      ],
+      "tb": "tb/07/Memory_Posedge_tb.v",
+      "tb_top": "Memory_Posedge_tb",
+      "wave_tb": "server/wave_tb/07/Memory_Posedge.v",
+      "runtime_files": []
+    },
+    {
+      "id": "ComputerPosedge",
+      "title": "ComputerPosedge",
+      "project": "07",
+      "module": "n2t_computer_posedge",
+      "ports": [
+        {
+          "name": "clk",
+          "width": 1,
+          "dir": "clk"
+        },
+        {
+          "name": "reset",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "outM",
+          "width": 16,
+          "dir": "out"
+        },
+        {
+          "name": "writeM",
+          "width": 1,
+          "dir": "out"
+        },
+        {
+          "name": "addressM",
+          "width": 15,
+          "dir": "out"
+        },
+        {
+          "name": "pc",
+          "width": 15,
+          "dir": "out"
+        },
+        {
+          "name": "dbg_we",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "dbg_addr",
+          "width": 14,
+          "dir": "in"
+        },
+        {
+          "name": "dbg_wdata",
+          "width": 16,
+          "dir": "in"
+        }
+      ],
+      "probes": [],
+      "description": "Computer（posedge 版）：ROM32K + CPU(posedge) + Memory(posedge)\n与官方 n2t_computer 端口一致，全部时序逻辑使用上升沿，\n供 NPU 以同一边沿集成。",
+      "initial_code": "`timescale 1ns/1ps\n\n// Computer（posedge 版）：ROM32K + CPU(posedge) + Memory(posedge)\n// 与官方 n2t_computer 端口一致，全部时序逻辑使用上升沿，\n// 供 NPU 以同一边沿集成。\nmodule n2t_computer_posedge #(\n    parameter ROM_INIT_FILE = \"\",\n    parameter RAM_INIT_FILE = \"\"\n) (\n    input  clk,\n    input  reset,\n    output [15:0] outM,\n    output        writeM,\n    output [14:0] addressM,\n    output [14:0] pc,\n    input         dbg_we,\n    input  [13:0] dbg_addr,\n    input  [15:0] dbg_wdata\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/And16.v",
+        "solution/01/DMux.v",
+        "solution/01/DMux4Way.v",
+        "solution/01/DMux8Way.v",
+        "solution/01/Mux.v",
+        "solution/01/Mux16.v",
+        "solution/01/Mux4Way16.v",
+        "solution/01/Mux8Way16.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Not16.v",
+        "solution/01/Or.v",
+        "solution/01/Or16.v",
+        "solution/01/Or8Way.v",
+        "solution/01/Xor.v",
+        "solution/02/ALU.v",
+        "solution/02/Add16.v",
+        "solution/02/FullAdder.v",
+        "solution/02/HalfAdder.v",
+        "solution/02/Inc16.v",
+        "solution/03/Bit.v",
+        "solution/03/PC.v",
+        "solution/03/RAM16K.v",
+        "solution/03/RAM4K.v",
+        "solution/03/RAM512.v",
+        "solution/03/RAM64.v",
+        "solution/03/RAM8.v",
+        "solution/03/Register.v",
+        "solution/05/CPU.v",
+        "solution/05/Computer.v",
+        "solution/05/Memory.v",
+        "solution/05/ROM32K.v",
+        "solution/06/PE.v",
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
+      ],
+      "tb": "tb/07/ComputerPosedge_tb.v",
+      "tb_top": "ComputerPosedge_tb",
+      "wave_tb": "server/wave_tb/07/ComputerPosedge.v",
+      "runtime_files": [
+        "programs/Add.hack",
+        "programs/Max.hack"
+      ]
     }
   ]
 }

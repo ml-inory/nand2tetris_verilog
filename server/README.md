@@ -57,6 +57,23 @@ cd server && docker compose up -d
 容器内以非 root 用户 `judge` 运行，判题进程还有 CPU/内存/文件大小 rlimit 与超时 kill。
 生产环境建议再套一层反向代理（nginx/caddy）做 HTTPS。
 
+### 云端部署（GitHub Container Registry）
+
+推送到 `main` 后，GitHub Actions 会自动构建镜像并发布到 GHCR：
+
+```bash
+docker pull ghcr.io/ml-inory/nand2tetris_verilog:latest
+sudo mkdir -p /opt/n2t-data && sudo chown 10001:10001 /opt/n2t-data
+docker run --rm -d -p 8000:8000 \
+  -v /opt/n2t-data:/srv/app/server/data \
+  --tmpfs /tmp:size=64m --pids-limit 64 --memory 1g \
+  --cap-drop ALL --security-opt no-new-privileges \
+  ghcr.io/ml-inory/nand2tetris_verilog:latest
+```
+
+题库已包含 Project 06（PE / SystolicArray）与 Project 07
+（RAM16K_Posedge / CPU_Posedge / Memory_Posedge / ComputerPosedge）。
+
 ## 安全边界（重要）
 
 - 判题执行的是**不可信 Verilog**，务必保持：非 root、无网络外联权限（如 iptables 或独立

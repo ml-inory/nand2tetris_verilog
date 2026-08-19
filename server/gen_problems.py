@@ -88,7 +88,17 @@ def main():
         cfg = tst2tb.CHIPS[chip]
         proj = tst2tb.PROJECT[chip]
         module = tst2tb.MODULE[chip]
-        fname = 'Computer.v' if proj == '05' and chip.startswith('Computer') else chip + '.v'
+        if proj == '05' and chip.startswith('Computer'):
+            fname = 'Computer.v'
+        elif proj == '07':
+            fname = {
+                'RAM16K_Posedge': 'RAM16K.v',
+                'CPU_Posedge': 'CPU.v',
+                'Memory_Posedge': 'Memory.v',
+                'ComputerPosedge': 'Computer.v',
+            }[chip]
+        else:
+            fname = chip + '.v'
         sol_file = os.path.join(SOL, proj, fname)
         asg_file = os.path.join(ASG, proj, fname)
         tb_file = os.path.join(TB, proj, chip + '_tb.v')
