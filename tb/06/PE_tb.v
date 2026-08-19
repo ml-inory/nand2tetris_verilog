@@ -64,7 +64,7 @@ module PE_tb;
         $display("=== PE ===");
 
         // 复位
-        repeat (2) @(negedge clk);
+        repeat (2) @(posedge clk);
         rst = 1'b0;
         #1;
 
@@ -73,13 +73,13 @@ module PE_tb;
         w_in = 8'sd5;
         a_in = 8'sd0;
         psum_in = 32'sd0;
-        @(negedge clk);
+        @(posedge clk);
         #1;
         w_load = 1'b0;
 
         // 第一个乘累加：psum_out = 0 + 7 * 5 = 35
         a_in = 8'sd7;
-        @(negedge clk);
+        @(posedge clk);
         #1;
         tst_check(psum_out, 32'sd35, "psum after 7*5");
         tst_check(a_out, 32'sd7, "a_out after first MAC");
@@ -88,14 +88,14 @@ module PE_tb;
         // 第二个乘累加：psum_out = 35 + (-3) * 5 = 20
         a_in = -8'sd3;
         psum_in = 32'sd35;
-        @(negedge clk);
+        @(posedge clk);
         #1;
         tst_check(psum_out, 32'sd20, "psum after 35 + (-3)*5");
         tst_check(a_out, -32'sd3, "a_out after second MAC");
 
         // 复位清零
         rst = 1'b1;
-        @(negedge clk);
+        @(posedge clk);
         #1;
         tst_check(psum_out, 32'sd0, "psum reset");
 

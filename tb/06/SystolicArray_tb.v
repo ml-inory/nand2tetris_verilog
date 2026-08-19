@@ -88,7 +88,7 @@ module SystolicArray_tb;
         end
 
         // 复位
-        repeat (2) @(negedge clk);
+        repeat (2) @(posedge clk);
         rst = 1'b0;
         #1;
 
@@ -99,7 +99,7 @@ module SystolicArray_tb;
                 w_data[(r*N + j)*W_W +: W_W] = W_mat[r][j];
             end
         end
-        @(negedge clk);
+        @(posedge clk);
         #1;
         w_load = 1'b0;
 
@@ -108,13 +108,13 @@ module SystolicArray_tb;
             for (r = 0; r < N; r = r + 1) begin
                 a_data[r*A_W +: A_W] = A_mat[r][k];
             end
-            @(negedge clk);
+            @(posedge clk);
             #1;
         end
 
         // 保持最后一拍输入让流水排空；
         // 输出对齐后，第一个完整结果在最后一个输入送入后再等 N-1 拍出现。
-        repeat (N-1) @(negedge clk);
+        repeat (N-1) @(posedge clk);
         #1;
         for (k = 0; k < N; k = k + 1) begin
             for (j = 0; j < N; j = j + 1) begin
@@ -122,7 +122,7 @@ module SystolicArray_tb;
                           $signed(psum_out[j*P_W +: P_W]),
                           exp_mat[k][j]);
             end
-            @(negedge clk);
+            @(posedge clk);
             #1;
         end
 

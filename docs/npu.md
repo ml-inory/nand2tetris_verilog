@@ -76,8 +76,8 @@ C[k][col] = sum_{row=0..N-1} A[row][k] * W[row][col]
 底部还会按列做输出对齐，消除经典脉动阵列的斜输出。权重用 `w_load` 批量装载，
 装载完成后再开始送 `a_data`。
 
-时序统一使用下降沿提交，与仓库其余模块一致；FPGA 上改用 `posedge` 时只需同步
-调整测试台采样点，RTL 逻辑不变。
+Project 06（NPU 扩展）使用正规上升沿（posedge）提交，与真实 FPGA 一致；
+Hack 官方部分（Project 1/2/3/5）仍使用 negedge，以对齐官方测试向量。
 
 ## 作业要求
 

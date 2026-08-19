@@ -10,8 +10,8 @@
 // 计算语义（有符号）：
 //   psum_out = psum_in + a_in * w
 //
-// 时序：与仓库其他模块一致，统一在 clk 下降沿提交（FPGA 上可改为 posedge，
-// 只需同步调整测试台采样点）。
+// 时序：Project 06 使用正规上升沿（posedge）提交，与真实 FPGA 一致。
+// 注意：Hack 官方部分（Project 1/2/3/5）为了对齐官方测试向量仍用 negedge。
 //
 // Project 06 为自定义扩展（非官方 nand2tetris 题目），后续模块：
 //   n2t_systolic_array -> n2t_conv_unit -> n2t_npu
@@ -32,7 +32,7 @@ module n2t_pe #(
 );
     reg signed [W_W-1:0] w;
 
-    always @(negedge clk or posedge rst) begin
+    always @(posedge clk or posedge rst) begin
         if (rst) begin
             w        <= {W_W{1'b0}};
             w_out    <= {W_W{1'b0}};

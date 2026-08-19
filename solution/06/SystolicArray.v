@@ -17,7 +17,7 @@
 // 时序：
 //   1. w_load 为高时把 w_data 整体写入阵列（真实 NPU 中由 DMA/权重 SRAM
 //      批量装载）；
-//   2. 之后每个 clk 下降沿送一个 a_data 向量；
+//   2. 之后每个 clk 上升沿送一个 a_data 向量；
 //   3. 底部结果先做“输出对齐”：第 col 列额外延迟 N-1-col 拍，
 //      因此 psum_out 的所有列在同一拍出现；
 //   4. 最后一个输入送入后再等 N-1 拍，开始逐拍输出完整结果。
@@ -42,7 +42,7 @@ module n2t_systolic_array #(
     reg [A_W-1:0] a_dly [0:N-1][0:N-1];
     integer r, d;
 
-    always @(negedge clk or posedge rst) begin
+    always @(posedge clk or posedge rst) begin
         if (rst) begin
             for (r = 0; r < N; r = r + 1)
                 for (d = 0; d < N; d = d + 1)
@@ -108,7 +108,7 @@ module n2t_systolic_array #(
     reg [P_W-1:0] o_dly [0:N-1][0:N-1];
     integer oc, od;
 
-    always @(negedge clk or posedge rst) begin
+    always @(posedge clk or posedge rst) begin
         if (rst) begin
             for (oc = 0; oc < N; oc = oc + 1)
                 for (od = 0; od < N; od = od + 1)

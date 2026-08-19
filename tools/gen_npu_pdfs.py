@@ -1372,7 +1372,7 @@ CHAPTERS = [
             'contract': [
                 'PE：psum_out = psum_in + a_in * w，全部使用有符号运算。',
                 '阵列：`w_data` 为 N*N*W_W 位，`a_data` 为 N*A_W 位，`psum_out` 为 N*P_W 位。',
-                '时序：统一在 clk 下降沿提交，与仓库其他模块一致。',
+                '时序：使用正规上升沿（posedge）提交，与真实 FPGA 一致。',
                 '测试：PE 6 项检查、SystolicArray 64 项检查全部通过。',
             ],
             'resources': [
@@ -1511,7 +1511,7 @@ CHAPTERS = [
                 '卷积输出必须与 Python int8 参考实现逐元素一致。',
                 '支持 stride=1/2、padding=0/1 的配置。',
                 '数据通路与控制器分离：控制器产生地址和使能，数据通路只做运算。',
-                '保持 negedge 时序约定。',
+                '保持 posedge 时序约定。',
             ],
             'resources': [
                 '`docs/npu.md` 的路线图。',

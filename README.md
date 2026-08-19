@@ -161,6 +161,9 @@ make sim-02              # 全部 PASS 即通过
 - `assignment/06/`：对应作业模板
 - `tb/06/`：PE 与阵列的独立测试台
 
+Project 06 使用正规上升沿（posedge），与真实 FPGA 一致；官方 Hack 部分
+（Project 1/2/3/5）仍为 negedge，以对齐官方测试向量。
+
 ```bash
 make sim-06 RTLDIR=solution   # 用答案验证
 make sim-06                   # 学生模式（模板留空，需要补全）
