@@ -113,6 +113,22 @@ function renderList() {
   }
 }
 
+async function refreshProblems() {
+  const btn = $('btn-refresh-list');
+  btn.disabled = true;
+  btn.textContent = '…';
+  try {
+    problems = await api('/api/problems');
+    solvedSet = new Set((await api('/api/solved')).solved);
+    renderList();
+    btn.textContent = '✓';
+  } catch (e) {
+    btn.textContent = '!';
+  } finally {
+    setTimeout(() => { btn.disabled = false; btn.textContent = '刷新'; }, 800);
+  }
+}
+
 // ---------------- 我的提交 ----------------
 function renderSubList(list) {
   const box = $('sub-list');
@@ -446,6 +462,7 @@ async function initApp() {
 async function init() {
   $('btn-submit').onclick = submit;
   $('btn-tb').onclick = showTb;
+  $('btn-refresh-list').onclick = refreshProblems;
   $('btn-reset').onclick = () => {
     if (detail && confirm('恢复初始模板？当前代码将被覆盖。')) {
       setCode(detail.initial_code);
