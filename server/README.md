@@ -74,6 +74,14 @@ docker run --rm -d -p 8000:8000 \
 题库已包含 Project 06（PE / SystolicArray）与 Project 07
 （RAM16K_Posedge / CPU_Posedge / Memory_Posedge / ComputerPosedge）。
 
+以后更新线上版本，直接在本地跑：
+
+```bash
+ssh -i ~/tencent_cloud.pem ubuntu@43.153.202.142 'bash -s' < server/deploy.sh
+```
+
+脚本会拉取最新 GHCR 镜像、保留 `/opt/n2t-data` 数据卷并重建容器。
+
 ## 安全边界（重要）
 
 - 判题执行的是**不可信 Verilog**，务必保持：非 root、无网络外联权限（如 iptables 或独立
