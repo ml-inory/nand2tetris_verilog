@@ -13,6 +13,7 @@ gen_npu_pdfs.py — 为 NPU 扩展生成“每章 3 个 PDF”的课程资料。
 输出：docs/npu/course/ChapterXX/{Project,Lecture,Assignment}.pdf
 """
 import os
+import math
 import sys
 
 from reportlab.lib import colors
@@ -22,6 +23,7 @@ from reportlab.lib.units import cm
 from reportlab.lib.utils import simpleSplit
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.cidfonts import UnicodeCIDFont
+from reportlab.graphics.shapes import Drawing, Rect, String, Line, Polygon
 from reportlab.platypus import (
     PageBreak, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle,
 )
@@ -94,14 +96,510 @@ def build_styles():
                                        fontName=FONT, fontSize=25, leading=32,
                                        textColor=ORANGE, alignment=0)
     st['slide_body'] = ParagraphStyle('slide_body', parent=s['Normal'],
-                                      fontName=FONT, fontSize=15, leading=24,
+                                      fontName=FONT, fontSize=13, leading=20,
                                       textColor=DARK, spaceAfter=8)
     st['slide_bullet'] = ParagraphStyle('slide_bullet', parent=s['Normal'],
-                                        fontName=FONT, fontSize=14,
-                                        leading=22, textColor=DARK,
+                                        fontName=FONT, fontSize=13,
+                                        leading=20, textColor=DARK,
                                         leftIndent=18, bulletIndent=4,
                                         spaceAfter=6)
     return st
+
+
+# ---------------------------------------------------------------------------
+# 配图绘制工具（reportlab 矢量图，全部可缩放、无需外部图片）
+# ---------------------------------------------------------------------------
+
+def _diagram(w, h):
+    return Drawing(w, h)
+
+
+def _box(d, x, y, w, h, label='', fs=9, fill=colors.white,
+         stroke=colors.black, tc=DARK, lw=1):
+    d.add(Rect(x, y, w, h, fillColor=fill, strokeColor=stroke,
+               strokeWidth=lw))
+    if label:
+        d.add(String(x + w / 2.0, y + h / 2.0 - fs * 0.35, label,
+                     fontName=FONT, fontSize=fs, fillColor=tc,
+                     textAnchor='middle'))
+
+
+def _dtext(d, x, y, text, fs=9, anchor='middle', color=DARK):
+    d.add(String(x, y, text, fontName=FONT, fontSize=fs,
+                 fillColor=color, textAnchor=anchor))
+
+
+def _arrow(d, x1, y1, x2, y2, label='', color=ORANGE, lw=1.4, fs=8):
+    d.add(Line(x1, y1, x2, y2, strokeColor=color, strokeWidth=lw))
+    ang = math.atan2(y2 - y1, x2 - x1)
+    L = 7
+    p1 = (x2 - L * math.cos(ang - 0.42), y2 - L * math.sin(ang - 0.42))
+    p2 = (x2 - L * math.cos(ang + 0.42), y2 - L * math.sin(ang + 0.42))
+    d.add(Polygon([x2, y2, p1[0], p1[1], p2[0], p2[1]],
+                  fillColor=color, strokeColor=color))
+    if label:
+        _dtext(d, (x1 + x2) / 2.0, (y1 + y2) / 2.0 + 3, label, fs=fs)
+
+
+def diag_system():
+    """Ch1：CPU / Memory / NPU 系统框图。"""
+    d = _diagram(560, 250)
+    _box(d, 20, 150, 120, 70, 'Hack CPU\n(调度器)', fs=10,
+         fill=LIGHT, stroke=ORANGE)
+    _box(d, 220, 150, 120, 70, 'Memory\n(含 MMIO)', fs=10,
+         fill=LIGHT, stroke=ORANGE)
+    _box(d, 420, 150, 120, 70, 'NPU\n(加速器)', fs=10,
+         fill=LIGHT, stroke=ORANGE)
+    _arrow(d, 140, 185, 220, 185, '读写')
+    _arrow(d, 340, 185, 420, 185, 'MMIO')
+    _box(d, 60, 30, 130, 60, '命令/状态\n寄存器', fs=9)
+    _box(d, 215, 30, 130, 60, '权重/输入\nSRAM', fs=9)
+    _box(d, 370, 30, 130, 60, '脉动阵列\n8x8', fs=9)
+    _arrow(d, 125, 90, 125, 150, 'CPU 控制')
+    _arrow(d, 280, 90, 280, 150, '数据搬运')
+    _arrow(d, 435, 90, 435, 150, '计算')
+    _dtext(d, 280, 10, '图 1：Hack CPU 只做调度，重计算全部下沉到 NPU',
+           fs=8, color=GRAY)
+    return d
+
+
+def diag_addr_map():
+    """Ch1：Hack 地址空间与 NPU MMIO 段。"""
+    d = _diagram(420, 380)
+    rows = [
+        ('0x7000 - 0x7FFF', 'NPU 寄存器 / 数据缓冲（新增）', ORANGE, 110),
+        ('0x6000', 'Keyboard（只读）', colors.white, 40),
+        ('0x4000 - 0x5FFF', 'Screen（8K 字）', LIGHT, 70),
+        ('0x0000 - 0x3FFF', 'RAM16K（64KB）', LIGHT, 90),
+    ]
+    y = 20
+    for label, desc, fill, h in rows:
+        _box(d, 30, y, 150, h, label, fs=9, fill=fill, stroke=ORANGE)
+        _dtext(d, 280, y + h / 2 - 4, desc, fs=9)
+        y += h + 6
+    _dtext(d, 210, 365, '图 2：Hack 地址空间。0x7000 以上原本未使用，',
+           fs=8, color=GRAY)
+    _dtext(d, 210, 352, '正好预留给 NPU。', fs=8, color=GRAY)
+    return d
+
+
+def diag_mmio_flow():
+    """Ch1：MMIO 写命令 / 轮询状态 的握手。"""
+    d = _diagram(560, 210)
+    _box(d, 20, 90, 130, 60, 'CPU\n写 CMD=START', fs=9, fill=LIGHT)
+    _box(d, 215, 90, 130, 60, 'NPU\n执行推理', fs=9, fill=LIGHT)
+    _box(d, 410, 90, 130, 60, 'CPU\n读 STATUS', fs=9, fill=LIGHT)
+    _arrow(d, 150, 120, 215, 120, '1')
+    _arrow(d, 345, 120, 410, 120, '2: DONE=1')
+    _box(d, 20, 10, 520, 45,
+         'CPU 视角：写命令 -> 忙等（轮询） -> 读到完成位 -> 读结果',
+         fs=9, fill=LIGHT)
+    _dtext(d, 280, 185, '图 3：MMIO 的本质就是“把外设寄存器当成内存地址来读写”。',
+           fs=8, color=GRAY)
+    return d
+
+
+def diag_int8():
+    """Ch1：float -> int8 量化映射。"""
+    d = _diagram(560, 170)
+    _dtext(d, 50, 120, '浮点范围 [-1.0, 1.0]', fs=9, anchor='start')
+    _arrow(d, 50, 110, 510, 110)
+    _dtext(d, 50, 96, '-1.0', fs=8)
+    _dtext(d, 280, 96, '0.0', fs=8)
+    _dtext(d, 510, 96, '1.0', fs=8)
+    _dtext(d, 50, 50, 'int8 范围 [-128, 127]', fs=9, anchor='start')
+    _arrow(d, 50, 40, 510, 40)
+    _dtext(d, 50, 26, '-128', fs=8)
+    _dtext(d, 280, 26, '0', fs=8)
+    _dtext(d, 510, 26, '127', fs=8)
+    _dtext(d, 280, 145, '图 4：q = round(clamp(x / scale))，scale = 1/127。',
+           fs=8, color=GRAY)
+    return d
+
+
+def diag_pe():
+    """Ch2：PE 数据流。"""
+    d = _diagram(420, 260)
+    _box(d, 140, 90, 140, 80, 'PE\npsum += a * w', fs=10,
+         fill=LIGHT, stroke=ORANGE)
+    _arrow(d, 30, 130, 140, 130, 'a_in')
+    _arrow(d, 280, 130, 390, 130, 'a_out')
+    _arrow(d, 210, 210, 210, 170, 'psum_in')
+    _arrow(d, 210, 90, 210, 50, 'psum_out')
+    _arrow(d, 330, 210, 330, 170, 'w_load')
+    _dtext(d, 210, 20, '图 5：激活向右流，部分和向下流，权重装载后驻留。',
+           fs=8, color=GRAY)
+    return d
+
+
+def diag_array():
+    """Ch2：4x4 脉动阵列。"""
+    d = _diagram(520, 320)
+    n = 4
+    cw, ch, gap = 50, 38, 14
+    x0, y0 = 80, 70
+    for i in range(n):
+        for j in range(n):
+            _box(d, x0 + j * (cw + gap), y0 + (n - 1 - i) * (ch + gap),
+                 cw, ch, 'PE', fs=8, fill=LIGHT, stroke=ORANGE)
+    for i in range(n):
+        y = y0 + (n - 1 - i) * (ch + gap) + ch / 2
+        _arrow(d, 30, y, x0, y)
+    for j in range(n):
+        x = x0 + j * (cw + gap) + cw / 2
+        _arrow(d, x, y0 + n * (ch + gap) + 5, x, y0 + n * (ch + gap) + 25,
+               'psum 0')
+    _dtext(d, 260, 300, '图 6：N x N PE 阵列。激活从左侧流入，',
+           fs=8, color=GRAY)
+    _dtext(d, 260, 288, '部分和从顶部流入、逐行累加。', fs=8, color=GRAY)
+    return d
+
+
+def diag_skew():
+    """Ch2：斜输入示意。"""
+    d = _diagram(520, 200)
+    rows = [('row0', 40), ('row1', 90), ('row2', 140)]
+    for label, y in rows:
+        _dtext(d, 30, y + 10, label, fs=9, anchor='start')
+    colors3 = [ORANGE, LIGHT, colors.HexColor('#DDDDDD')]
+    for r, (label, y) in enumerate(rows):
+        for k in range(6):
+            _box(d, 80 + k * 45, y, 38, 22, 'k%d' % k, fs=7,
+                 fill=colors3[(r + k) % 3], stroke=ORANGE)
+    _dtext(d, 260, 175,
+           '图 7：row i 的输入序列整体延迟 i 拍（斜输入），'
+           '保证同一列在同一拍处理同一个 k。', fs=8, color=GRAY)
+    return d
+
+
+def diag_align():
+    """Ch2：输出对齐。"""
+    d = _diagram(540, 210)
+    _dtext(d, 130, 180, '对齐前（各列差一拍）', fs=9)
+    cols = [
+        (90, 'col0'), (140, 'col1'), (190, 'col2'),
+    ]
+    for x, lab in cols:
+        _dtext(d, x, 160, lab, fs=8)
+        _box(d, x, 130, 30, 15, '', fill=ORANGE)
+    _dtext(d, 300, 180, '延迟 N-1-col 拍后', fs=9)
+    _dtext(d, 350, 160, 'col0  col1  col2', fs=8)
+    for i in range(3):
+        _box(d, 320 + i * 55, 130, 30, 15, '', fill=LIGHT,
+             stroke=ORANGE)
+    _arrow(d, 250, 137, 310, 137, '对齐')
+    _dtext(d, 270, 90, '图 8：底部加移位寄存器，把不同列的斜输出拉齐到同一拍。',
+           fs=8, color=GRAY)
+    return d
+
+
+def diag_timing():
+    """Ch2：脉动阵列时序。"""
+    d = _diagram(540, 200)
+    y0 = 40
+    labels = ['clk', 'w_load', 'a_data', 'psum_out']
+    for i, lab in enumerate(labels):
+        y = y0 + i * 40
+        _dtext(d, 40, y + 8, lab, fs=9, anchor='start')
+        _arrow(d, 90, y, 500, y, color=GRAY, lw=1)
+        if lab == 'clk':
+            for t in range(0, 8, 2):
+                _box(d, 90 + t * 25, y, 25, 12, '', fill=ORANGE)
+        elif lab == 'w_load':
+            _box(d, 90, y, 25, 12, '', fill=ORANGE)
+        elif lab == 'a_data':
+            for t in range(8):
+                _box(d, 90 + t * 25, y, 25, 12, 'k%d' % t, fs=6,
+                     fill=LIGHT)
+        elif lab == 'psum_out':
+            for t in range(8):
+                _box(d, 90 + (t + 7) * 25, y, 25, 12, 'C%d' % t, fs=6,
+                     fill=ORANGE)
+    _dtext(d, 270, 12, '图 9：送 8 个 a_data 后，输出从第 7 拍起逐拍出现。',
+           fs=8, color=GRAY)
+    return d
+
+
+def diag_sram():
+    """Ch3：SRAM 布局。"""
+    d = _diagram(540, 200)
+    _box(d, 30, 70, 120, 60, '输入 SRAM\nHxWxC', fs=9, fill=LIGHT)
+    _box(d, 190, 70, 120, 60, '权重 SRAM\nCout x K', fs=9, fill=LIGHT)
+    _box(d, 350, 70, 160, 60, '脉动阵列\n8x8', fs=10, fill=ORANGE,
+         stroke=ORANGE, tc=colors.white)
+    _box(d, 30, 10, 120, 40, '输出 SRAM\nHxWxCout', fs=9, fill=LIGHT)
+    _arrow(d, 150, 100, 190, 100, '数据')
+    _arrow(d, 310, 100, 350, 100, '权重')
+    _arrow(d, 350, 70, 350, 50, '结果', color=GRAY)
+    _arrow(d, 350, 50, 150, 30, '', color=GRAY)
+    _dtext(d, 270, 175, '图 11：SRAM 负责把数据喂给阵列，并接住结果。',
+           fs=8, color=GRAY)
+    return d
+
+
+def diag_linebuffer():
+    """Ch3：Line Buffer 滑动窗口。"""
+    d = _diagram(520, 210)
+    rows = 3
+    cols = 6
+    for i in range(rows):
+        for j in range(cols):
+            _box(d, 60 + j * 40, 100 - i * 45, 36, 36, '', fs=6,
+                 fill=colors.white, stroke=ORANGE)
+    for i in range(rows):
+        for j in range(3):
+            _box(d, 100 + j * 40, 100 - i * 45, 36, 36, '', fs=6,
+                 fill=LIGHT, stroke=ORANGE, lw=2)
+    _arrow(d, 320, 120, 380, 120, '向右滑')
+    _dtext(d, 260, 185, '图 12：只保留最近 3 行，窗口逐列滑动，'
+                        '避免整图重复搬运。', fs=8, color=GRAY)
+    return d
+
+
+def diag_fsm():
+    """Ch3：卷积控制器状态机。"""
+    d = _diagram(580, 220)
+    states = [
+        (30, 'IDLE', LIGHT), (150, 'LOAD_W', LIGHT),
+        (270, 'RUN', LIGHT), (390, 'DRAIN', LIGHT), (500, 'DONE', ORANGE),
+    ]
+    for x, name, fill in states:
+        _box(d, x, 80, 60, 45, name, fs=9, fill=fill, stroke=ORANGE)
+        if x < 500:
+            _arrow(d, x + 60, 102, x + 90, 102)
+    _dtext(d, 60, 50, '收到 CMD', fs=7)
+    _dtext(d, 180, 50, '权重装载完', fs=7)
+    _dtext(d, 300, 50, '像素送完', fs=7)
+    _dtext(d, 420, 50, '流水排空', fs=7)
+    _arrow(d, 530, 80, 530, 40, '', color=GRAY)
+    _arrow(d, 60, 40, 60, 80, '', color=GRAY)
+    _dtext(d, 280, 20, '图 9：控制器就是一个小型状态机。', fs=8, color=GRAY)
+    return d
+
+
+def diag_export():
+    """Ch4：导出流水线。"""
+    d = _diagram(560, 200)
+    steps = [
+        (20, 'PyTorch\n训练', LIGHT),
+        (120, '后训练\n量化', LIGHT),
+        (220, '导出\nhex/json', LIGHT),
+        (320, 'Python int8\n模拟', LIGHT),
+        (420, 'golden\n文件', ORANGE),
+    ]
+    for x, name, fill in steps:
+        _box(d, x, 80, 90, 60, name, fs=8, fill=fill, stroke=ORANGE)
+        if x < 420:
+            _arrow(d, x + 90, 110, x + 120, 110)
+    _dtext(d, 280, 25, '图 14：软件端先生成 golden，RTL 再逐层对齐。',
+           fs=8, color=GRAY)
+    return d
+
+
+def diag_driver():
+    """Ch5：Hack 驱动流程图。"""
+    d = _diagram(420, 240)
+    boxes = [
+        (130, 180, '写输入/权重地址'),
+        (130, 120, '写 CMD=START'),
+        (130, 60, '轮询 STATUS'),
+    ]
+    for x, y, name in boxes:
+        _box(d, x, y, 160, 45, name, fs=9, fill=LIGHT, stroke=ORANGE)
+    _arrow(d, 210, 180, 210, 165)
+    _arrow(d, 210, 120, 210, 105)
+    _box(d, 330, 60, 70, 45, 'DONE?', fs=8)
+    _arrow(d, 290, 82, 330, 82)
+    _arrow(d, 365, 60, 365, 20, '否', color=GRAY)
+    _arrow(d, 365, 20, 210, 20, '', color=GRAY)
+    _arrow(d, 210, 20, 210, 60, '', color=GRAY)
+    _box(d, 130, 10, 160, 40, '读结果/argmax', fs=9, fill=ORANGE,
+         stroke=ORANGE, tc=colors.white)
+    _arrow(d, 365, 105, 365, 90, '是')
+    _arrow(d, 365, 90, 290, 30)
+    _dtext(d, 210, 225, '图 16：驱动只做 I/O 和轮询，不做计算。',
+           fs=8, color=GRAY)
+    return d
+
+
+def diag_im2col():
+    """Ch3：im2col 示意。"""
+    d = _diagram(560, 220)
+    _dtext(d, 120, 190, '输入特征图 4x4', fs=9)
+    for i in range(4):
+        for j in range(4):
+            _box(d, 60 + j * 30, 60 + i * 30, 28, 28, '', fs=6,
+                 fill=colors.white, stroke=ORANGE)
+    for i in range(3):
+        for j in range(3):
+            _box(d, 90 + j * 30, 60 + i * 30, 28, 28, '', fs=6,
+                 fill=LIGHT, stroke=ORANGE, lw=2)
+    _arrow(d, 220, 120, 280, 120, '展平')
+    _dtext(d, 380, 190, 'im2col 矩阵的一行', fs=9)
+    for k in range(9):
+        _box(d, 280 + k * 30, 110, 28, 28, 'x%d' % k, fs=7,
+             fill=LIGHT, stroke=ORANGE)
+    _dtext(d, 280, 30, '图 10：每个输出像素的 3x3x通道 窗口展开成一行，',
+           fs=8, color=GRAY)
+    _dtext(d, 280, 17, '整个卷积就变成矩阵乘。', fs=8, color=GRAY)
+    return d
+
+
+def diag_pool():
+    """Ch3：MaxPool 2x2。"""
+    d = _diagram(420, 220)
+    _dtext(d, 110, 190, '输入 4x4', fs=9)
+    vals = [['1', '3', '2', '4'],
+            ['5', '6', '8', '7'],
+            ['2', '0', '3', '1'],
+            ['9', '4', '2', '5']]
+    for i in range(4):
+        for j in range(4):
+            _box(d, 40 + j * 36, 50 + i * 36, 34, 34, vals[i][j], fs=8,
+                 fill=LIGHT, stroke=ORANGE)
+    _arrow(d, 220, 120, 270, 120, 'max')
+    _dtext(d, 340, 190, '输出 2x2', fs=9)
+    out = [['6', '8'], ['9', '5']]
+    for i in range(2):
+        for j in range(2):
+            _box(d, 300 + j * 50, 90 + i * 50, 48, 48, out[i][j], fs=10,
+                 fill=ORANGE, stroke=ORANGE, tc=colors.white)
+    _dtext(d, 210, 20, '图 13：2x2 窗口取最大值，尺寸减半。', fs=8, color=GRAY)
+    return d
+
+
+def diag_cnn():
+    """Ch4：tiny CNN 结构。"""
+    d = _diagram(600, 200)
+    boxes = [
+        ('输入\n28x28x1', 40, LIGHT),
+        ('Conv3x3\n->8 + ReLU', 130, LIGHT),
+        ('MaxPool\n14x14x8', 220, LIGHT),
+        ('Conv3x3\n->16 + ReLU', 310, LIGHT),
+        ('MaxPool\n7x7x16', 400, LIGHT),
+        ('FC64\nReLU', 470, ORANGE),
+        ('FC10\nSoftmax', 520, ORANGE),
+    ]
+    for name, x, fill in boxes:
+        _box(d, x, 70, 55, 70, name, fs=7, fill=fill, stroke=ORANGE)
+    for i in range(len(boxes) - 1):
+        x1 = boxes[i][1] + 55
+        x2 = boxes[i + 1][1]
+        _arrow(d, x1, 105, x2, 105)
+    _dtext(d, 280, 25, '图 12：tiny CNN = 卷积 + 池化 + 全连接，'
+                       '没有检测头/NMS，是 NPU 入门的最佳模型。',
+           fs=8, color=GRAY)
+    return d
+
+
+def diag_quant():
+    """Ch4：per-tensor 量化。"""
+    d = _diagram(540, 200)
+    _dtext(d, 40, 150, '浮点权重分布', fs=9, anchor='start')
+    for i in range(12):
+        h = 20 + (i % 5) * 8
+        _box(d, 60 + i * 36, 80, 30, h, '', fs=6, fill=LIGHT,
+             stroke=ORANGE)
+    _arrow(d, 500, 120, 540, 120, 'scale')
+    _dtext(d, 40, 40, '量化后 int8 桶', fs=9, anchor='start')
+    for i in range(12):
+        _box(d, 60 + i * 36, 20, 30, 25, '', fs=6, fill=ORANGE)
+    _dtext(d, 270, 175, '图 13：min/max 确定 scale，整个张量映射到'
+                       ' [-128, 127]。', fs=8, color=GRAY)
+    return d
+
+
+def diag_soc():
+    """Ch5：Hack + NPU 整机。"""
+    d = _diagram(560, 250)
+    _box(d, 20, 120, 200, 90, 'Hack Computer\nROM + CPU + Memory',
+         fs=10, fill=LIGHT, stroke=ORANGE)
+    _box(d, 340, 120, 200, 90, 'NPU 外设\n控制器 + SRAM + 阵列',
+         fs=10, fill=LIGHT, stroke=ORANGE)
+    _arrow(d, 220, 165, 340, 165, 'MMIO 0x7000+')
+    _box(d, 60, 25, 120, 45, 'Hack 驱动\n(轮询)', fs=8)
+    _box(d, 220, 25, 120, 45, '命令/状态\n寄存器', fs=8)
+    _box(d, 380, 25, 120, 45, '推理结果\n写回 RAM', fs=8)
+    _arrow(d, 120, 70, 120, 120)
+    _arrow(d, 280, 70, 280, 120)
+    _arrow(d, 440, 70, 440, 120)
+    _dtext(d, 280, 10, '图 14：NPU 作为内存映射外设挂在 Hack 整机上。',
+           fs=8, color=GRAY)
+    return d
+
+
+def diag_handshake():
+    """Ch5：CPU-NPU 握手时序。"""
+    d = _diagram(540, 240)
+    _dtext(d, 120, 205, 'CPU', fs=10)
+    _dtext(d, 420, 205, 'NPU', fs=10)
+    _arrow(d, 120, 190, 120, 20, '', color=GRAY, lw=1.2)
+    _arrow(d, 420, 190, 420, 20, '', color=GRAY, lw=1.2)
+    steps = [
+        (160, '写 CMD=START', 380),
+        (130, 'BUSY=1', 420),
+        (100, '计算中 ...', 420),
+        (70, 'DONE=1', 420),
+        (40, '读 STATUS / 结果', 160),
+    ]
+    for y, msg, x2 in steps:
+        if msg in ('BUSY=1', 'DONE=1'):
+            _arrow(d, 420, y + 8, 420, y, '', color=ORANGE)
+            _dtext(d, 330, y - 3, msg, fs=8, anchor='end')
+        else:
+            _arrow(d, 180, y + 8, 380, y, '', color=ORANGE)
+            _dtext(d, 280, y + 10, msg, fs=8)
+    _dtext(d, 270, 10, '图 15：先写命令，再轮询完成位，最后读结果。',
+           fs=8, color=GRAY)
+    return d
+
+
+DIAGRAMS = {
+    'system': diag_system,
+    'addr_map': diag_addr_map,
+    'mmio_flow': diag_mmio_flow,
+    'int8': diag_int8,
+    'pe': diag_pe,
+    'array': diag_array,
+    'skew': diag_skew,
+    'align': diag_align,
+    'timing': diag_timing,
+    'sram': diag_sram,
+    'linebuffer': diag_linebuffer,
+    'fsm': diag_fsm,
+    'im2col': diag_im2col,
+    'pool': diag_pool,
+    'cnn': diag_cnn,
+    'quant': diag_quant,
+    'export': diag_export,
+    'soc': diag_soc,
+    'handshake': diag_handshake,
+    'driver': diag_driver,
+}
+
+
+GLOSSARY = [
+    ('CPU', '中央处理器，负责执行指令；在本课程里是 Hack CPU。'),
+    ('RAM', '随机存取存储器，Hack 有 64KB，用于放数据和程序状态。'),
+    ('MMIO', 'Memory-Mapped I/O，把外设寄存器映射到内存地址，CPU 用普通读写指令控制外设。'),
+    ('寄存器', 'CPU 或外设内部的小容量存储单元，通常 8/16/32 位。'),
+    ('SRAM', '片上静态随机存储器，速度快、容量小，NPU 用它暂存权重和特征图。'),
+    ('MAC', '乘累加运算：acc = acc + a * w，是 CNN 最基础的计算。'),
+    ('GEMM', '通用矩阵乘，C = A x B；卷积可以转换成 GEMM。'),
+    ('PE', 'Processing Element，处理单元；本课程里是一个 MAC 单元。'),
+    ('Systolic Array', '脉动阵列：PE 排成网格，数据在相邻 PE 间逐拍流动。'),
+    ('Weight-Stationary', '权重驻留式数据流：权重装载后停在 PE 内反复使用。'),
+    ('斜输入', '把第 row 行输入延迟 row 拍，使阵列各行在同一拍处理同一个 k。'),
+    ('im2col', 'Image to Column，把卷积窗口展平成矩阵行，从而用 GEMM 计算卷积。'),
+    ('Line Buffer', '行缓冲：只保留最近若干行，供滑动窗口复用。'),
+    ('FSM', '有限状态机：一组状态和跳转条件，NPU 控制器用它实现调度。'),
+    ('DMA', 'Direct Memory Access，直接内存访问，批量搬运数据。'),
+    ('量化', '把浮点数映射到低比特整数（如 int8），并记录 scale 以便还原。'),
+    ('Scale', '量化比例因子，决定一个整数单位代表多大的浮点数值。'),
+    ('Polling', '轮询：CPU 反复读状态寄存器，直到外设完成。'),
+    ('argmax', '取最大值的下标；分类任务里就是预测类别。'),
+    ('NPU', 'Neural Processing Unit，神经网络处理器，专为张量运算设计的加速器。'),
+]
 
 
 def page_footer(ch, kind):
@@ -201,7 +699,7 @@ def render_lecture(ch, meta, st):
                           'Nand to Tetris / NPU Extension / Chapter %d / Lecture'
                           % ch)
         canvas.drawRightString(doc.pagesize[0] - 1.8 * cm, 1.0 * cm,
-                               'Slide %d/%d' % (doc.page, total))
+                               'Page %d' % doc.page)
         canvas.restoreState()
 
     def slide_bg(canvas, doc):
@@ -219,11 +717,35 @@ def render_lecture(ch, meta, st):
         story.append(Paragraph('Chapter %d &nbsp;|&nbsp; %s'
                                % (ch, slide['title']), st['slide_title']))
         story.append(Spacer(1, 0.5 * cm))
+        for para in slide.get('body', []):
+            story.append(Paragraph(para, st['slide_body']))
+            story.append(Spacer(1, 0.2 * cm))
         for b in slide['bullets']:
             story.append(Paragraph('&bull;&nbsp; ' + b, st['slide_bullet']))
+        for diag_name in slide.get('diagrams', []):
+            story.append(Spacer(1, 0.35 * cm))
+            story.append(DIAGRAMS[diag_name]())
+        if slide.get('cite'):
+            story.append(Spacer(1, 0.3 * cm))
+            story.append(Paragraph('Paper: ' + slide['cite'], st['hint']))
         if slide.get('note'):
-            story.append(Spacer(1, 0.4 * cm))
+            story.append(Spacer(1, 0.3 * cm))
             story.append(Paragraph('Note: ' + slide['note'], st['hint']))
+
+    story.append(PageBreak())
+    story.append(Paragraph('术语速查（Glossary）', st['slide_title']))
+    story.append(Spacer(1, 0.5 * cm))
+    for term, desc in GLOSSARY:
+        story.append(Paragraph('&bull;&nbsp; <b>%s</b>：%s' % (term, desc),
+                               st['slide_bullet']))
+
+    if lec.get('refs'):
+        story.append(PageBreak())
+        story.append(Paragraph('References / 延伸阅读', st['slide_title']))
+        story.append(Spacer(1, 0.5 * cm))
+        for ref in lec['refs']:
+            story.append(Paragraph('&bull;&nbsp; ' + ref, st['slide_bullet']))
+
     doc.build(story, onFirstPage=lambda c, d: (slide_bg(c, d), footer(c, d)),
               onLaterPages=lambda c, d: (slide_bg(c, d), footer(c, d)))
     print('generated %s' % os.path.relpath(path, ROOT))
@@ -994,6 +1516,408 @@ CHAPTERS = [
 ]
 
 
+# ---------------------------------------------------------------------------
+# 讲义“详细讲解”补充：按 (章号, 幻灯片标题) 追加正文、配图和论文引用
+# ---------------------------------------------------------------------------
+LECTURE_NOTES = {
+    1: {
+        '为什么 CPU 跑不动 CNN': {
+            'body': [
+                '计算机执行程序时，CPU 一条一条地“取指令 -> 译码 -> 执行”。'
+                'Hack 的 ALU 只会做加法、按位与、取反等操作，没有乘法指令；'
+                '一个乘累加（a*w+b）在 Hack 上要拆成很多条加法/移位指令，'
+                '速度会非常慢。',
+                '更关键的是，CNN 的运算量是几万到几亿次 MAC。如果每个 MAC 都要'
+                '经过“取指-译码-执行”，指令流本身就变成瓶颈。专用硬件可以把'
+                '很多 MAC 放在同一个时钟周期里并行完成。',
+            ],
+        },
+        '系统分层': {
+            'body': [
+                'MMIO（Memory-Mapped I/O）的意思是：外设的寄存器和内存使用同一条'
+                '地址总线。CPU 不需要新的专用指令，只要“往某个地址写值”或“从'
+                '某个地址读值”，就能控制外设。',
+                '比如地址 0x7000 可以定义为“命令寄存器”，CPU 执行 `@0x7000; M=D`'
+                '就把 D 的内容写给了 NPU。对 CPU 来说，这跟写 RAM 没有区别；'
+                '对 NPU 来说，它看到地址落在自己的区间，就接管这次读写。',
+            ],
+            'diagrams': ['system'],
+        },
+        'NPU 内部结构': {
+            'body': [
+                'NPU 不是一块“魔法芯片”，它内部也是寄存器、SRAM 和运算阵列的组合。'
+                '命令寄存器告诉它“做什么”，状态寄存器告诉 CPU“做完没有”，'
+                '权重 SRAM 存放模型参数，输入/输出 SRAM 存放特征图。',
+                '脉动阵列只负责最重的矩阵乘；周围这些“搬运工”决定了阵列能不能'
+                '吃饱。这也是为什么真实 NPU 设计里 DMA 和缓存往往比阵列本身更难。',
+            ],
+        },
+        'MMIO 协议': {
+            'body': [
+                '一次最简单的 MMIO 交互分三步：第一，CPU 把输入数据地址、输出'
+                '地址、层参数写进 NPU 的寄存器；第二，CPU 向 CMD 寄存器写 START；'
+                '第三，CPU 反复读 STATUS 寄存器，直到 DONE 位置 1，再读取结果。',
+                '寄存器表就是 CPU 与 NPU 之间的“合同”：地址、位宽、读写方向、'
+                '含义都必须提前定好。寄存器表不清楚，后面写驱动时就会互相猜。',
+            ],
+            'diagrams': ['addr_map', 'mmio_flow'],
+            'cite': 'Patterson & Hennessy, Computer Organization and Design, '
+                    'memory-mapped I/O 章节',
+        },
+        '为什么是 int8': {
+            'body': [
+                '浮点数（float32）做乘法需要很大的硬件，int8 乘法器只有它几分之一'
+                '的面积和功耗。NPU 通常把权重和激活量化成 8 位有符号整数，'
+                '累加时用 32 位，保证精度。',
+                '量化不是“随便取整”：每层有一个 scale，把浮点区间映射到'
+                '[-128, 127]。这个映射关系会在 Ch4 详细讲。',
+            ],
+            'diagrams': ['int8'],
+        },
+        'GEMM 是核心算子': {
+            'body': [
+                'GEMM（General Matrix Multiply）是 C = A x B。卷积可以通过 im2col'
+                '变成矩阵乘，全连接本来就是矩阵乘。所以只要硬件把矩阵乘做快，'
+                'CNN 的大部分计算就快起来了。',
+                '脉动阵列正是为 GEMM 设计的：它把乘法器排成网格，让数据像心跳一样'
+                '在 PE 之间流动，从而在一个周期内完成很多 MAC。',
+            ],
+            'cite': 'Kung, Why Systolic Architectures?, IEEE Computer, 1982',
+        },
+        '数据流总览': {
+            'body': [
+                '端到端的数据流是：图片从 RAM 拷到输入 SRAM，权重从权重 SRAM 装载'
+                '进阵列；控制器逐像素把数据送进阵列，阵列输出经过激活/池化后写回'
+                '输出 SRAM；最后一层结束后，CPU 把结果读回 RAM。',
+                '这条路径上的每一步都是后面章节的作业：Ch2 做阵列，Ch3 做控制器，'
+                'Ch4 做权重，Ch5 做整机。',
+            ],
+            'diagrams': ['system'],
+        },
+    },
+    2: {
+        'PE 接口': {
+            'body': [
+                'PE 是最小的计算单元，只做一件事：psum_out = psum_in + a * w。'
+                'a 是激活，w 是权重，psum 是“部分和”——上一排算到一半的结果。',
+                '数据流的方向很重要：a 从西边进来、从东边出去；psum 从北边进来、'
+                '从南边出去；权重装载后停在 PE 里不动。所有方向都固定下来，'
+                '硬件连线才简单，时序才可预测。',
+            ],
+            'diagrams': ['pe'],
+        },
+        'Weight-Stationary 数据流': {
+            'body': [
+                '“Weight-Stationary”指权重停留在 PE 内、被反复使用。在卷积里，'
+                '同一个权重会被很多输入像素使用，复用好；在矩阵乘里，每个权重'
+                '会被一整行输入使用。',
+                '阵列中每个 PE 存一个权重，一行激活从左往右流，部分和从上往下流。'
+                '这样每个周期所有 PE 都在做乘法，硬件利用率高。',
+            ],
+            'diagrams': ['array'],
+            'cite': 'Kung & Leiserson, Systolic Arrays (for VLSI), 1978',
+        },
+        '斜输入': {
+            'body': [
+                '如果所有行的数据同时进入阵列，第一行处理 k=0 时，第二行已经在'
+                '处理 k=1，部分和就会“错位相加”。解决方法是把第 row 行的输入'
+                '整体延迟 row 拍，让所有行在同一拍处理同一个 k。',
+                '这就是“斜输入”（skewed input）。外部使用者不需要自己打 skew，'
+                '阵列内部用移位寄存器自动完成。',
+            ],
+            'diagrams': ['skew'],
+        },
+        '输出对齐': {
+            'body': [
+                '由于激活在行内还要向右流，列 j 的结果天然比列 j-1 晚一拍。'
+                '如果不处理，底部输出是“斜”的，控制器取数会非常麻烦。',
+                '我们在阵列底部给第 col 列额外延迟 N-1-col 拍，把各列拉齐。'
+                '付出几个寄存器的代价，换回“所有输出通道同一拍出现”的干净接口。',
+            ],
+            'diagrams': ['align'],
+        },
+        '时序示例': {
+            'body': [
+                '使用时序图最容易理解：w_load 高一个周期装载权重；之后每拍送一个'
+                'a_data；最后一个输入送入后，还要等 N-1 拍让流水排空，才开始'
+                '逐拍收到结果。',
+                '对 N=8：装载 1 拍 + 输入 8 拍 + 排空 7 拍，第一个结果在第 15 拍'
+                '（0 基的第 14 拍）出现。这些数字会在 Assignment 里让你亲手推导。',
+            ],
+            'diagrams': ['timing'],
+        },
+        '为什么叫脉动': {
+            'body': [
+                '“Systolic”源自心脏的收缩（systole）：数据像血液一样被周期性地'
+                '推送到相邻 PE，每个 PE 只跟邻居通信。好处是连线短、时钟快、'
+                '没有全局广播，坏处是数据必须按固定节奏流动，控制器要精确计算'
+                '每一拍的地址。',
+            ],
+            'cite': 'Kung, Why Systolic Architectures?, IEEE Computer, 1982',
+        },
+    },
+    3: {
+        '阵列输出的意义': {
+            'body': [
+                'Ch2 的阵列输出是 C[k][col] = sum_row A[row][k] * W[row][col]。'
+                '如果我们把 A 的行当作输入通道、列当作空间位置，W 的行当作输入'
+                '通道、列当作输出通道，那么每个 k（每一拍）就是一个像素点上'
+                '全部 N 个输出通道。',
+                '这个格式非常“顺手”：卷积控制器只要逐像素产生输入向量，'
+                '收集输出向量，就能完成一层卷积。',
+            ],
+        },
+        'SRAM 组织': {
+            'body': [
+                'SRAM 是 NPU 的“粮仓”：输入 SRAM 存放特征图，权重 SRAM 存放模型'
+                '参数，输出 SRAM 暂存结果。它们都比 Hack 的 64KB RAM 更适合阵列'
+                '并行读取。',
+                '容量估算例子：28x28x8 的 int8 特征图 = 6272 字节；一个小模型'
+                '约 5 万参数 = 50KB 权重，足够放在片上。',
+            ],
+            'diagrams': ['sram'],
+        },
+        '控制器 FSM': {
+            'body': [
+                '控制器本质是一个有限状态机：IDLE 等待命令；LOAD_W 把权重搬进'
+                '阵列；RUN 逐像素送数据、收结果；DRAIN 等流水排空；DONE 通知 CPU。',
+                '写控制器时最难的是“地址计算”：每个像素的窗口在输入 SRAM 里'
+                '对应的偏移、每个输出写回的位置，都要算对。',
+            ],
+            'diagrams': ['fsm'],
+        },
+        'im2col': {
+            'body': [
+                'im2col 的意思是“image to column”：把每个卷积窗口展平成一行。'
+                '一个 3x3、输入通道为 C 的窗口，展平后长度是 9*C；所有窗口拼起来'
+                '就是一个大矩阵，矩阵乘的结果就是卷积输出。',
+                '代价是输入数据被重复复制（每个像素可能出现在多个窗口里），'
+                '好处是阵列可以直接做矩阵乘，控制器逻辑简单。',
+            ],
+            'diagrams': ['im2col'],
+            'cite': 'Sze et al., Efficient Processing of Deep Neural Networks, '
+                    'Proc. IEEE, 2017',
+        },
+        'Line Buffer': {
+            'body': [
+                'Line Buffer 是另一种方案：逐行扫描图片时，只保留最近 3 行，'
+                '窗口在 buffer 里滑动。这样每个像素只从外部读一次，带宽更省，'
+                '但地址/时序逻辑更复杂。',
+                '两种方案没有绝对优劣：im2col 简单直接，line buffer 更适合'
+                '流式/低带宽设计。本章先实现一种即可。',
+            ],
+            'diagrams': ['linebuffer'],
+        },
+        'ReLU 与量化': {
+            'body': [
+                '阵列输出是 int32 累加和，需要先乘上 scale 反量化，再重新量化成'
+                'int8 给下一层。ReLU 在量化域里只是 max(x, 0)，非常便宜。',
+                '很多模型用 LeakyReLU/SiLU，硬件实现更贵（需要乘法或查表）。'
+                '我们的 tiny CNN 先选 ReLU，降低 RTL 难度。',
+            ],
+        },
+        'MaxPool': {
+            'body': [
+                'MaxPool 2x2 把每 2x2 窗口取最大值，宽高减半。它不做乘法，'
+                '只用一个比较器和一个计数器，跟在卷积输出后面流式完成。',
+                '池化让特征图变小，也减少下一层计算量；对小模型来说这是'
+                '不可或缺的降采样手段。',
+            ],
+            'diagrams': ['pool'],
+        },
+        '全连接 = GEMM': {
+            'body': [
+                '全连接层 y = W x + b 就是矩阵乘。输入 784 维、输出 64 维，'
+                '权重是 64x784 的矩阵。控制器不需要滑动窗口，直接把输入向量'
+                '按 8 通道一组喂给阵列即可。',
+                '这意味着同一个阵列、同一套控制逻辑，既能做卷积也能做 FC，'
+                'NPU 的复用性就在这里。',
+            ],
+        },
+        'Golden 验证': {
+            'body': [
+                'Golden 是“标准答案”：先用 Python 按 int8 规则逐层算出结果，'
+                '导出成 hex；RTL testbench 读入同样的权重和输入，逐元素比对。',
+                '关键是 Python 参考实现必须和 RTL 使用完全相同的量化规则'
+                '（scale、round、clamp），否则两边永远对不上。',
+            ],
+        },
+    },
+    4: {
+        '模型结构': {
+            'body': [
+                '我们选一个很小的 CNN：两层 3x3 卷积（8 通道、16 通道），'
+                '中间夹 MaxPool，最后接 64 和 10 两个全连接。总参数约 5 万，'
+                'int8 后约 50KB，NPU 片上 SRAM 放得下。',
+                'MNIST 是 28x28 灰度图，单通道。两层卷积后变成 7x7x16，'
+                '展平 784 维，正好接 FC。结构简单但足以演示完整链路。',
+            ],
+            'diagrams': ['cnn'],
+            'cite': 'LeCun et al., Gradient-Based Learning Applied to Document '
+                    'Recognition, Proc. IEEE, 1998',
+        },
+        '训练要点': {
+            'body': [
+                '训练用浮点做，和硬件无关。关键是固定随机种子、归一化输入、'
+                '记录 float 准确率，作为量化后的对比基线。',
+                '目标不是刷 SOTA：float 准确率超过 97%、int8 模拟后超过 95%，'
+                '就足够说明整条链路是通的。',
+            ],
+        },
+        '后训练量化': {
+            'body': [
+                '后训练量化（PTQ）不需要重新训练：拿一批校准数据跑一遍，统计'
+                '每层激活的 min/max，算出 scale；权重直接用自身的 min/max。',
+                '对称量化公式是 q = round(clamp(x / scale, -128, 127))，'
+                'scale = max(|x|) / 127。量化误差会累积，所以逐层用 int8 模拟'
+                '验证很重要。',
+            ],
+            'diagrams': ['quant'],
+            'cite': 'Jacob et al., Quantization and Training of Neural Networks '
+                    'for Efficient Integer-Arithmetic-Only Inference, CVPR 2018',
+        },
+        'BN 折叠': {
+            'body': [
+                'BatchNorm 在训练时依赖 batch 统计量，但推理时 mean/var 是常量，'
+                '可以“折叠”进前一层的卷积权重：w_fold = w*gamma/sqrt(var+eps)，'
+                'bias 也一起合并。',
+                '折叠后 RTL 不需要实现 BN 单元，省掉一个模块，也少一层量化误差。',
+            ],
+        },
+        '导出格式': {
+            'body': [
+                '导出的内容有四种：权重（weights.hex）、一张测试图片'
+                '（image.hex）、每层 golden 输出（golden.hex）、每层的 scale 和'
+                '布局信息（scales.json）。',
+                '布局必须和 Ch3 的 SRAM 定义一致：行主序、int8 补码。'
+                '这是软件和硬件之间最容易出错的地方。',
+            ],
+            'diagrams': ['export'],
+        },
+        'Python int8 模拟器': {
+            'body': [
+                '“Python int8 模拟器”就是在 PyTorch 里用整数运算重新实现前向'
+                '传播：每个卷积/FC 输出先反量化再量化回 int8，激活也一样。',
+                '它跑出来的结果就是 RTL 的 golden。模拟器正确，RTL 才有对照；'
+                '模拟器错了，RTL 再对也是错上加错。',
+            ],
+        },
+        '常见坑': {
+            'body': [
+                '最常见的是 round 规则不一致：Python 的 round() 是银行家舍入，'
+                '硬件常用四舍五入，必须统一成同一种。',
+                '其次是 scale 精度：用 float 计算 scale 没问题，但导出后如果'
+                '被截断成 int16，误差会被放大。还有 ReLU 之后 tensor 的 min 是 0，'
+                '不能用负值范围。',
+            ],
+        },
+    },
+    5: {
+        'Hack + NPU 系统': {
+            'body': [
+                '最后一步是把 NPU 挂进 `n2t_computer`：Memory 在地址译码时增加'
+                '0x7000-0x7FFF 段，命中该段就把读写转给 NPU。CPU 跑一条普通'
+                '汇编指令就能触发 NPU。',
+                '对 CPU 而言 NPU 只是“一块特殊的内存”；对 NPU 而言 CPU 只是'
+                '“一个会读写寄存器的控制器”。这就是 MMIO 的对称性。',
+            ],
+            'diagrams': ['soc'],
+        },
+        'MMIO 地址分配': {
+            'body': [
+                'Hack 原始地址空间：0x0000-0x3FFF 是 RAM，0x4000-0x5FFF 是 Screen，'
+                '0x6000 是 Keyboard。0x7000 以上未使用，所以 NPU 占用这一段不会'
+                '破坏原有程序。',
+                '寄存器表建议：0x7000 CMD、0x7001 STATUS、0x7002 ADDR_SRC、'
+                '0x7003 ADDR_DST、0x7004 LENGTH。具体位宽在 Ch1 Assignment 里设计。',
+            ],
+            'diagrams': ['addr_map'],
+        },
+        '命令协议': {
+            'body': [
+                '握手协议要简单可靠：CPU 先写参数，再写 CMD=START；NPU 收到后'
+                '把 BUSY 置 1，开始执行；完成后 BUSY 清零、DONE 置 1；CPU 轮询'
+                '到 DONE 后读结果，最后写 CMD=CLR 清状态。',
+                '这个协议不需要中断，也不需要新的 Hack 指令，完全用现有汇编'
+                '读写内存实现。',
+            ],
+            'diagrams': ['handshake'],
+        },
+        'Hack 驱动': {
+            'body': [
+                'Hack 汇编驱动核心就几行：把地址常数加载到 A，用 `M=D` 写寄存器，'
+                '用 `D=M` 读寄存器，用跳转指令循环轮询。',
+                '驱动里没有乘法，也没有矩阵运算——那些都在 NPU 里。驱动只负责'
+                '“把任务描述清楚”和“等结果”。',
+            ],
+            'diagrams': ['driver'],
+        },
+        '轮询 vs 中断': {
+            'body': [
+                '轮询（polling）就是 CPU 反复读 STATUS，直到完成位出现。'
+                '实现简单，但 CPU 在等待期间不能干别的。',
+                '中断（interrupt）需要硬件在完成时打断 CPU，Hack 指令集没有'
+                '中断机制，所以本章用轮询。真实系统中小任务轮询也完全够用。',
+            ],
+        },
+        '集成测试': {
+            'body': [
+                '集成测试的输入是 Ch4 导出的一张图片和权重文件；仿真启动时通过'
+                '`$readmemh` 预置到 SRAM/RAM。CPU 跑驱动，NPU 算完，测试台读取'
+                '最终结果并检查 argmax。',
+                '验收标准两条：原有 `make test` 必须全绿（不能破坏 Hack 语义），'
+                '新增端到端测试必须 PASS。',
+            ],
+            'cite': 'Jouppi et al., In-Datacenter Performance Analysis of a Tensor '
+                    'Processing Unit, ISCA 2017',
+        },
+        '扩展方向': {
+            'body': [
+                'MNIST 之后，同一个框架可以换数据集、加深网络，也可以评估 tiny '
+                'YOLO：卷积和 FC 直接复用，需要新增的是 upsample、concat、'
+                '检测头和后处理 NMS。',
+                'NMS 这类控制密集的后处理可以留在 CPU 或 Python，NPU 只做'
+                '最重的张量运算，这是真实 SoC 的常见分工。',
+            ],
+            'cite': 'Redmon & Farhadi, YOLOv3: An Incremental Improvement, arXiv 2018',
+        },
+    },
+}
+
+LECTURE_REFS = {
+    1: [
+        'Kung, H.T., "Why Systolic Architectures?", IEEE Computer, 1982.',
+        'Jouppi et al., "In-Datacenter Performance Analysis of a Tensor Processing Unit", ISCA 2017.',
+        'Sze et al., "Efficient Processing of Deep Neural Networks: A Tutorial and Survey", Proceedings of the IEEE, 2017.',
+        'Patterson & Hennessy, "Computer Organization and Design"（MMIO / I/O 章节）.',
+    ],
+    2: [
+        'Kung & Leiserson, "Systolic Arrays (for VLSI)", 1978.',
+        'Kung, H.T., "Why Systolic Architectures?", IEEE Computer, 1982.',
+        'Jouppi et al., "In-Datacenter Performance Analysis of a Tensor Processing Unit", ISCA 2017.',
+        'Sze et al., "Efficient Processing of Deep Neural Networks: A Tutorial and Survey", Proceedings of the IEEE, 2017.',
+    ],
+    3: [
+        'Sze et al., "Efficient Processing of Deep Neural Networks: A Tutorial and Survey", Proceedings of the IEEE, 2017.',
+        'Chen et al., "Eyeriss: An Energy-Efficient Reconfigurable Accelerator for Deep Convolutional Neural Networks", ISSCC 2016.',
+        'Han et al., "EIE: Efficient Inference Engine on Compressed Deep Neural Network", ISCA 2016.',
+        'Han et al., "Deep Compression: Compressing Deep Neural Networks with Pruning, Trained Quantization and Huffman Coding", ICLR 2016.',
+    ],
+    4: [
+        'Jacob et al., "Quantization and Training of Neural Networks for Efficient Integer-Arithmetic-Only Inference", CVPR 2018.',
+        'LeCun et al., "Gradient-Based Learning Applied to Document Recognition", Proceedings of the IEEE, 1998（MNIST）.',
+        'Han et al., "Deep Compression", ICLR 2016.',
+        'Sze et al., "Efficient Processing of Deep Neural Networks", Proceedings of the IEEE, 2017.',
+    ],
+    5: [
+        'Patterson & Hennessy, "Computer Organization and Design"（memory-mapped I/O）.',
+        'Jouppi et al., "In-Datacenter Performance Analysis of a Tensor Processing Unit", ISCA 2017.',
+        'Redmon et al., "You Only Look Once: Unified, Real-Time Object Detection", CVPR 2016.',
+        'Redmon & Farhadi, "YOLOv3: An Incremental Improvement", arXiv 1804.02767, 2018.',
+    ],
+}
+
+
 def main():
     register_font()
     st = build_styles()
@@ -1001,6 +1925,16 @@ def main():
     for ch in CHAPTERS:
         if str(ch['num']) not in wanted:
             continue
+        notes = LECTURE_NOTES.get(ch['num'], {})
+        for slide in ch['lecture']['slides']:
+            extra = notes.get(slide['title'], {})
+            if extra.get('body'):
+                slide.setdefault('body', []).extend(extra['body'])
+            if extra.get('diagrams'):
+                slide.setdefault('diagrams', []).extend(extra['diagrams'])
+            if extra.get('cite'):
+                slide['cite'] = extra['cite']
+        ch['lecture']['refs'] = LECTURE_REFS.get(ch['num'], [])
         render_project(ch['num'], ch, st)
         render_lecture(ch['num'], ch, st)
         render_assignment(ch['num'], ch, st)

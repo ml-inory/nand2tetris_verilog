@@ -45,6 +45,8 @@ docs/npu/course/
 ```
 
 索引与生成方法见 [`docs/npu/course/README.md`](course/README.md)。
+Lecture 讲义已扩展为零基础版：每个关键概念（MMIO、GEMM、量化、脉动阵列等）
+都有详细讲解、矢量配图、论文引用、术语速查和延伸阅读。
 
 ## 数据布局与时序
 
