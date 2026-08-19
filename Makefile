@@ -19,6 +19,7 @@
 IVERILOG ?= iverilog
 VVP      ?= vvp
 PYTHON   ?= python3
+PDF_PY   ?= python3
 
 # 默认用学生作业目录；答案回归用 RTLDIR=solution
 RTLDIR  ?= assignment
@@ -26,7 +27,7 @@ SOLRTL  := solution
 RTL := $(wildcard $(RTLDIR)/0*/*.v)
 SIMDIR := sim
 
-.PHONY: all test tb assign sim-01 sim-02 sim-03 sim-05 wave clean
+.PHONY: all test tb assign sim-01 sim-02 sim-03 sim-05 sim-06 wave pdf-npu clean
 
 all: test
 
@@ -36,7 +37,10 @@ tb:
 assign:
 	$(PYTHON) tools/gen_assignment.py
 
-sim-01 sim-02 sim-03 sim-05: sim-%: tb
+pdf-npu:
+	$(PDF_PY) tools/gen_npu_pdfs.py
+
+sim-01 sim-02 sim-03 sim-05 sim-06: sim-%: tb
 	@mkdir -p $(SIMDIR)
 	@echo "RTLDIR = $(RTLDIR)"
 	@fail=0; \
@@ -53,7 +57,7 @@ sim-01 sim-02 sim-03 sim-05: sim-%: tb
 	if [ $$fail -ne 0 ]; then echo "!!! Project $* has failures"; exit 1; fi
 
 test:
-	$(MAKE) sim-01 sim-02 sim-03 sim-05 RTLDIR=$(SOLRTL)
+	$(MAKE) sim-01 sim-02 sim-03 sim-05 sim-06 RTLDIR=$(SOLRTL)
 	@echo "All projects simulated (solution)."
 
 wave: tb

@@ -4,13 +4,15 @@
 自动化测试工具链：官方 `.tst/.cmp` 测试向量会被自动翻译成 Verilog testbench，直接跑
 `iverilog` 即可逐行比对，得到与课程硬件模拟器一致的 PASS/FAIL 结果。
 
+在官方 Project 5 之外，仓库还包含一个自定义 **Project 6（NPU 脉动阵列）** 扩展：
+从单 PE 到 N×N 脉动阵列，逐步往“内存映射 NPU + 小模型推理”的目标搭。
 项目面向"更接近实战"的学习体验：RTL 结构式、可综合风格、贴近真实硬件（扁平存储阵列、
 显式时钟端口、参数化 ROM/RAM 初始化、测试背板写口），同时严格保持课程官方的行为语义。
 
 ## 目录结构
 
 ```
-solution/        完整答案（Project 1/2/3/5，共 33 个芯片，全部实现）
+solution/        完整答案（Project 1/2/3/5 + 自定义 Project 6 起步，全部实现）
 assignment/      学生作业模板（模块端口声明保留、实现留空，待补全）
 tools/tst2tb.py  .tst/.cmp -> Verilog testbench 自动翻译器
 tools/gen_assignment.py  从 solution 重新生成 assignment 作业模板
@@ -19,6 +21,7 @@ programs/        Hack 机器码示例（Add.hack / Max.hack / Rect.hack）
 tb/0X/           生成的 testbench（+ 手工 tb/05/Memory_tb.v）
 sim/             仿真输出（vvp 二进制、VCD 波形）
 Makefile         一键仿真 / 测试 / 波形 / 生成作业
+docs/npu.md      Project 6（NPU 脉动阵列）设计与路线图
 ```
 
 ## 在线练习（server 分支）
@@ -54,9 +57,10 @@ export PATH=/tmp/iverilog-local/usr/bin:$PATH
 ## 快速开始
 
 ```bash
-make test                 # 用 solution（答案）全量回归：01 + 02 + 03 + 05
+make test                 # 用 solution（答案）全量回归：01 + 02 + 03 + 05 + 06
 make sim-03               # 验证作业 Project 3（默认用 assignment）
 make sim-02                   # 验证作业 Project 2（默认用 assignment）
+make sim-06                   # 验证 NPU Project 6（PE + SystolicArray）
 make wave CHIP=ALU        # 生成波形并用 gtkwave 打开（也可手动打开 sim/ALU_tb.vcd）
 make tb                   # 用 tools/tst2tb.py 重新生成全部 testbench
 make assign               # 从 solution 重新生成 assignment 作业模板
@@ -138,3 +142,30 @@ make sim-02              # 全部 PASS 即通过
 | 2 | 加法器与 ALU | 5 | ALU 用 mux16/not16/and16/add16 组合 |
 | 3 | 时序电路 | 8 | Bit/Register/RAM 系列/PC |
 | 5 | 整机 | 4+1 | CPU、Memory、Computer + ROM32K；Computer 跑通 Add/Max/Rect |
+| 6 | NPU 脉动阵列（自定义） | 2+ | PE、N×N SystolicArray；后续扩展 Conv/Act/Pool/MMIO |
+
+## Project 6（自定义 NPU 扩展）
+
+这是仓库自带的进阶作业，不属于官方 nand2tetris 课程，目标是：
+
+1. 实现 int8 脉动阵列（weight-stationary）；
+2. 扩展成卷积/池化/全连接数据通路；
+3. 用 Python 训练并量化一个小的 MNIST 分类模型；
+4. 最终在仿真中完成一张图片的端到端分类推理；
+5. 可选：通过 MMIO 挂进现有 Hack Computer，用 Hack 机器码发起推理。
+
+目前已完成第一步的作业框架：
+
+- `solution/06/PE.v`：单 PE（int8×int8 + int32 累加）
+- `solution/06/SystolicArray.v`：参数化 N×N 脉动阵列
+- `assignment/06/`：对应作业模板
+- `tb/06/`：PE 与阵列的独立测试台
+
+```bash
+make sim-06 RTLDIR=solution   # 用答案验证
+make sim-06                   # 学生模式（模板留空，需要补全）
+```
+
+详细的数据布局、时序约定与后续里程碑见 [`docs/npu.md`](docs/npu.md)。
+每章的 Project / Lecture / Assignment 三个 PDF 见
+[`docs/npu/course/`](docs/npu/course/README.md)。

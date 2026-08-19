@@ -23,6 +23,11 @@ TODO = "    // ==================== 作业：请补全本模块实现 ==========
     "    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n" \
     "    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n"
 
+TODO_06 = "    // ==================== 作业：请补全本模块实现 ====================\n" \
+    "    // 提示：参考 docs/npu.md 与 solution/06/ 的完整实现。\n" \
+    "    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n" \
+    "    // 完成后执行 `make sim-06 RTLDIR=assignment` 验证。\n"
+
 # 测试台会用层级路径读取以下内部信号（对应官方测试的 ARegister[]/DRegister[]/
 # PC[]/RAM16K[] 探针）。骨架里保留这些声明/例化，保证留空作业也能编译；
 # 学生补全逻辑时必须保留这些命名（与课程要求部件名一致）。
@@ -71,7 +76,8 @@ def gen_one(src, dst):
     parts = [header.rstrip('\n')]
     if name in SKELETONS:
         parts.append('\n' + SKELETONS[name])
-    parts.append('\n' + TODO + '\nendmodule\n')
+    todo = TODO_06 if os.path.basename(os.path.dirname(dst)) == '06' else TODO
+    parts.append('\n' + todo + '\nendmodule\n')
 
     os.makedirs(os.path.dirname(dst), exist_ok=True)
     with open(dst, 'w', encoding='utf-8') as f:

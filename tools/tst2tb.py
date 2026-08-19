@@ -144,6 +144,17 @@ CHIPS = {
                                  'RAM16K[0]': ('u_comp.u_mem.u_ram.mem[0]', 16),
                                  'RAM16K[1]': ('u_comp.u_mem.u_ram.mem[1]', 16),
                                  'RAM16K[2]': ('u_comp.u_mem.u_ram.mem[2]', 16)}),
+    # ---------------- Project 6（自定义 NPU 扩展）----------------
+    # manual_tb=True 表示 testbench 是手工维护的（tb/06/*_tb.v），
+    # tools/tst2tb.py 与 server/gen_wave.py 遇到时不会用 .tst/.cmp 覆盖。
+    'PE': dict(manual_tb=True, inst='dut',
+               ports=P(('clk', 1, 'clk'), ('rst', 1, 'in'), ('w_load', 1, 'in'),
+                       ('w_in', 8, 'in'), ('a_in', 8, 'in'), ('psum_in', 32, 'in'),
+                       ('w_out', 8, 'out'), ('a_out', 8, 'out'), ('psum_out', 32, 'out'))),
+    'SystolicArray': dict(manual_tb=True, inst='dut',
+                          ports=P(('clk', 1, 'clk'), ('rst', 1, 'in'), ('w_load', 1, 'in'),
+                                  ('w_data', 512, 'in'), ('a_data', 64, 'in'),
+                                  ('psum_out', 256, 'out'))),
 }
 
 MODULE = {
@@ -161,6 +172,7 @@ MODULE = {
     'CPU': 'n2t_cpu',
     'ComputerAdd': 'n2t_computer', 'ComputerMax': 'n2t_computer',
     'ComputerRect': 'n2t_computer',
+    'PE': 'n2t_pe', 'SystolicArray': 'n2t_systolic_array',
 }
 
 PROJECT = {
@@ -171,6 +183,7 @@ PROJECT = {
     'Bit': '03', 'Register': '03', 'RAM8': '03', 'RAM64': '03', 'RAM512': '03',
     'RAM4K': '03', 'RAM16K': '03', 'PC': '03',
     'CPU': '05', 'ComputerAdd': '05', 'ComputerMax': '05', 'ComputerRect': '05',
+    'PE': '06', 'SystolicArray': '06',
 }
 
 
@@ -496,6 +509,9 @@ def main():
     targets = sys.argv[1:] or sorted(CHIPS)
     for name in targets:
         cfg = CHIPS[name]
+        if cfg.get('manual_tb'):
+            print('skip (manual tb): %s' % name)
+            continue
         tb_dir = os.path.join(ROOT, 'tb', PROJECT[name])
         os.makedirs(tb_dir, exist_ok=True)
         out = os.path.join(tb_dir, name + '_tb.v')

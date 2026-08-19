@@ -49,6 +49,8 @@ def gen_wave_tb(chip_name, cfg):
     module = tst2tb.MODULE[chip_name]
     inst = cfg['inst']
     ports = cfg['ports']
+    if cfg.get('manual_tb'):
+        return gen_manual_wave_tb(chip_name, cfg)
     stmts = collect_ops(tst2tb.parse_tst(os.path.join(ROOT, cfg['tst'])))
 
     m = re.search(r'ROM32K\s+load\s+([A-Za-z0-9_.-]+\.hack)',
@@ -120,6 +122,71 @@ def gen_wave_tb(chip_name, cfg):
             prev_set = False
         elif st[0] == 'tock':
             L.append('        clk = 1\'b0; #10;')
+    L.append('        #10;')
+    L.append('        $finish;')
+    L.append('    end')
+    L.append('endmodule')
+    return '\n'.join(L)
+
+
+def gen_manual_wave_tb(chip_name, cfg):
+    """手工 testbench 题目的波形演示：不解析 .tst，直接给一组简单激励。"""
+    module = tst2tb.MODULE[chip_name]
+    inst = cfg['inst']
+    ports = cfg['ports']
+
+    L = []
+    L.append('`timescale 1ns/1ps')
+    L.append('')
+    L.append('// 波形演示激励（手工 testbench 自动生成）：只驱动端口、只 dump 端口。')
+    L.append('module %s_wave_tb;' % chip_name)
+    L.append('')
+    for (name, w, d) in ports:
+        if d == 'clk':
+            L.append('    reg clk = 1\'b0;')
+        elif d == 'in':
+            L.append('    reg  [%d:0] %s = %s;' % (w - 1, name, tst2tb.vconst(w, 0)))
+        else:
+            L.append('    wire [%d:0] %s;' % (w - 1, name))
+    L.append('')
+    L.append('    %s %s(' % (module, inst))
+    for idx, (name, w, d) in enumerate(ports):
+        comma = ',' if idx < len(ports) - 1 else ''
+        L.append('        .%s(%s)%s' % (name, name, comma))
+    L.append('    );')
+    L.append('')
+    L.append('    initial begin')
+    L.append('        $dumpfile("wave.vcd");')
+    L.append('        $dumpvars(0, %s);' % ', '.join(p[0] for p in ports))
+    L.append('')
+    L.append('        // 简单激励：先复位两拍，再载入数据，最后再跑两拍')
+    L.append('        #5;')
+    for (name, w, d) in ports:
+        if d == 'in' and name == 'rst':
+            L.append('        rst = 1;')
+    L.append('        #10;')
+    for (name, w, d) in ports:
+        if d == 'in' and name != 'rst':
+            L.append('        %s = %s;' % (name, tst2tb.vconst(w, (name == 'w_load') and 1 or 3)))
+    L.append('        #10;')
+    for (name, w, d) in ports:
+        if d == 'clk':
+            L.append('        clk = 1;')
+    L.append('        #10;')
+    for (name, w, d) in ports:
+        if d == 'clk':
+            L.append('        clk = 0;')
+    L.append('        #10;')
+    for (name, w, d) in ports:
+        if d == 'in' and name == 'rst':
+            L.append('        rst = 0;')
+    for (name, w, d) in ports:
+        if d == 'in' and name == 'w_load':
+            L.append('        w_load = 0;')
+    L.append('        #10;')
+    for (name, w, d) in ports:
+        if d == 'clk':
+            L.append('        clk = 1;')
     L.append('        #10;')
     L.append('        $finish;')
     L.append('    end')
