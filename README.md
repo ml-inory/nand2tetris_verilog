@@ -143,6 +143,7 @@ make sim-02              # 全部 PASS 即通过
 | 3 | 时序电路 | 8 | Bit/Register/RAM 系列/PC |
 | 5 | 整机 | 4+1 | CPU、Memory、Computer + ROM32K；Computer 跑通 Add/Max/Rect |
 | 6 | NPU 脉动阵列（自定义） | 2+ | PE、N×N SystolicArray；后续扩展 Conv/Act/Pool/MMIO |
+| 7 | posedge Hack 整机（自定义） | 4 | CPU/Memory/RAM16K/Computer 上升沿版，供 NPU 集成 |
 
 ## Project 6（自定义 NPU 扩展）
 
@@ -172,3 +173,19 @@ make sim-06                   # 学生模式（模板留空，需要补全）
 详细的数据布局、时序约定与后续里程碑见 [`docs/npu.md`](docs/npu.md)。
 每章的 Project / Lecture / Assignment 三个 PDF 见
 [`docs/npu/course/`](docs/npu/course/README.md)。
+
+## Project 7（posedge Hack 整机，供 NPU 集成）
+
+官方 Hack（Project 5）为了对齐 `.tst/.cmp` 测试向量使用 negedge 提交；
+NPU（Project 6）使用正规 posedge。为了让两者能在同一时钟沿下集成，
+这里提供一套功能等价、但全部时序逻辑使用上升沿的 Hack 整机：
+
+- `solution/07/CPU.v`：`n2t_cpu_posedge`，单边沿 CPU
+- `solution/07/RAM16K.v`：`n2t_ram16k_posedge`
+- `solution/07/Memory.v`：`n2t_memory_posedge`
+- `solution/07/Computer.v`：`n2t_computer_posedge`
+- `tb/07/ComputerPosedge_tb.v`：运行 Add.hack / Max.hack 验证最终 RAM 结果
+
+```bash
+make sim-07 RTLDIR=solution   # posedge 整机功能验证
+```

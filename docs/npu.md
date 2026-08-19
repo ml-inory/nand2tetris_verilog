@@ -30,6 +30,10 @@ make sim-06 RTLDIR=solution   # 答案回归
 make sim-06                   # 学生模式（需要先补全模板）
 ```
 
+官方 Hack（Project 5）为对齐官方测试向量使用 negedge；为了让 NPU 与 Hack
+能在同一个 posedge 下集成，仓库新增 `solution/07/`（posedge 版 CPU /
+RAM16K / Memory / Computer），功能等价且 `make sim-07` 已通过 Add/Max 验证。
+
 ## 课程资料（每章 3 个 PDF）
 
 模仿 nand2tetris.org 的资料形式，每章提供 Project / Lecture / Assignment

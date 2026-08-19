@@ -1785,7 +1785,7 @@ CHAPTERS = [
                 '这一章把 nand2tetris 的整机（Project 5）和前面的 NPU 工程串成一条完整链路：CPU 调度 -> NPU 计算 -> 结果回读。',
             ],
             'objective': [
-                '扩展 `n2t_memory` / `n2t_computer`：在 0x7000-0x7FFF 增加 NPU MMIO。',
+                '扩展 `n2t_memory_posedge` / `n2t_computer_posedge`：在 0x7000-0x7FFF 增加 NPU MMIO。',
                 '编写一条 Hack 汇编驱动：写命令、轮询状态、读取结果。',
                 '集成测试：加载一张 MNIST 图片，端到端输出正确类别。',
                 '保持原有 `make test`（Project 1/2/3/5/6）全部通过。',
@@ -2222,7 +2222,7 @@ LECTURE_NOTES = {
     5: {
         'Hack + NPU 系统': {
             'body': [
-                '最后一步是把 NPU 挂进 `n2t_computer`：Memory 在地址译码时增加'
+                '最后一步是把 NPU 挂进 `n2t_computer_posedge`：Memory 在地址译码时增加'
                 '0x7000-0x7FFF 段，命中该段就把读写转给 NPU。CPU 跑一条普通'
                 '汇编指令就能触发 NPU。',
                 '对 CPU 而言 NPU 只是“一块特殊的内存”；对 NPU 而言 CPU 只是'

@@ -43,4 +43,4 @@ python3 -m venv /tmp/pdfenv
 | 2 | `assignment/06`：PE 与 SystolicArray（已搭好框架） |
 | 3 | 后续 `assignment/07`：控制器、激活/池化、FC |
 | 4 | 后续 `tools/npu_mnist.py` 与 `npu_data/` |
-| 5 | 后续 `n2t_memory` / `n2t_computer` 的 MMIO 集成 |
+| 5 | `solution/07` posedge Hack 整机 + NPU 的 MMIO 集成 |
