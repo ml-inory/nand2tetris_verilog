@@ -38,6 +38,15 @@ WEB = os.path.join(os.path.dirname(HERE), 'web')
 
 app = FastAPI(title='nand2tetris Verilog Judge', version='0.3.0')
 
+
+@app.middleware('http')
+async def no_cache_api(request, call_next):
+    response = await call_next(request)
+    if request.url.path.startswith('/api/'):
+        response.headers['Cache-Control'] = 'no-store'
+    return response
+
+
 # ---- 全局最近判题（匿名，内存；重启即清空）----
 RECENT = deque(maxlen=50)
 

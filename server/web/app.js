@@ -25,7 +25,7 @@ async function api(path, opts = {}) {
   const headers = Object.assign({'Content-Type': 'application/json'}, opts.headers || {});
   const token = getToken();
   if (token) headers['Authorization'] = 'Bearer ' + token;
-  const r = await fetch(path, Object.assign({}, opts, {headers}));
+  const r = await fetch(path, Object.assign({}, opts, {headers, cache: 'no-store'}));
   if (!r.ok) {
     let msg = 'HTTP ' + r.status;
     try { const j = await r.json(); if (j.detail) msg = j.detail; else if (j.error) msg = j.error; } catch (e) {}
