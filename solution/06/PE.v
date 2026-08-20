@@ -21,7 +21,7 @@ module n2t_pe #(
     parameter P_W = 32   // 累加器位宽（有符号）
 ) (
     input  clk,
-    input  rst,
+    input  arst,   // async reset（异步复位，高有效）
     input  w_load,
     input  signed [W_W-1:0] w_in,
     input  signed [A_W-1:0] a_in,
@@ -32,8 +32,8 @@ module n2t_pe #(
 );
     reg signed [W_W-1:0] w;
 
-    always @(posedge clk or posedge rst) begin
-        if (rst) begin
+    always @(posedge clk or posedge arst) begin
+        if (arst) begin
             w        <= {W_W{1'b0}};
             w_out    <= {W_W{1'b0}};
             a_out    <= {A_W{1'b0}};

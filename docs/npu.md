@@ -82,6 +82,7 @@ C[k][col] = sum_{row=0..N-1} A[row][k] * W[row][col]
 装载完成后再开始送 `a_data`。
 
 Project 06（NPU 扩展）使用正规上升沿（posedge）提交，与真实 FPGA 一致；
+异步复位端口命名为 `arst`（async reset，高有效）。
 Hack 官方部分（Project 1/2/3/5）仍使用 negedge，以对齐官方测试向量。
 
 ## 作业要求

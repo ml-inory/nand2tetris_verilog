@@ -10,7 +10,7 @@ module SystolicArray_tb;
     localparam P_W = 32;
 
     reg clk = 1'b0;
-    reg rst = 1'b1;
+    reg arst = 1'b1;
     reg w_load = 1'b0;
     reg [N*N*W_W-1:0] w_data = 0;
     reg [N*A_W-1:0] a_data = 0;
@@ -31,7 +31,7 @@ module SystolicArray_tb;
         .P_W(P_W)
     ) dut (
         .clk(clk),
-        .rst(rst),
+        .arst(arst),
         .w_load(w_load),
         .w_data(w_data),
         .a_data(a_data),
@@ -89,7 +89,7 @@ module SystolicArray_tb;
 
         // 复位
         repeat (2) @(posedge clk);
-        rst = 1'b0;
+        arst = 1'b0;
         #1;
 
         // 批量装载权重

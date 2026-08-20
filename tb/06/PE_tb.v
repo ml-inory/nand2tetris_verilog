@@ -8,7 +8,7 @@ module PE_tb;
     localparam P_W = 32;
 
     reg clk = 1'b0;
-    reg rst = 1'b1;
+    reg arst = 1'b1;
     reg w_load = 1'b0;
     reg signed [W_W-1:0] w_in = 8'sd0;
     reg signed [A_W-1:0] a_in = 8'sd0;
@@ -26,7 +26,7 @@ module PE_tb;
         .P_W(P_W)
     ) dut (
         .clk(clk),
-        .rst(rst),
+        .arst(arst),
         .w_load(w_load),
         .w_in(w_in),
         .a_in(a_in),
@@ -65,7 +65,7 @@ module PE_tb;
 
         // 复位
         repeat (2) @(posedge clk);
-        rst = 1'b0;
+        arst = 1'b0;
         #1;
 
         // 装载权重 w = 5
@@ -94,7 +94,7 @@ module PE_tb;
         tst_check(a_out, -32'sd3, "a_out after second MAC");
 
         // 复位清零
-        rst = 1'b1;
+        arst = 1'b1;
         @(posedge clk);
         #1;
         tst_check(psum_out, 32'sd0, "psum reset");

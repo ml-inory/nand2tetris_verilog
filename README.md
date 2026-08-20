@@ -157,8 +157,8 @@ make sim-02              # 全部 PASS 即通过
 
 目前已完成第一步的作业框架：
 
-- `solution/06/PE.v`：单 PE（int8×int8 + int32 累加）
-- `solution/06/SystolicArray.v`：参数化 N×N 脉动阵列
+- `solution/06/PE.v`：单 PE（int8×int8 + int32 累加，异步复位 `arst`）
+- `solution/06/SystolicArray.v`：参数化 N×N 脉动阵列（异步复位 `arst`）
 - `assignment/06/`：对应作业模板
 - `tb/06/`：PE 与阵列的独立测试台
 

@@ -4,7 +4,7 @@
 module PE_wave_tb;
 
     reg clk = 1'b0;
-    reg  [0:0] rst = 1'h0;
+    reg  [0:0] arst = 1'h0;
     reg  [0:0] w_load = 1'h0;
     reg  [7:0] w_in = 8'h0;
     reg  [7:0] a_in = 8'h0;
@@ -15,7 +15,7 @@ module PE_wave_tb;
 
     n2t_pe dut(
         .clk(clk),
-        .rst(rst),
+        .arst(arst),
         .w_load(w_load),
         .w_in(w_in),
         .a_in(a_in),
@@ -27,11 +27,11 @@ module PE_wave_tb;
 
     initial begin
         $dumpfile("wave.vcd");
-        $dumpvars(0, clk, rst, w_load, w_in, a_in, psum_in, w_out, a_out, psum_out);
+        $dumpvars(0, clk, arst, w_load, w_in, a_in, psum_in, w_out, a_out, psum_out);
 
         // 简单激励：先复位两拍，再载入数据，最后再跑两拍
         #5;
-        rst = 1;
+        arst = 1;
         #10;
         w_load = 1'h1;
         w_in = 8'h3;
@@ -42,7 +42,7 @@ module PE_wave_tb;
         #10;
         clk = 0;
         #10;
-        rst = 0;
+        arst = 0;
         w_load = 0;
         #10;
         clk = 1;

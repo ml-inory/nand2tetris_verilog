@@ -134,6 +134,7 @@ def gen_manual_wave_tb(chip_name, cfg):
     module = tst2tb.MODULE[chip_name]
     inst = cfg['inst']
     ports = cfg['ports']
+    reset_name = 'arst' if any(n == 'arst' for (n, _, _) in ports) else 'rst'
 
     L = []
     L.append('`timescale 1ns/1ps')
@@ -162,11 +163,11 @@ def gen_manual_wave_tb(chip_name, cfg):
     L.append('        // 简单激励：先复位两拍，再载入数据，最后再跑两拍')
     L.append('        #5;')
     for (name, w, d) in ports:
-        if d == 'in' and name == 'rst':
-            L.append('        rst = 1;')
+        if d == 'in' and name == reset_name:
+            L.append('        %s = 1;' % reset_name)
     L.append('        #10;')
     for (name, w, d) in ports:
-        if d == 'in' and name != 'rst':
+        if d == 'in' and name != reset_name:
             L.append('        %s = %s;' % (name, tst2tb.vconst(w, (name == 'w_load') and 1 or 3)))
     L.append('        #10;')
     for (name, w, d) in ports:
@@ -178,8 +179,8 @@ def gen_manual_wave_tb(chip_name, cfg):
             L.append('        clk = 0;')
     L.append('        #10;')
     for (name, w, d) in ports:
-        if d == 'in' and name == 'rst':
-            L.append('        rst = 0;')
+        if d == 'in' and name == reset_name:
+            L.append('        %s = 0;' % reset_name)
     for (name, w, d) in ports:
         if d == 'in' and name == 'w_load':
             L.append('        w_load = 0;')

@@ -31,7 +31,7 @@ module n2t_systolic_array #(
     parameter P_W  = 32
 ) (
     input  clk,
-    input  rst,
+    input  arst,   // async reset（异步复位，高有效）
     input  w_load,
     input  [N*N*W_W-1:0] w_data, // N x N 权重矩阵，行主序
     input  [N*A_W-1:0] a_data,   // 每拍一个长度为 N 的输入向量
@@ -42,8 +42,8 @@ module n2t_systolic_array #(
     reg [A_W-1:0] a_dly [0:N-1][0:N-1];
     integer r, d;
 
-    always @(posedge clk or posedge rst) begin
-        if (rst) begin
+    always @(posedge clk or posedge arst) begin
+        if (arst) begin
             for (r = 0; r < N; r = r + 1)
                 for (d = 0; d < N; d = d + 1)
                     a_dly[r][d] <= {A_W{1'b0}};
@@ -91,7 +91,7 @@ module n2t_systolic_array #(
                     .P_W(P_W)
                 ) u_pe (
                     .clk(clk),
-                    .rst(rst),
+                    .arst(arst),
                     .w_load(w_load),
                     .w_in(w_data[(i*N + j)*W_W +: W_W]),
                     .a_in(pe_a_in),
@@ -108,8 +108,8 @@ module n2t_systolic_array #(
     reg [P_W-1:0] o_dly [0:N-1][0:N-1];
     integer oc, od;
 
-    always @(posedge clk or posedge rst) begin
-        if (rst) begin
+    always @(posedge clk or posedge arst) begin
+        if (arst) begin
             for (oc = 0; oc < N; oc = oc + 1)
                 for (od = 0; od < N; od = od + 1)
                     o_dly[oc][od] <= {P_W{1'b0}};

@@ -31,7 +31,7 @@ module n2t_systolic_array #(
     parameter P_W  = 32
 ) (
     input  clk,
-    input  rst,
+    input  arst,   // async reset（异步复位，高有效）
     input  w_load,
     input  [N*N*W_W-1:0] w_data, // N x N 权重矩阵，行主序
     input  [N*A_W-1:0] a_data,   // 每拍一个长度为 N 的输入向量

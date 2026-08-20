@@ -2733,7 +2733,7 @@
           "dir": "clk"
         },
         {
-          "name": "rst",
+          "name": "arst",
           "width": 1,
           "dir": "in"
         },
@@ -2775,7 +2775,7 @@
       ],
       "probes": [],
       "description": "PE：脉动阵列中的单个乘累加单元（MAC）。\n数据流约定（经典 weight-stationary 脉动阵列）：\na_in    从左侧流入，a_out 向右流出（每拍移动一格）\npsum_in 从上方流入，psum_out 向下方流出（累加结果逐拍下移）\nw_in    在 w_load 为高时写入 PE 内部权重寄存器，之后保持不变\n计算语义（有符号）：\npsum_out = psum_in + a_in * w\n时序：Project 06 使用正规上升沿（posedge）提交，与真实 FPGA 一致。\n注意：Hack 官方部分（Project 1/2/3/5）为了对齐官方测试向量仍用 negedge。\nProject 06 为自定义扩展（非官方 nand2tetris 题目），后续模块：\nn2t_systolic_array -> n2t_conv_unit -> n2t_npu",
-      "initial_code": "`timescale 1ns/1ps\n\n// PE：脉动阵列中的单个乘累加单元（MAC）。\n//\n// 数据流约定（经典 weight-stationary 脉动阵列）：\n//   a_in    从左侧流入，a_out 向右流出（每拍移动一格）\n//   psum_in 从上方流入，psum_out 向下方流出（累加结果逐拍下移）\n//   w_in    在 w_load 为高时写入 PE 内部权重寄存器，之后保持不变\n//\n// 计算语义（有符号）：\n//   psum_out = psum_in + a_in * w\n//\n// 时序：Project 06 使用正规上升沿（posedge）提交，与真实 FPGA 一致。\n// 注意：Hack 官方部分（Project 1/2/3/5）为了对齐官方测试向量仍用 negedge。\n//\n// Project 06 为自定义扩展（非官方 nand2tetris 题目），后续模块：\n//   n2t_systolic_array -> n2t_conv_unit -> n2t_npu\nmodule n2t_pe #(\n    parameter A_W = 8,   // 激活/输入数据位宽（有符号）\n    parameter W_W = 8,   // 权重位宽（有符号）\n    parameter P_W = 32   // 累加器位宽（有符号）\n) (\n    input  clk,\n    input  rst,\n    input  w_load,\n    input  signed [W_W-1:0] w_in,\n    input  signed [A_W-1:0] a_in,\n    input  signed [P_W-1:0] psum_in,\n    output reg signed [W_W-1:0] w_out,\n    output reg signed [A_W-1:0] a_out,\n    output reg signed [P_W-1:0] psum_out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 docs/npu.md 与 solution/06/ 的完整实现。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-06 RTLDIR=assignment` 验证。\n\nendmodule\n",
+      "initial_code": "`timescale 1ns/1ps\n\n// PE：脉动阵列中的单个乘累加单元（MAC）。\n//\n// 数据流约定（经典 weight-stationary 脉动阵列）：\n//   a_in    从左侧流入，a_out 向右流出（每拍移动一格）\n//   psum_in 从上方流入，psum_out 向下方流出（累加结果逐拍下移）\n//   w_in    在 w_load 为高时写入 PE 内部权重寄存器，之后保持不变\n//\n// 计算语义（有符号）：\n//   psum_out = psum_in + a_in * w\n//\n// 时序：Project 06 使用正规上升沿（posedge）提交，与真实 FPGA 一致。\n// 注意：Hack 官方部分（Project 1/2/3/5）为了对齐官方测试向量仍用 negedge。\n//\n// Project 06 为自定义扩展（非官方 nand2tetris 题目），后续模块：\n//   n2t_systolic_array -> n2t_conv_unit -> n2t_npu\nmodule n2t_pe #(\n    parameter A_W = 8,   // 激活/输入数据位宽（有符号）\n    parameter W_W = 8,   // 权重位宽（有符号）\n    parameter P_W = 32   // 累加器位宽（有符号）\n) (\n    input  clk,\n    input  arst,   // async reset（异步复位，高有效）\n    input  w_load,\n    input  signed [W_W-1:0] w_in,\n    input  signed [A_W-1:0] a_in,\n    input  signed [P_W-1:0] psum_in,\n    output reg signed [W_W-1:0] w_out,\n    output reg signed [A_W-1:0] a_out,\n    output reg signed [P_W-1:0] psum_out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 docs/npu.md 与 solution/06/ 的完整实现。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-06 RTLDIR=assignment` 验证。\n\nendmodule\n",
       "sol_file": "solution/06/PE.v",
       "deps": [
         "solution/01/And.v",
@@ -2834,7 +2834,7 @@
           "dir": "clk"
         },
         {
-          "name": "rst",
+          "name": "arst",
           "width": 1,
           "dir": "in"
         },
@@ -2861,7 +2861,7 @@
       ],
       "probes": [],
       "description": "SystolicArray：N x N 的 weight-stationary 脉动阵列。\n数据布局（行主序，扁平向量）：\nw_data[row*N + col] = W[row][col]\na_data[row]         = A[row][k]（第 k 拍送入第 k 个输入向量）\npsum_out[col]       = C[k][col]（输出已对齐，所有列同一拍出现）\n计算语义：\nC[k][col] = sum_{row=0..N-1} A[row][k] * W[row][col]\n对应到卷积 GEMM：A 的行是输入通道、列是空间位置；W 的行是输入通道、\n列是输出通道；C 的每一拍是一个空间位置上所有输出通道的结果。\n也就是说，这个阵列天然适合“一次输出一个像素点的 N 个输出通道”。\n时序：\n1. w_load 为高时把 w_data 整体写入阵列（真实 NPU 中由 DMA/权重 SRAM\n批量装载）；\n2. 之后每个 clk 上升沿送一个 a_data 向量；\n3. 底部结果先做“输出对齐”：第 col 列额外延迟 N-1-col 拍，\n因此 psum_out 的所有列在同一拍出现；\n4. 最后一个输入送入后再等 N-1 拍，开始逐拍输出完整结果。\n输入对齐：行 i 的输入在阵列内部延迟 i 拍，实现经典脉动阵列的斜输入，\n因此外部不需要自己打 skew，只要按 k 逐拍送数据即可。",
-      "initial_code": "`timescale 1ns/1ps\n\n// SystolicArray：N x N 的 weight-stationary 脉动阵列。\n//\n// 数据布局（行主序，扁平向量）：\n//   w_data[row*N + col] = W[row][col]\n//   a_data[row]         = A[row][k]（第 k 拍送入第 k 个输入向量）\n//   psum_out[col]       = C[k][col]（输出已对齐，所有列同一拍出现）\n//\n// 计算语义：\n//   C[k][col] = sum_{row=0..N-1} A[row][k] * W[row][col]\n//\n// 对应到卷积 GEMM：A 的行是输入通道、列是空间位置；W 的行是输入通道、\n// 列是输出通道；C 的每一拍是一个空间位置上所有输出通道的结果。\n// 也就是说，这个阵列天然适合“一次输出一个像素点的 N 个输出通道”。\n//\n// 时序：\n//   1. w_load 为高时把 w_data 整体写入阵列（真实 NPU 中由 DMA/权重 SRAM\n//      批量装载）；\n//   2. 之后每个 clk 上升沿送一个 a_data 向量；\n//   3. 底部结果先做“输出对齐”：第 col 列额外延迟 N-1-col 拍，\n//      因此 psum_out 的所有列在同一拍出现；\n//   4. 最后一个输入送入后再等 N-1 拍，开始逐拍输出完整结果。\n//\n// 输入对齐：行 i 的输入在阵列内部延迟 i 拍，实现经典脉动阵列的斜输入，\n// 因此外部不需要自己打 skew，只要按 k 逐拍送数据即可。\nmodule n2t_systolic_array #(\n    parameter N    = 8,\n    parameter A_W  = 8,\n    parameter W_W  = 8,\n    parameter P_W  = 32\n) (\n    input  clk,\n    input  rst,\n    input  w_load,\n    input  [N*N*W_W-1:0] w_data, // N x N 权重矩阵，行主序\n    input  [N*A_W-1:0] a_data,   // 每拍一个长度为 N 的输入向量\n    output [N*P_W-1:0] psum_out  // 每拍一个长度为 N 的输出向量\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 docs/npu.md 与 solution/06/ 的完整实现。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-06 RTLDIR=assignment` 验证。\n\nendmodule\n",
+      "initial_code": "`timescale 1ns/1ps\n\n// SystolicArray：N x N 的 weight-stationary 脉动阵列。\n//\n// 数据布局（行主序，扁平向量）：\n//   w_data[row*N + col] = W[row][col]\n//   a_data[row]         = A[row][k]（第 k 拍送入第 k 个输入向量）\n//   psum_out[col]       = C[k][col]（输出已对齐，所有列同一拍出现）\n//\n// 计算语义：\n//   C[k][col] = sum_{row=0..N-1} A[row][k] * W[row][col]\n//\n// 对应到卷积 GEMM：A 的行是输入通道、列是空间位置；W 的行是输入通道、\n// 列是输出通道；C 的每一拍是一个空间位置上所有输出通道的结果。\n// 也就是说，这个阵列天然适合“一次输出一个像素点的 N 个输出通道”。\n//\n// 时序：\n//   1. w_load 为高时把 w_data 整体写入阵列（真实 NPU 中由 DMA/权重 SRAM\n//      批量装载）；\n//   2. 之后每个 clk 上升沿送一个 a_data 向量；\n//   3. 底部结果先做“输出对齐”：第 col 列额外延迟 N-1-col 拍，\n//      因此 psum_out 的所有列在同一拍出现；\n//   4. 最后一个输入送入后再等 N-1 拍，开始逐拍输出完整结果。\n//\n// 输入对齐：行 i 的输入在阵列内部延迟 i 拍，实现经典脉动阵列的斜输入，\n// 因此外部不需要自己打 skew，只要按 k 逐拍送数据即可。\nmodule n2t_systolic_array #(\n    parameter N    = 8,\n    parameter A_W  = 8,\n    parameter W_W  = 8,\n    parameter P_W  = 32\n) (\n    input  clk,\n    input  arst,   // async reset（异步复位，高有效）\n    input  w_load,\n    input  [N*N*W_W-1:0] w_data, // N x N 权重矩阵，行主序\n    input  [N*A_W-1:0] a_data,   // 每拍一个长度为 N 的输入向量\n    output [N*P_W-1:0] psum_out  // 每拍一个长度为 N 的输出向量\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 docs/npu.md 与 solution/06/ 的完整实现。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-06 RTLDIR=assignment` 验证。\n\nendmodule\n",
       "sol_file": "solution/06/SystolicArray.v",
       "deps": [
         "solution/01/And.v",
