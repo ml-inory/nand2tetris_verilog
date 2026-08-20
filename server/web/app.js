@@ -286,6 +286,22 @@ function renderWave(waveJson, boxId, index) {
   }
 }
 
+async function loadExpectedWave() {
+  const box = $('wave-expected');
+  box.innerHTML = '';
+  if (!currentId) return;
+  try {
+    const r = await api('/api/problems/' + currentId + '/expected_wave');
+    if (r.wave && r.wave.signal && r.wave.signal.length) {
+      renderWave(r.wave, 'wave-expected', 1);
+    } else {
+      box.textContent = '期望波形生成失败';
+    }
+  } catch (e) {
+    box.textContent = '期望波形生成失败: ' + e.message;
+  }
+}
+
 function showResult(r) {
   const box = $('result');
   box.classList.remove('hidden');
@@ -327,6 +343,7 @@ function showResult(r) {
   if (r.wave && r.wave.signal && r.wave.signal.length) {
     wb.classList.remove('hidden');
     renderWave(r.wave, 'wave', 0);
+    loadExpectedWave();
     $('wave-internal').classList.add('hidden');
     $('wave-signals').value = '';
     $('wave-msg').textContent = '';

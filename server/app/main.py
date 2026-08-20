@@ -174,6 +174,20 @@ def get_tb(pid: str, request: Request):
     return {'tb': text}
 
 
+@app.get('/api/problems/{pid}/expected_wave')
+def get_expected_wave(pid: str, request: Request):
+    if current_user(request) is None:
+        raise HTTPException(401, '请先登录')
+    p = BY_ID.get(pid)
+    if p is None:
+        raise HTTPException(404, 'problem not found')
+    from .wave import run_expected_wave
+    try:
+        return {'wave': run_expected_wave(p)}
+    except Exception:
+        return {'wave': None}
+
+
 # ---------------- 判题 ----------------
 @app.post('/api/submit')
 def submit(request: Request, body: Submit):

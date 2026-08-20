@@ -111,6 +111,7 @@ def main():
             'probes': probes,
             'description': read_header_comment(sol_file),
             'initial_code': open(asg_file, encoding='utf-8').read(),
+            'sol_file': os.path.relpath(sol_file, ROOT),
             'deps': collect_deps(chip),
             'tb': os.path.relpath(tb_file, ROOT),
             'tb_top': chip + '_tb',

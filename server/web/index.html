@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>nand2tetris Verilog 在线练习</title>
-<link rel="stylesheet" href="style.css?v=20260819b">
+<link rel="stylesheet" href="style.css?v=20260820">
 <script src="vendor/wavedrom.skin.default.js"></script>
 <script src="vendor/wavedrom.js"></script>
 <script>
@@ -123,8 +123,10 @@ var MONACO_CDNS = [
           </div>
         </div>
         <div id="wave-box" class="hidden">
-          <div class="section-title">波形</div>
+          <div class="section-title">实际波形</div>
           <div id="wave" class="wave"></div>
+          <div class="section-title">期望波形（参考实现）</div>
+          <div id="wave-expected" class="wave"></div>
           <div class="wave-tools">
             <input id="wave-signals" placeholder="内部信号（逗号分隔，如 mem[5], u1.out）" spellcheck="false">
             <button id="btn-wave-signals">显示内部信号</button>
@@ -148,6 +150,6 @@ var MONACO_CDNS = [
   </div>
 </div>
 
-<script src="app.js?v=20260819b"></script>
+<script src="app.js?v=20260820"></script>
 </body>
 </html>

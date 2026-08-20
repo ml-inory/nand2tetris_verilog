@@ -20,6 +20,7 @@
       "probes": [],
       "description": "Not：out = ~in，由 Nand(a, a) 构成\n对应 nand2tetris Project 1 的 Not.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// Not：out = ~in，由 Nand(a, a) 构成\n// 对应 nand2tetris Project 1 的 Not.hdl\nmodule n2t_not (\n    input  in,\n    output out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/01/Not.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -90,6 +91,7 @@
       "probes": [],
       "description": "And：out = a & b，由 Nand + Not 构成\n对应 nand2tetris Project 1 的 And.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// And：out = a & b，由 Nand + Not 构成\n// 对应 nand2tetris Project 1 的 And.hdl\nmodule n2t_and (\n    input  a,\n    input  b,\n    output out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/01/And.v",
       "deps": [
         "solution/01/And16.v",
         "solution/01/DMux.v",
@@ -160,6 +162,7 @@
       "probes": [],
       "description": "Or：out = a | b，由 Not + Nand 构成\n对应 nand2tetris Project 1 的 Or.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// Or：out = a | b，由 Not + Nand 构成\n// 对应 nand2tetris Project 1 的 Or.hdl\nmodule n2t_or (\n    input  a,\n    input  b,\n    output out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/01/Or.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -230,6 +233,7 @@
       "probes": [],
       "description": "Xor：out = a ^ b = (a & ~b) | (~a & b)\n对应 nand2tetris Project 1 的 Xor.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// Xor：out = a ^ b = (a & ~b) | (~a & b)\n// 对应 nand2tetris Project 1 的 Xor.hdl\nmodule n2t_xor (\n    input  a,\n    input  b,\n    output out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/01/Xor.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -305,6 +309,7 @@
       "probes": [],
       "description": "Mux（2 选 1）：sel=0 时 out=a，sel=1 时 out=b\n对应 nand2tetris Project 1 的 Mux.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// Mux（2 选 1）：sel=0 时 out=a，sel=1 时 out=b\n// 对应 nand2tetris Project 1 的 Mux.hdl\nmodule n2t_mux (\n    input  a,\n    input  b,\n    input  sel,\n    output out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/01/Mux.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -380,6 +385,7 @@
       "probes": [],
       "description": "DMux（1 分 2）：sel=0 时 in→a，sel=1 时 in→b\n对应 nand2tetris Project 1 的 DMux.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// DMux（1 分 2）：sel=0 时 in→a，sel=1 时 in→b\n// 对应 nand2tetris Project 1 的 DMux.hdl\nmodule n2t_dmux (\n    input  in,\n    input  sel,\n    output a,\n    output b\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/01/DMux.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -445,6 +451,7 @@
       "probes": [],
       "description": "Not16：16 位按位取反\n对应 nand2tetris Project 1 的 Not16.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// Not16：16 位按位取反\n// 对应 nand2tetris Project 1 的 Not16.hdl\nmodule n2t_not16 (\n    input  [15:0] in,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/01/Not16.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -515,6 +522,7 @@
       "probes": [],
       "description": "And16：16 位按位与\n对应 nand2tetris Project 1 的 And16.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// And16：16 位按位与\n// 对应 nand2tetris Project 1 的 And16.hdl\nmodule n2t_and16 (\n    input  [15:0] a,\n    input  [15:0] b,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/01/And16.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/DMux.v",
@@ -585,6 +593,7 @@
       "probes": [],
       "description": "Or16：16 位按位或\n对应 nand2tetris Project 1 的 Or16.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// Or16：16 位按位或\n// 对应 nand2tetris Project 1 的 Or16.hdl\nmodule n2t_or16 (\n    input  [15:0] a,\n    input  [15:0] b,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/01/Or16.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -660,6 +669,7 @@
       "probes": [],
       "description": "Mux16：16 位 2 选 1，sel 共用\n对应 nand2tetris Project 1 的 Mux16.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// Mux16：16 位 2 选 1，sel 共用\n// 对应 nand2tetris Project 1 的 Mux16.hdl\nmodule n2t_mux16 (\n    input  [15:0] a,\n    input  [15:0] b,\n    input         sel,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/01/Mux16.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -725,6 +735,7 @@
       "probes": [],
       "description": "Or8Way：8 输入或门（树形）\n对应 nand2tetris Project 1 的 Or8Way.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// Or8Way：8 输入或门（树形）\n// 对应 nand2tetris Project 1 的 Or8Way.hdl\nmodule n2t_or8way (\n    input  [7:0] in,\n    output       out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/01/Or8Way.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -810,6 +821,7 @@
       "probes": [],
       "description": "Mux4Way16：4 路 16 位选择器，sel[1] 为高位\n对应 nand2tetris Project 1 的 Mux4Way16.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// Mux4Way16：4 路 16 位选择器，sel[1] 为高位\n// 对应 nand2tetris Project 1 的 Mux4Way16.hdl\nmodule n2t_mux4way16 (\n    input  [15:0] a,\n    input  [15:0] b,\n    input  [15:0] c,\n    input  [15:0] d,\n    input  [1:0]  sel,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/01/Mux4Way16.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -915,6 +927,7 @@
       "probes": [],
       "description": "Mux8Way16：8 路 16 位选择器，sel[2] 为高位\n对应 nand2tetris Project 1 的 Mux8Way16.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// Mux8Way16：8 路 16 位选择器，sel[2] 为高位\n// 对应 nand2tetris Project 1 的 Mux8Way16.hdl\nmodule n2t_mux8way16 (\n    input  [15:0] a,\n    input  [15:0] b,\n    input  [15:0] c,\n    input  [15:0] d,\n    input  [15:0] e,\n    input  [15:0] f,\n    input  [15:0] g,\n    input  [15:0] h,\n    input  [2:0]  sel,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/01/Mux8Way16.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -1000,6 +1013,7 @@
       "probes": [],
       "description": "DMux4Way：1 分 4，sel[1] 为高位\n对应 nand2tetris Project 1 的 DMux4Way.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// DMux4Way：1 分 4，sel[1] 为高位\n// 对应 nand2tetris Project 1 的 DMux4Way.hdl\nmodule n2t_dmux4way (\n    input  in,\n    input  [1:0] sel,\n    output a,\n    output b,\n    output c,\n    output d\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/01/DMux4Way.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -1105,6 +1119,7 @@
       "probes": [],
       "description": "DMux8Way：1 分 8，sel[2] 为高位\n对应 nand2tetris Project 1 的 DMux8Way.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// DMux8Way：1 分 8，sel[2] 为高位\n// 对应 nand2tetris Project 1 的 DMux8Way.hdl\nmodule n2t_dmux8way (\n    input  in,\n    input  [2:0] sel,\n    output a,\n    output b,\n    output c,\n    output d,\n    output e,\n    output f,\n    output g,\n    output h\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/01/DMux8Way.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -1180,6 +1195,7 @@
       "probes": [],
       "description": "HalfAdder：sum = a^b, carry = a&b\n对应 nand2tetris Project 2 的 HalfAdder.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// HalfAdder：sum = a^b, carry = a&b\n// 对应 nand2tetris Project 2 的 HalfAdder.hdl\nmodule n2t_half_adder (\n    input  a,\n    input  b,\n    output sum,\n    output carry\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/02/HalfAdder.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -1260,6 +1276,7 @@
       "probes": [],
       "description": "FullAdder：三个输入的全加器，由两个半加器 + 或门构成\n对应 nand2tetris Project 2 的 FullAdder.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// FullAdder：三个输入的全加器，由两个半加器 + 或门构成\n// 对应 nand2tetris Project 2 的 FullAdder.hdl\nmodule n2t_full_adder (\n    input  a,\n    input  b,\n    input  c,\n    output sum,\n    output carry\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/02/FullAdder.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -1330,6 +1347,7 @@
       "probes": [],
       "description": "Add16：16 位行波进位加法器\n对应 nand2tetris Project 2 的 Add16.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// Add16：16 位行波进位加法器\n// 对应 nand2tetris Project 2 的 Add16.hdl\nmodule n2t_add16 (\n    input  [15:0] a,\n    input  [15:0] b,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/02/Add16.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -1395,6 +1413,7 @@
       "probes": [],
       "description": "Inc16：加 1，即 Add16(in, 1)\n对应 nand2tetris Project 2 的 Inc16.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// Inc16：加 1，即 Add16(in, 1)\n// 对应 nand2tetris Project 2 的 Inc16.hdl\nmodule n2t_inc16 (\n    input  [15:0] in,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/02/Inc16.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -1505,6 +1524,7 @@
       "probes": [],
       "description": "ALU：Hack 芯片的核心算术逻辑单元，按课程方式用门级/部件级搭建\n对应 nand2tetris Project 2 的 ALU.hdl\n功能：\nzx: x 置 0       nx: x 取反     zy: y 置 0\nny: y 取反       f: 1=加 0=与   no: 输出取反\nzr: out==0       ng: out<0（最高位）",
       "initial_code": "`timescale 1ns/1ps\n\n// ALU：Hack 芯片的核心算术逻辑单元，按课程方式用门级/部件级搭建\n// 对应 nand2tetris Project 2 的 ALU.hdl\n//\n// 功能：\n//   zx: x 置 0       nx: x 取反     zy: y 置 0\n//   ny: y 取反       f: 1=加 0=与   no: 输出取反\n//   zr: out==0       ng: out<0（最高位）\nmodule n2t_alu (\n    input  [15:0] x,\n    input  [15:0] y,\n    input         zx,\n    input         nx,\n    input         zy,\n    input         ny,\n    input         f,\n    input         no,\n    output [15:0] out,\n    output        zr,\n    output        ng\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/02/ALU.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -1580,6 +1600,7 @@
       "probes": [],
       "description": "Bit：1 位数据位。\n课程硬件模拟器在 tick（时钟 0->1）采样输入、tock（1->0）提交输出，\n官方测试向量也是“tick 后看旧值、tock 后看新值”。\n为与官方向量逐行一致，这里在下降沿提交（真实 FPGA 一般用上升沿，\n想改成 posedge 的话需要同步调整测试台的采样点）。\n对应 nand2tetris Project 3 的 Bit.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// Bit：1 位数据位。\n// 课程硬件模拟器在 tick（时钟 0->1）采样输入、tock（1->0）提交输出，\n// 官方测试向量也是“tick 后看旧值、tock 后看新值”。\n// 为与官方向量逐行一致，这里在下降沿提交（真实 FPGA 一般用上升沿，\n// 想改成 posedge 的话需要同步调整测试台的采样点）。\n// 对应 nand2tetris Project 3 的 Bit.hdl\nmodule n2t_bit (\n    input  clk,\n    input  in,\n    input  load,\n    output reg out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/03/Bit.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -1655,6 +1676,7 @@
       "probes": [],
       "description": "Register：16 位寄存器，由 16 个 Bit 组成\n对应 nand2tetris Project 3 的 Register.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// Register：16 位寄存器，由 16 个 Bit 组成\n// 对应 nand2tetris Project 3 的 Register.hdl\nmodule n2t_register (\n    input         clk,\n    input  [15:0] in,\n    input         load,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/03/Register.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -1735,6 +1757,7 @@
       "probes": [],
       "description": "RAM8：8 个 16 位寄存器，DMux8Way 译码写使能，Mux8Way16 读\n对应 nand2tetris Project 3 的 RAM8.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// RAM8：8 个 16 位寄存器，DMux8Way 译码写使能，Mux8Way16 读\n// 对应 nand2tetris Project 3 的 RAM8.hdl\nmodule n2t_ram8 (\n    input         clk,\n    input  [15:0] in,\n    input         load,\n    input  [2:0]  address,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/03/RAM8.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -1814,7 +1837,8 @@
       ],
       "probes": [],
       "description": "RAM64：64 x 16\n课程里由 8 个 RAM8 拼成；这里用扁平存储阵列实现，\n避免被更大 RAM（如 RAM512 例化 8 个 RAM64）展开成数十万触发器\n导致编译/仿真资源爆炸（贴近真实 RTL 的 BRAM 推断）。\n对应 nand2tetris Project 3 的 RAM64.hdl",
-      "initial_code": "`timescale 1ns/1ps\n\n// RAM64：8 个 RAM8，address[5:3] 译码，address[2:0] 片内寻址\n// 对应 nand2tetris Project 3 的 RAM64.hdl\nmodule n2t_ram64 (\n    input         clk,\n    input  [15:0] in,\n    input         load,\n    input  [5:0]  address,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "initial_code": "`timescale 1ns/1ps\n\n// RAM64：64 x 16\n// 课程里由 8 个 RAM8 拼成；这里用扁平存储阵列实现，\n// 避免被更大 RAM（如 RAM512 例化 8 个 RAM64）展开成数十万触发器\n// 导致编译/仿真资源爆炸（贴近真实 RTL 的 BRAM 推断）。\n// 对应 nand2tetris Project 3 的 RAM64.hdl\nmodule n2t_ram64 (\n    input         clk,\n    input  [15:0] in,\n    input         load,\n    input  [5:0]  address,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/03/RAM64.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -1895,6 +1919,7 @@
       "probes": [],
       "description": "RAM512：512 x 16\n课程里由 8 个 RAM64 拼成；这里用扁平存储阵列实现，\n避免仿真器把层级 RAM 展开成数十万触发器（贴近真实 RTL 的 BRAM 推断）。\n对应 nand2tetris Project 3 的 RAM512.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// RAM512：512 x 16\n// 课程里由 8 个 RAM64 拼成；这里用扁平存储阵列实现，\n// 避免仿真器把层级 RAM 展开成数十万触发器（贴近真实 RTL 的 BRAM 推断）。\n// 对应 nand2tetris Project 3 的 RAM512.hdl\nmodule n2t_ram512 (\n    input         clk,\n    input  [15:0] in,\n    input         load,\n    input  [8:0]  address,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/03/RAM512.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -1975,6 +2000,7 @@
       "probes": [],
       "description": "RAM4K：4096 x 16\n课程里由 8 个 RAM512 拼成；这里用扁平存储阵列实现，\n避免仿真器把层级 RAM 展开成数十万触发器（贴近真实 RTL 的 BRAM 推断）。\n对应 nand2tetris Project 3 的 RAM4K.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// RAM4K：4096 x 16\n// 课程里由 8 个 RAM512 拼成；这里用扁平存储阵列实现，\n// 避免仿真器把层级 RAM 展开成数十万触发器（贴近真实 RTL 的 BRAM 推断）。\n// 对应 nand2tetris Project 3 的 RAM4K.hdl\nmodule n2t_ram4k (\n    input         clk,\n    input  [15:0] in,\n    input         load,\n    input  [11:0] address,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/03/RAM4K.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -2070,6 +2096,7 @@
       "probes": [],
       "description": "RAM16K：16K x 16 主内存\n课程里由 4 个 RAM4K 拼成；这里用扁平存储阵列实现，\n更接近真实 RTL（综合工具会把它推断为 Block RAM），\n并通过参数 INIT_FILE / 背板写口支持测试预置。\n对应 nand2tetris Project 3 的 RAM16K.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// RAM16K：16K x 16 主内存\n// 课程里由 4 个 RAM4K 拼成；这里用扁平存储阵列实现，\n// 更接近真实 RTL（综合工具会把它推断为 Block RAM），\n// 并通过参数 INIT_FILE / 背板写口支持测试预置。\n// 对应 nand2tetris Project 3 的 RAM16K.hdl\nmodule n2t_ram16k #(\n    parameter INIT_FILE = \"\"   // 十六进制初始化文件（可选，仅仿真用）\n) (\n    input         clk,\n    input  [15:0] in,\n    input         load,\n    input  [14:0] address,     // 与课程一致：address[14] 未使用\n    // 测试背板写口（仅仿真，综合时忽略）\n    input         dbg_we,\n    input  [13:0] dbg_addr,\n    input  [15:0] dbg_wdata,\n    output [15:0] out\n);\n    // 测试台按层级路径读取 u_comp.u_mem.u_ram.mem[i]，\n    // 存储数组必须命名为 mem（对应课程内置 RAM16K）。\n    reg [15:0] mem [0:16383];\n\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/03/RAM16K.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -2155,6 +2182,7 @@
       "probes": [],
       "description": "PC：16 位程序计数器（带 load/inc/reset），由 Mux16 + Inc16 + Register 构成\n优先级：reset > load > inc > 保持；状态在下降沿提交（与课程模拟器一致）\n对应 nand2tetris Project 3 的 PC.hdl",
       "initial_code": "`timescale 1ns/1ps\n\n// PC：16 位程序计数器（带 load/inc/reset），由 Mux16 + Inc16 + Register 构成\n// 优先级：reset > load > inc > 保持；状态在下降沿提交（与课程模拟器一致）\n// 对应 nand2tetris Project 3 的 PC.hdl\nmodule n2t_pc (\n    input         clk,\n    input  [15:0] in,\n    input         load,\n    input         inc,\n    input         reset,\n    output [15:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/03/PC.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -2255,6 +2283,7 @@
       ],
       "description": "CPU：Hack CPU，包含 A/D 寄存器、ALU 与程序计数器 PC\n对应 nand2tetris Project 5 的 CPU.hdl\n时序模型与官方硬件模拟器逐拍一致（参考 nand2tetris 官方实现）：\ntick（上升沿）：\n- D 寄存器采样 ALU 结果（用更新前的 D/A 计算）\n- outM 更新为 tick 时刻的 ALU 结果；writeM 为组合输出\n- 暂存 tick 时刻的 ALU 结果与标志位（供 tock 使用）\ntock（下降沿）：\n- A 寄存器、PC 提交\n- outM 用“更新后的 D + 新 A”重算并提交（与官方一致）\nDRegister[] 探针读到的是 tick 时刻采样的 D 值（与官方测试一致）",
       "initial_code": "`timescale 1ns/1ps\n\n// CPU：Hack CPU，包含 A/D 寄存器、ALU 与程序计数器 PC\n// 对应 nand2tetris Project 5 的 CPU.hdl\n//\n// 时序模型与官方硬件模拟器逐拍一致（参考 nand2tetris 官方实现）：\n//   tick（上升沿）：\n//     - D 寄存器采样 ALU 结果（用更新前的 D/A 计算）\n//     - outM 更新为 tick 时刻的 ALU 结果；writeM 为组合输出\n//     - 暂存 tick 时刻的 ALU 结果与标志位（供 tock 使用）\n//   tock（下降沿）：\n//     - A 寄存器、PC 提交\n//     - outM 用“更新后的 D + 新 A”重算并提交（与官方一致）\n//   DRegister[] 探针读到的是 tick 时刻采样的 D 值（与官方测试一致）\nmodule n2t_cpu (\n    input         clk,\n    input  [15:0] inM,\n    input  [15:0] instruction,\n    input         reset,\n    output reg [15:0] outM,\n    output        writeM,\n    output [14:0] addressM,\n    output [14:0] pc\n);\n    // 测试台按层级路径读取 cpu.a_reg / cpu.d_reg / cpu.pc_reg，\n    // 请保留这三个寄存器命名（对应课程中的 ARegister / DRegister / PC）。\n    reg [15:0] a_reg;\n    reg [15:0] d_reg;\n    reg [14:0] pc_reg;\n\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/05/CPU.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -2388,6 +2417,7 @@
       ],
       "description": "Computer：Hack 整机 = ROM32K + CPU + Memory\n对应 nand2tetris Project 5 的 Computer.hdl\n接口在课程版本（仅 reset 输入）基础上增加了 outM/writeM/addressM/pc\n输出（当前教材版本即如此），以及测试背板写口。",
       "initial_code": "`timescale 1ns/1ps\n\n// Computer：Hack 整机 = ROM32K + CPU + Memory\n// 对应 nand2tetris Project 5 的 Computer.hdl\n// 接口在课程版本（仅 reset 输入）基础上增加了 outM/writeM/addressM/pc\n// 输出（当前教材版本即如此），以及测试背板写口。\nmodule n2t_computer #(\n    parameter ROM_INIT_FILE = \"\",   // 机器码 .hack 文件\n    parameter RAM_INIT_FILE = \"\"    // RAM 初始化文件（可选）\n) (\n    input  clk,\n    input  reset,\n    output [15:0] outM,\n    output        writeM,\n    output [14:0] addressM,\n    output [14:0] pc,\n    // 测试背板写口（仅仿真）\n    input         dbg_we,\n    input  [13:0] dbg_addr,\n    input  [15:0] dbg_wdata\n);\n    // Computer 就是把 ROM / CPU / Memory 三块部件接起来（接线本身也是作业，\n    // 但必须保留例化名 u_rom / u_cpu / u_mem：测试台按层级路径读取内部寄存器与内存）。\n    wire [15:0] instr, inM;\n\n    n2t_rom32k #(.INIT_FILE(ROM_INIT_FILE)) u_rom(\n        .address(pc), .out(instr)\n    );\n\n    n2t_cpu u_cpu(\n        .clk(clk), .inM(inM), .instruction(instr), .reset(reset),\n        .outM(outM), .writeM(writeM), .addressM(addressM), .pc(pc)\n    );\n\n    n2t_memory #(.RAM_INIT_FILE(RAM_INIT_FILE)) u_mem(\n        .clk(clk), .in(outM), .load(writeM), .address(addressM),\n        .keyboard_in(16'h0000),\n        .dbg_we(dbg_we), .dbg_addr(dbg_addr), .dbg_wdata(dbg_wdata),\n        .out(inM)\n    );\n\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/05/Computer.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -2515,6 +2545,7 @@
       ],
       "description": "Computer：Hack 整机 = ROM32K + CPU + Memory\n对应 nand2tetris Project 5 的 Computer.hdl\n接口在课程版本（仅 reset 输入）基础上增加了 outM/writeM/addressM/pc\n输出（当前教材版本即如此），以及测试背板写口。",
       "initial_code": "`timescale 1ns/1ps\n\n// Computer：Hack 整机 = ROM32K + CPU + Memory\n// 对应 nand2tetris Project 5 的 Computer.hdl\n// 接口在课程版本（仅 reset 输入）基础上增加了 outM/writeM/addressM/pc\n// 输出（当前教材版本即如此），以及测试背板写口。\nmodule n2t_computer #(\n    parameter ROM_INIT_FILE = \"\",   // 机器码 .hack 文件\n    parameter RAM_INIT_FILE = \"\"    // RAM 初始化文件（可选）\n) (\n    input  clk,\n    input  reset,\n    output [15:0] outM,\n    output        writeM,\n    output [14:0] addressM,\n    output [14:0] pc,\n    // 测试背板写口（仅仿真）\n    input         dbg_we,\n    input  [13:0] dbg_addr,\n    input  [15:0] dbg_wdata\n);\n    // Computer 就是把 ROM / CPU / Memory 三块部件接起来（接线本身也是作业，\n    // 但必须保留例化名 u_rom / u_cpu / u_mem：测试台按层级路径读取内部寄存器与内存）。\n    wire [15:0] instr, inM;\n\n    n2t_rom32k #(.INIT_FILE(ROM_INIT_FILE)) u_rom(\n        .address(pc), .out(instr)\n    );\n\n    n2t_cpu u_cpu(\n        .clk(clk), .inM(inM), .instruction(instr), .reset(reset),\n        .outM(outM), .writeM(writeM), .addressM(addressM), .pc(pc)\n    );\n\n    n2t_memory #(.RAM_INIT_FILE(RAM_INIT_FILE)) u_mem(\n        .clk(clk), .in(outM), .load(writeM), .address(addressM),\n        .keyboard_in(16'h0000),\n        .dbg_we(dbg_we), .dbg_addr(dbg_addr), .dbg_wdata(dbg_wdata),\n        .out(inM)\n    );\n\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/05/Computer.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -2642,6 +2673,7 @@
       ],
       "description": "Computer：Hack 整机 = ROM32K + CPU + Memory\n对应 nand2tetris Project 5 的 Computer.hdl\n接口在课程版本（仅 reset 输入）基础上增加了 outM/writeM/addressM/pc\n输出（当前教材版本即如此），以及测试背板写口。",
       "initial_code": "`timescale 1ns/1ps\n\n// Computer：Hack 整机 = ROM32K + CPU + Memory\n// 对应 nand2tetris Project 5 的 Computer.hdl\n// 接口在课程版本（仅 reset 输入）基础上增加了 outM/writeM/addressM/pc\n// 输出（当前教材版本即如此），以及测试背板写口。\nmodule n2t_computer #(\n    parameter ROM_INIT_FILE = \"\",   // 机器码 .hack 文件\n    parameter RAM_INIT_FILE = \"\"    // RAM 初始化文件（可选）\n) (\n    input  clk,\n    input  reset,\n    output [15:0] outM,\n    output        writeM,\n    output [14:0] addressM,\n    output [14:0] pc,\n    // 测试背板写口（仅仿真）\n    input         dbg_we,\n    input  [13:0] dbg_addr,\n    input  [15:0] dbg_wdata\n);\n    // Computer 就是把 ROM / CPU / Memory 三块部件接起来（接线本身也是作业，\n    // 但必须保留例化名 u_rom / u_cpu / u_mem：测试台按层级路径读取内部寄存器与内存）。\n    wire [15:0] instr, inM;\n\n    n2t_rom32k #(.INIT_FILE(ROM_INIT_FILE)) u_rom(\n        .address(pc), .out(instr)\n    );\n\n    n2t_cpu u_cpu(\n        .clk(clk), .inM(inM), .instruction(instr), .reset(reset),\n        .outM(outM), .writeM(writeM), .addressM(addressM), .pc(pc)\n    );\n\n    n2t_memory #(.RAM_INIT_FILE(RAM_INIT_FILE)) u_mem(\n        .clk(clk), .in(outM), .load(writeM), .address(addressM),\n        .keyboard_in(16'h0000),\n        .dbg_we(dbg_we), .dbg_addr(dbg_addr), .dbg_wdata(dbg_wdata),\n        .out(inM)\n    );\n\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 nand2tetris 对应 Project 的 HDL 描述。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-0X RTLDIR=assignment` 验证（0X 为项目号）。\n\nendmodule\n",
+      "sol_file": "solution/05/Computer.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -2744,6 +2776,7 @@
       "probes": [],
       "description": "PE：脉动阵列中的单个乘累加单元（MAC）。\n数据流约定（经典 weight-stationary 脉动阵列）：\na_in    从左侧流入，a_out 向右流出（每拍移动一格）\npsum_in 从上方流入，psum_out 向下方流出（累加结果逐拍下移）\nw_in    在 w_load 为高时写入 PE 内部权重寄存器，之后保持不变\n计算语义（有符号）：\npsum_out = psum_in + a_in * w\n时序：Project 06 使用正规上升沿（posedge）提交，与真实 FPGA 一致。\n注意：Hack 官方部分（Project 1/2/3/5）为了对齐官方测试向量仍用 negedge。\nProject 06 为自定义扩展（非官方 nand2tetris 题目），后续模块：\nn2t_systolic_array -> n2t_conv_unit -> n2t_npu",
       "initial_code": "`timescale 1ns/1ps\n\n// PE：脉动阵列中的单个乘累加单元（MAC）。\n//\n// 数据流约定（经典 weight-stationary 脉动阵列）：\n//   a_in    从左侧流入，a_out 向右流出（每拍移动一格）\n//   psum_in 从上方流入，psum_out 向下方流出（累加结果逐拍下移）\n//   w_in    在 w_load 为高时写入 PE 内部权重寄存器，之后保持不变\n//\n// 计算语义（有符号）：\n//   psum_out = psum_in + a_in * w\n//\n// 时序：Project 06 使用正规上升沿（posedge）提交，与真实 FPGA 一致。\n// 注意：Hack 官方部分（Project 1/2/3/5）为了对齐官方测试向量仍用 negedge。\n//\n// Project 06 为自定义扩展（非官方 nand2tetris 题目），后续模块：\n//   n2t_systolic_array -> n2t_conv_unit -> n2t_npu\nmodule n2t_pe #(\n    parameter A_W = 8,   // 激活/输入数据位宽（有符号）\n    parameter W_W = 8,   // 权重位宽（有符号）\n    parameter P_W = 32   // 累加器位宽（有符号）\n) (\n    input  clk,\n    input  rst,\n    input  w_load,\n    input  signed [W_W-1:0] w_in,\n    input  signed [A_W-1:0] a_in,\n    input  signed [P_W-1:0] psum_in,\n    output reg signed [W_W-1:0] w_out,\n    output reg signed [A_W-1:0] a_out,\n    output reg signed [P_W-1:0] psum_out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 docs/npu.md 与 solution/06/ 的完整实现。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-06 RTLDIR=assignment` 验证。\n\nendmodule\n",
+      "sol_file": "solution/06/PE.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",
@@ -2829,6 +2862,7 @@
       "probes": [],
       "description": "SystolicArray：N x N 的 weight-stationary 脉动阵列。\n数据布局（行主序，扁平向量）：\nw_data[row*N + col] = W[row][col]\na_data[row]         = A[row][k]（第 k 拍送入第 k 个输入向量）\npsum_out[col]       = C[k][col]（输出已对齐，所有列同一拍出现）\n计算语义：\nC[k][col] = sum_{row=0..N-1} A[row][k] * W[row][col]\n对应到卷积 GEMM：A 的行是输入通道、列是空间位置；W 的行是输入通道、\n列是输出通道；C 的每一拍是一个空间位置上所有输出通道的结果。\n也就是说，这个阵列天然适合“一次输出一个像素点的 N 个输出通道”。\n时序：\n1. w_load 为高时把 w_data 整体写入阵列（真实 NPU 中由 DMA/权重 SRAM\n批量装载）；\n2. 之后每个 clk 上升沿送一个 a_data 向量；\n3. 底部结果先做“输出对齐”：第 col 列额外延迟 N-1-col 拍，\n因此 psum_out 的所有列在同一拍出现；\n4. 最后一个输入送入后再等 N-1 拍，开始逐拍输出完整结果。\n输入对齐：行 i 的输入在阵列内部延迟 i 拍，实现经典脉动阵列的斜输入，\n因此外部不需要自己打 skew，只要按 k 逐拍送数据即可。",
       "initial_code": "`timescale 1ns/1ps\n\n// SystolicArray：N x N 的 weight-stationary 脉动阵列。\n//\n// 数据布局（行主序，扁平向量）：\n//   w_data[row*N + col] = W[row][col]\n//   a_data[row]         = A[row][k]（第 k 拍送入第 k 个输入向量）\n//   psum_out[col]       = C[k][col]（输出已对齐，所有列同一拍出现）\n//\n// 计算语义：\n//   C[k][col] = sum_{row=0..N-1} A[row][k] * W[row][col]\n//\n// 对应到卷积 GEMM：A 的行是输入通道、列是空间位置；W 的行是输入通道、\n// 列是输出通道；C 的每一拍是一个空间位置上所有输出通道的结果。\n// 也就是说，这个阵列天然适合“一次输出一个像素点的 N 个输出通道”。\n//\n// 时序：\n//   1. w_load 为高时把 w_data 整体写入阵列（真实 NPU 中由 DMA/权重 SRAM\n//      批量装载）；\n//   2. 之后每个 clk 上升沿送一个 a_data 向量；\n//   3. 底部结果先做“输出对齐”：第 col 列额外延迟 N-1-col 拍，\n//      因此 psum_out 的所有列在同一拍出现；\n//   4. 最后一个输入送入后再等 N-1 拍，开始逐拍输出完整结果。\n//\n// 输入对齐：行 i 的输入在阵列内部延迟 i 拍，实现经典脉动阵列的斜输入，\n// 因此外部不需要自己打 skew，只要按 k 逐拍送数据即可。\nmodule n2t_systolic_array #(\n    parameter N    = 8,\n    parameter A_W  = 8,\n    parameter W_W  = 8,\n    parameter P_W  = 32\n) (\n    input  clk,\n    input  rst,\n    input  w_load,\n    input  [N*N*W_W-1:0] w_data, // N x N 权重矩阵，行主序\n    input  [N*A_W-1:0] a_data,   // 每拍一个长度为 N 的输入向量\n    output [N*P_W-1:0] psum_out  // 每拍一个长度为 N 的输出向量\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 docs/npu.md 与 solution/06/ 的完整实现。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-06 RTLDIR=assignment` 验证。\n\nendmodule\n",
+      "sol_file": "solution/06/SystolicArray.v",
       "deps": [
         "solution/01/And.v",
         "solution/01/And16.v",

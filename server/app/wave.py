@@ -11,6 +11,7 @@ wave.py — 波形：跑“波形演示 testbench”生成 wave.vcd，解析成 
 """
 import os
 import re
+import tempfile
 
 from .judge import _run, IVERILOG, VVP, ROOT
 
@@ -130,6 +131,31 @@ def run_wave(prob, workdir):
     names = [name for _, name in var_order]
     disp = [ports[names.index(n)] if n in ports else n for n in names]
     return to_wavedrom(events, var_order, disp)
+
+
+EXPECTED_WAVE_CACHE = {}
+
+
+def run_expected_wave(prob):
+    """用 solution 参考实现跑同一份波形激励，生成“期望波形”。"""
+    import shutil
+
+    if prob['id'] in EXPECTED_WAVE_CACHE:
+        return EXPECTED_WAVE_CACHE[prob['id']]
+
+    workdir = tempfile.mkdtemp(prefix='n2t_wave_exp_')
+    try:
+        shutil.copy(os.path.join(ROOT, prob['sol_file']),
+                    os.path.join(workdir, 'user.v'))
+        for i, dep in enumerate(prob['deps']):
+            shutil.copy(os.path.join(ROOT, dep),
+                        os.path.join(workdir, 'dep%d_%s' % (i, os.path.basename(dep))))
+        wave = run_wave(prob, workdir)
+    finally:
+        shutil.rmtree(workdir, ignore_errors=True)
+
+    EXPECTED_WAVE_CACHE[prob['id']] = wave
+    return wave
 
 
 def run_wave_for_code(problem_id, code, signals):
