@@ -310,8 +310,8 @@ function expandWave(sig, len) {
 }
 
 const WAVE_BLUE = '#1a4fd1';
-const WAVE_CELL = 9;
-const WAVE_LABEL = 132;
+const WAVE_CELL = 28;
+const WAVE_LABEL = 150;
 const WAVE_ROWH = 30;
 const WAVE_HEADH = 20;
 const WAVE_AXISH = 18;
@@ -404,7 +404,7 @@ function renderHDLBits(actual, expected) {
   const W = WAVE_LABEL + len * WAVE_CELL + 24;
   const H = rowCount + WAVE_AXISH + 8;
 
-  let s = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg" style="background:#fff">`;
+  let s = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:1200px;background:#fff">`;
   for (let i = 1; i <= len; i++) {
     s += `<line x1="${WAVE_LABEL + i * WAVE_CELL}" y1="0" x2="${WAVE_LABEL + i * WAVE_CELL}" y2="${H - WAVE_AXISH}" stroke="#e8e8e8" stroke-dasharray="2,2"/>`;
   }
