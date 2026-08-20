@@ -10,6 +10,8 @@ let solvedSet = new Set();          // 已通过题目（后端按账号同步�
 let draftCache = {};                // id -> 后端草稿（null 表示无）
 let draftTimers = {};
 let expectedWave = null;            // 参考实现波形（HDLBits 对比用）
+let actualWave = null;              // 当前提交的实际波形
+let highlightStep = null;           // 失败详情里点击的 step（聚焦波形）
 
 const $ = (id) => document.getElementById(id);
 const dirName = (d) => ({in: '输入', out: '输出', clk: '时钟'}[d] || d);
@@ -312,9 +314,9 @@ function expandWave(sig, len) {
 const WAVE_BLUE = '#1a4fd1';
 const WAVE_CELL = 28;
 const WAVE_LABEL = 150;
-const WAVE_ROWH = 30;
-const WAVE_HEADH = 20;
-const WAVE_AXISH = 18;
+const WAVE_ROWH = 20;
+const WAVE_HEADH = 12;
+const WAVE_AXISH = 14;
 
 function drawSignalWave(vals, x0, y, cell, rowh) {
   let s = '';
@@ -335,7 +337,7 @@ function drawSignalWave(vals, x0, y, cell, rowh) {
       } else {
         s += `<rect x="${x + 0.5}" y="${top}" width="${w - 1}" height="${bottom - top}" fill="#fff" stroke="#000"/>`;
         if (w >= 18) {
-          s += `<text x="${x + w / 2}" y="${mid + 4}" font-size="10" text-anchor="middle">${esc(String(v))}</text>`;
+          s += `<text x="${x + w / 2}" y="${mid + 3}" font-size="8" text-anchor="middle">${esc(String(v))}</text>`;
         }
       }
       i = j + 1;
@@ -371,7 +373,7 @@ function drawMismatchRow(a, e, x0, y, cell, rowh) {
   return s;
 }
 
-function renderHDLBits(actual, expected) {
+function renderHDLBits(actual, expected, focusStep) {
   const box = $('wave-compare');
   box.innerHTML = '';
   if (!actual || !expected || !actual.signal || !expected.signal) {
@@ -397,63 +399,95 @@ function renderHDLBits(actual, expected) {
     len = Math.max(len, am[n].wave ? am[n].wave.length : 0, em[n].wave ? em[n].wave.length : 0);
   }
 
+  let start = 0;
+  let end = len;
+  let localFocus = -1;
+  if (focusStep != null && focusStep >= 1) {
+    const idx = Math.max(0, focusStep - 1);
+    start = Math.max(0, idx - 3);
+    end = Math.min(len, idx + 4);
+    localFocus = idx - start;
+  }
+  const viewLen = end - start;
+  const slice = (vals) => vals.slice(start, end);
+
   const rowCount = WAVE_HEADH + inputs.length * WAVE_ROWH +
     WAVE_HEADH + outputs.length * WAVE_ROWH +
     WAVE_HEADH + outputs.length * WAVE_ROWH +
     WAVE_HEADH + outputs.length * WAVE_ROWH;
-  const W = WAVE_LABEL + len * WAVE_CELL + 24;
+  const W = WAVE_LABEL + viewLen * WAVE_CELL + 24;
   const H = rowCount + WAVE_AXISH + 8;
 
   let s = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:1200px;background:#fff">`;
-  for (let i = 1; i <= len; i++) {
+  for (let i = 1; i <= viewLen; i++) {
     s += `<line x1="${WAVE_LABEL + i * WAVE_CELL}" y1="0" x2="${WAVE_LABEL + i * WAVE_CELL}" y2="${H - WAVE_AXISH}" stroke="#e8e8e8" stroke-dasharray="2,2"/>`;
+  }
+  if (localFocus >= 0) {
+    s += `<rect x="${WAVE_LABEL + localFocus * WAVE_CELL}" y="0" width="${WAVE_CELL}" height="${H - WAVE_AXISH}" fill="#f44336" opacity="0.18"/>`;
   }
 
   let y = 0;
   const addGroup = (label) => {
-    s += `<text x="12" y="${y + 15}" font-size="13" font-weight="bold" fill="${WAVE_BLUE}">${esc(label)}</text>`;
+    s += `<text x="12" y="${y + 9}" font-size="11" font-weight="bold" fill="${WAVE_BLUE}">${esc(label)}</text>`;
     y += WAVE_HEADH;
   };
   const addRow = (label, vals) => {
-    s += `<text x="12" y="${y + 19}" font-size="12" fill="${WAVE_BLUE}">${esc(label)}</text>`;
+    s += `<text x="12" y="${y + 13}" font-size="10" fill="${WAVE_BLUE}">${esc(label)}</text>`;
     s += drawSignalWave(vals, WAVE_LABEL, y, WAVE_CELL, WAVE_ROWH);
     y += WAVE_ROWH;
   };
 
   addGroup('inputs');
-  for (const n of inputs) addRow(n, expandWave(am[n], len));
+  for (const n of inputs) addRow(n, slice(expandWave(am[n], len)));
 
   addGroup('Yours');
-  for (const n of outputs) addRow(n + ' (Yours)', expandWave(am[n], len));
+  for (const n of outputs) addRow(n + ' (Yours)', slice(expandWave(am[n], len)));
 
   addGroup('Ref');
-  for (const n of outputs) addRow(n + ' (Ref)', expandWave(em[n], len));
+  for (const n of outputs) addRow(n + ' (Ref)', slice(expandWave(em[n], len)));
 
   addGroup('Mismatch');
   for (const n of outputs) {
-    s += `<text x="12" y="${y + 19}" font-size="12" fill="${WAVE_BLUE}">Mismatch: ${esc(n)}</text>`;
-    s += drawMismatchRow(expandWave(am[n], len), expandWave(em[n], len),
+    s += `<text x="12" y="${y + 13}" font-size="10" fill="${WAVE_BLUE}">Mismatch: ${esc(n)}</text>`;
+    s += drawMismatchRow(slice(expandWave(am[n], len)), slice(expandWave(em[n], len)),
                          WAVE_LABEL, y, WAVE_CELL, WAVE_ROWH);
     y += WAVE_ROWH;
   }
 
-  for (let i = 0; i <= len; i += 2) {
-    s += `<text x="${WAVE_LABEL + i * WAVE_CELL}" y="${H - 4}" font-size="9" fill="#999" text-anchor="middle">${i * 10}</text>`;
+  for (let i = 0; i <= viewLen; i += 2) {
+    s += `<text x="${WAVE_LABEL + i * WAVE_CELL}" y="${H - 4}" font-size="8" fill="#999" text-anchor="middle">${(i + start) * 10}</text>`;
   }
   s += '</svg>';
-  box.innerHTML = s;
+  if (focusStep != null) {
+    box.innerHTML = '<div style="margin-bottom:6px"><button class="mini" onclick="clearWaveFocus()">显示完整波形</button></div>' + s;
+  } else {
+    box.innerHTML = s;
+  }
 }
 
-async function loadExpectedWave(actualWave) {
+function clearWaveFocus() {
+  highlightStep = null;
+  if (expectedWave && actualWave) renderHDLBits(actualWave, expectedWave, null);
+}
+
+function focusFailStep(step) {
+  highlightStep = (highlightStep === step) ? null : step;
+  if (expectedWave && actualWave) renderHDLBits(actualWave, expectedWave, highlightStep);
+  const wb = $('wave-box');
+  if (wb) wb.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+}
+
+async function loadExpectedWave(waveArg) {
   const box = $('wave-compare');
   box.innerHTML = '<span class="muted">正在生成期望波形…</span>';
   expectedWave = null;
+  actualWave = waveArg;
   if (!currentId) return;
   try {
     const r = await api('/api/problems/' + currentId + '/expected_wave');
     if (r.wave && r.wave.signal && r.wave.signal.length) {
       expectedWave = r.wave;
-      renderHDLBits(actualWave, expectedWave);
+      renderHDLBits(actualWave, expectedWave, highlightStep);
     } else {
       box.textContent = '期望波形生成失败';
     }
@@ -478,17 +512,18 @@ function showResult(r) {
   const fd = $('fail-detail');
   const ft = $('fail-table');
   if (r.fails && r.fails.length) {
-    ft.innerHTML = '<tr><th>step</th><th>信号</th><th>期望</th><th>实际</th></tr>';
+    ft.innerHTML = '<tr><th>step</th><th>信号</th><th>期望</th><th>实际</th><th>波形</th></tr>';
     const shown = r.fails.slice(0, 100);
     for (const f of shown) {
       const tr = document.createElement('tr');
       tr.innerHTML = `<td>${f.step}</td><td><code>${esc(f.signal)}</code></td>` +
-        `<td class="ok">${esc(f.exp)}</td><td class="bad">${esc(f.got)}</td>`;
+        `<td class="ok">${esc(f.exp)}</td><td class="bad">${esc(f.got)}</td>` +
+        `<td><button class="mini" onclick="focusFailStep(${f.step})">查看</button></td>`;
       ft.appendChild(tr);
     }
     if (r.fails.length > shown.length) {
       const tr = document.createElement('tr');
-      tr.innerHTML = `<td colspan="4" class="muted">仅显示前 ${shown.length} 条失败（共 ${r.fails.length} 条）</td>`;
+      tr.innerHTML = `<td colspan="5" class="muted">仅显示前 ${shown.length} 条失败（共 ${r.fails.length} 条）</td>`;
       ft.appendChild(tr);
     }
     fd.classList.remove('hidden');
