@@ -9,6 +9,7 @@ let authUser = null;
 let solvedSet = new Set();          // 已通过题目（后端按账号同步）
 let draftCache = {};                // id -> 后端草稿（null 表示无）
 let draftTimers = {};
+let expectedWave = null;            // 参考实现波形（HDLBits 对比用）
 
 const $ = (id) => document.getElementById(id);
 const dirName = (d) => ({in: '输入', out: '输出', clk: '时钟'}[d] || d);
@@ -286,14 +287,115 @@ function renderWave(waveJson, boxId, index) {
   }
 }
 
-async function loadExpectedWave() {
-  const box = $('wave-expected');
+function sigMap(arr) {
+  const m = {};
+  for (const s of (arr || [])) m[s.name] = s;
+  return m;
+}
+
+function expandWave(sig, len) {
+  const vals = [];
+  let prev = 'x';
+  let di = 0;
+  for (const ch of (sig.wave || '')) {
+    let v;
+    if (ch === '.') v = prev;
+    else if (ch === '=') { v = sig.data && sig.data[di] != null ? sig.data[di] : '='; di++; }
+    else v = ch;
+    vals.push(v);
+    if (ch !== '.') prev = v;
+  }
+  while (vals.length < len) vals.push(prev);
+  return vals;
+}
+
+function waveSVG(vals) {
+  const n = vals.length;
+  const w = Math.max(24, n * 8);
+  const h = 30;
+  let s = `<svg width="${w}" height="${h}" class="wsvg">`;
+  for (let i = 1; i < n; i++) {
+    s += `<line x1="${i * 8}" y1="3" x2="${i * 8}" y2="${h - 3}" stroke="#eee"/>`;
+  }
+  s += `<line x1="0" y1="22" x2="${n * 8}" y2="22" stroke="#999"/>`;
+  for (let i = 0; i < n; i++) {
+    const x = i * 8 + 1;
+    const v = vals[i];
+    if (v === '1') {
+      s += `<rect x="${x}" y="4" width="6" height="9" fill="#2e7d32"/>`;
+    } else if (v === '0') {
+      s += `<rect x="${x}" y="17" width="6" height="9" fill="#e0e0e0" stroke="#bbb"/>`;
+    } else if (v === 'x' || v === 'z') {
+      s += `<rect x="${x}" y="8" width="6" height="14" fill="#f44336" opacity="0.55"/>`;
+    } else {
+      s += `<rect x="${x}" y="4" width="6" height="20" fill="#bbdefb" stroke="#64b5f6"/>`;
+      s += `<text x="${x + 3}" y="19" font-size="8" text-anchor="middle">${esc(String(v))}</text>`;
+    }
+  }
+  s += '</svg>';
+  return s;
+}
+
+function mismatchSVG(a, e) {
+  const n = Math.max(a.length, e.length);
+  const w = Math.max(24, n * 8);
+  const h = 30;
+  let s = `<svg width="${w}" height="${h}" class="wsvg">`;
+  for (let i = 0; i < n; i++) {
+    if (a[i] !== e[i]) {
+      s += `<rect x="${i * 8 + 1}" y="4" width="6" height="22" fill="#f44336"/>`;
+    }
+  }
+  s += '</svg>';
+  return s;
+}
+
+function renderHDLBits(actual, expected) {
+  const box = $('wave-compare');
   box.innerHTML = '';
+  if (!actual || !expected || !actual.signal || !expected.signal) {
+    box.textContent = '波形数据缺失';
+    return;
+  }
+  const am = sigMap(actual.signal);
+  const em = sigMap(expected.signal);
+  const ports = detail.ports || [];
+  const names = [];
+  for (const p of ports) if (am[p.name] || em[p.name]) names.push(p.name);
+  for (const n of Object.keys(am)) if (!names.includes(n)) names.push(n);
+
+  const table = document.createElement('table');
+  table.className = 'hdlbits';
+  let html = '<tr><th>信号</th><th>Inputs</th><th>Yours</th><th>Ref</th><th>Mismatch</th></tr>';
+  for (const name of names) {
+    const p = ports.find(x => x.name === name);
+    const isOut = p && p.dir === 'out';
+    const a = am[name], e = em[name];
+    if (!a || !e) continue;
+    const len = Math.max(a.wave ? a.wave.length : 0, e.wave ? e.wave.length : 0);
+    const va = expandWave(a, len);
+    const ve = expandWave(e, len);
+    const dirLabel = p ? (p.dir === 'clk' ? 'clk' : (p.dir === 'in' ? 'in' : 'out')) : '?';
+    html += `<tr><td><code>${esc(name)}</code> <span class="muted">${dirLabel}</span></td>` +
+      `<td>${isOut ? '' : waveSVG(va)}</td>` +
+      `<td>${isOut ? waveSVG(va) : ''}</td>` +
+      `<td>${isOut ? waveSVG(ve) : ''}</td>` +
+      `<td>${isOut ? mismatchSVG(va, ve) : ''}</td></tr>`;
+  }
+  table.innerHTML = html;
+  box.appendChild(table);
+}
+
+async function loadExpectedWave(actualWave) {
+  const box = $('wave-compare');
+  box.innerHTML = '<span class="muted">正在生成期望波形…</span>';
+  expectedWave = null;
   if (!currentId) return;
   try {
     const r = await api('/api/problems/' + currentId + '/expected_wave');
     if (r.wave && r.wave.signal && r.wave.signal.length) {
-      renderWave(r.wave, 'wave-expected', 1);
+      expectedWave = r.wave;
+      renderHDLBits(actualWave, expectedWave);
     } else {
       box.textContent = '期望波形生成失败';
     }
@@ -342,8 +444,7 @@ function showResult(r) {
   const wb = $('wave-box');
   if (r.wave && r.wave.signal && r.wave.signal.length) {
     wb.classList.remove('hidden');
-    renderWave(r.wave, 'wave', 0);
-    loadExpectedWave();
+    loadExpectedWave(r.wave);
     $('wave-internal').classList.add('hidden');
     $('wave-signals').value = '';
     $('wave-msg').textContent = '';

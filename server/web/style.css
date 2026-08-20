@@ -71,6 +71,13 @@ button:disabled { opacity: .55; cursor: wait; }
 .wave { background: #0b0f18; border: 1px solid var(--border); border-radius: 6px;
   padding: 10px; overflow-x: auto; }
 .wave svg { display: block; }
+table.hdlbits { border-collapse: collapse; width: 100%; font-size: 12px; }
+table.hdlbits th, table.hdlbits td {
+  border: 1px solid var(--border); padding: 4px 8px;
+  text-align: left; vertical-align: middle; white-space: nowrap;
+}
+table.hdlbits th { background: var(--panel2); }
+table.hdlbits .wsvg { display: block; }
 .modal { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: flex;
   align-items: center; justify-content: center; z-index: 100; }
 .modal-box { background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
