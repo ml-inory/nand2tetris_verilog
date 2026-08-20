@@ -19,27 +19,27 @@ module SystolicArray_wave_tb;
         .psum_out(psum_out)
     );
 
+    always #5 clk = ~clk;
+
     initial begin
         $dumpfile("wave.vcd");
         $dumpvars(0, clk, rst, w_load, w_data, a_data, psum_out);
 
-        // 简单激励：先复位两拍，再载入数据，最后再跑两拍
-        #5;
+        // 同步复位风格：先复位两拍，释放后再装载权重并跑两拍
         rst = 1;
-        #10;
+        repeat (2) @(posedge clk);
+        rst = 0;
+        #1;
         w_load = 1'h1;
         w_data = 512'h3;
         a_data = 64'h3;
-        #10;
-        clk = 1;
-        #10;
-        clk = 0;
-        #10;
-        rst = 0;
+        @(posedge clk);
+        #1;
         w_load = 0;
-        #10;
-        clk = 1;
-        #10;
+        @(posedge clk);
+        #1;
+        @(posedge clk);
+        #1;
         $finish;
     end
 endmodule

@@ -155,39 +155,42 @@ def gen_manual_wave_tb(chip_name, cfg):
         L.append('        .%s(%s)%s' % (name, name, comma))
     L.append('    );')
     L.append('')
+    has_clk = any(d == 'clk' for (_, _, d) in ports)
+    if has_clk:
+        L.append('    always #5 clk = ~clk;')
+        L.append('')
     L.append('    initial begin')
     L.append('        $dumpfile("wave.vcd");')
     L.append('        $dumpvars(0, %s);' % ', '.join(p[0] for p in ports))
     L.append('')
-    L.append('        // 简单激励：先复位两拍，再载入数据，最后再跑两拍')
-    L.append('        #5;')
-    for (name, w, d) in ports:
-        if d == 'in' and name == 'rst':
-            L.append('        rst = 1;')
-    L.append('        #10;')
-    for (name, w, d) in ports:
-        if d == 'in' and name != 'rst':
-            L.append('        %s = %s;' % (name, tst2tb.vconst(w, (name == 'w_load') and 1 or 3)))
-    L.append('        #10;')
-    for (name, w, d) in ports:
-        if d == 'clk':
-            L.append('        clk = 1;')
-    L.append('        #10;')
-    for (name, w, d) in ports:
-        if d == 'clk':
-            L.append('        clk = 0;')
-    L.append('        #10;')
-    for (name, w, d) in ports:
-        if d == 'in' and name == 'rst':
-            L.append('        rst = 0;')
-    for (name, w, d) in ports:
-        if d == 'in' and name == 'w_load':
-            L.append('        w_load = 0;')
-    L.append('        #10;')
-    for (name, w, d) in ports:
-        if d == 'clk':
-            L.append('        clk = 1;')
-    L.append('        #10;')
+    if has_clk:
+        L.append('        // 同步复位风格：先复位两拍，释放后再装载权重并跑两拍')
+        for (name, w, d) in ports:
+            if d == 'in' and name == 'rst':
+                L.append('        rst = 1;')
+        L.append('        repeat (2) @(posedge clk);')
+        for (name, w, d) in ports:
+            if d == 'in' and name == 'rst':
+                L.append('        rst = 0;')
+        L.append('        #1;')
+        for (name, w, d) in ports:
+            if d == 'in' and name != 'rst':
+                L.append('        %s = %s;' % (name, tst2tb.vconst(w, (name == 'w_load') and 1 or 3)))
+        L.append('        @(posedge clk);')
+        L.append('        #1;')
+        for (name, w, d) in ports:
+            if d == 'in' and name == 'w_load':
+                L.append('        w_load = 0;')
+        L.append('        @(posedge clk);')
+        L.append('        #1;')
+        L.append('        @(posedge clk);')
+        L.append('        #1;')
+    else:
+        L.append('        #10;')
+        for (name, w, d) in ports:
+            if d == 'in':
+                L.append('        %s = %s;' % (name, tst2tb.vconst(w, 3)))
+        L.append('        #20;')
     L.append('        $finish;')
     L.append('    end')
     L.append('endmodule')
