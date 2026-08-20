@@ -24,7 +24,6 @@
 //
 // 输入对齐：行 i 的输入在阵列内部延迟 i 拍，实现经典脉动阵列的斜输入，
 // 因此外部不需要自己打 skew，只要按 k 逐拍送数据即可。
-// 复位采用同步复位：rst 高电平时在 posedge 清零，避免 reset/clk 竞争。
 module n2t_systolic_array #(
     parameter N    = 8,
     parameter A_W  = 8,

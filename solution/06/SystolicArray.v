@@ -24,7 +24,6 @@
 //
 // 输入对齐：行 i 的输入在阵列内部延迟 i 拍，实现经典脉动阵列的斜输入，
 // 因此外部不需要自己打 skew，只要按 k 逐拍送数据即可。
-// 复位采用同步复位：rst 高电平时在 posedge 清零，避免 reset/clk 竞争。
 module n2t_systolic_array #(
     parameter N    = 8,
     parameter A_W  = 8,
@@ -43,7 +42,7 @@ module n2t_systolic_array #(
     reg [A_W-1:0] a_dly [0:N-1][0:N-1];
     integer r, d;
 
-    always @(posedge clk) begin
+    always @(posedge clk or posedge rst) begin
         if (rst) begin
             for (r = 0; r < N; r = r + 1)
                 for (d = 0; d < N; d = d + 1)
@@ -109,7 +108,7 @@ module n2t_systolic_array #(
     reg [P_W-1:0] o_dly [0:N-1][0:N-1];
     integer oc, od;
 
-    always @(posedge clk) begin
+    always @(posedge clk or posedge rst) begin
         if (rst) begin
             for (oc = 0; oc < N; oc = oc + 1)
                 for (od = 0; od < N; od = od + 1)

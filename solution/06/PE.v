@@ -10,8 +10,7 @@
 // 计算语义（有符号）：
 //   psum_out = psum_in + a_in * w
 //
-// 时序：Project 06 使用正规上升沿（posedge）提交，与真实 FPGA 一致；
-// 复位采用同步复位（rst 高电平时，在 posedge 清零），避免 reset/clk 竞争。
+// 时序：Project 06 使用正规上升沿（posedge）提交，与真实 FPGA 一致。
 // 注意：Hack 官方部分（Project 1/2/3/5）为了对齐官方测试向量仍用 negedge。
 //
 // Project 06 为自定义扩展（非官方 nand2tetris 题目），后续模块：
@@ -33,7 +32,7 @@ module n2t_pe #(
 );
     reg signed [W_W-1:0] w;
 
-    always @(posedge clk) begin
+    always @(posedge clk or posedge rst) begin
         if (rst) begin
             w        <= {W_W{1'b0}};
             w_out    <= {W_W{1'b0}};
