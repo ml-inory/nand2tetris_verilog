@@ -309,45 +309,62 @@ function expandWave(sig, len) {
   return vals;
 }
 
-function waveSVG(vals) {
-  const n = vals.length;
-  const w = Math.max(24, n * 8);
-  const h = 30;
-  let s = `<svg width="${w}" height="${h}" class="wsvg">`;
-  for (let i = 1; i < n; i++) {
-    s += `<line x1="${i * 8}" y1="3" x2="${i * 8}" y2="${h - 3}" stroke="#eee"/>`;
-  }
-  s += `<line x1="0" y1="22" x2="${n * 8}" y2="22" stroke="#999"/>`;
-  for (let i = 0; i < n; i++) {
-    const x = i * 8 + 1;
-    const v = vals[i];
-    if (v === '1') {
-      s += `<rect x="${x}" y="4" width="6" height="9" fill="#2e7d32"/>`;
-    } else if (v === '0') {
-      s += `<rect x="${x}" y="17" width="6" height="9" fill="#e0e0e0" stroke="#bbb"/>`;
-    } else if (v === 'x' || v === 'z') {
-      s += `<rect x="${x}" y="8" width="6" height="14" fill="#f44336" opacity="0.55"/>`;
-    } else {
-      s += `<rect x="${x}" y="4" width="6" height="20" fill="#bbdefb" stroke="#64b5f6"/>`;
-      s += `<text x="${x + 3}" y="19" font-size="8" text-anchor="middle">${esc(String(v))}</text>`;
+const WAVE_BLUE = '#1a4fd1';
+const WAVE_CELL = 9;
+const WAVE_LABEL = 132;
+const WAVE_ROWH = 30;
+const WAVE_HEADH = 20;
+const WAVE_AXISH = 18;
+
+function drawSignalWave(s, vals, x0, y, cell, rowh) {
+  const top = y + 5;
+  const bottom = y + rowh - 8;
+  const mid = y + rowh / 2;
+  const isBus = vals.some(v => v !== '0' && v !== '1' && v !== 'x' && v !== 'z');
+  if (isBus) {
+    let i = 0;
+    while (i < vals.length) {
+      let j = i;
+      while (j + 1 < vals.length && vals[j + 1] === vals[i]) j++;
+      const x = x0 + i * cell;
+      const w = (j - i + 1) * cell;
+      const v = vals[i];
+      if (v === 'x' || v === 'z') {
+        s += `<rect x="${x + 0.5}" y="${top}" width="${w - 1}" height="${bottom - top}" fill="#ddd" stroke="#000"/>`;
+      } else {
+        s += `<rect x="${x + 0.5}" y="${top}" width="${w - 1}" height="${bottom - top}" fill="#fff" stroke="#000"/>`;
+        if (w >= 18) {
+          s += `<text x="${x + w / 2}" y="${mid + 4}" font-size="10" text-anchor="middle">${esc(String(v))}</text>`;
+        }
+      }
+      i = j + 1;
+    }
+  } else {
+    let prev = null;
+    for (let i = 0; i < vals.length; i++) {
+      const v = vals[i];
+      let level;
+      if (v === '1') level = top;
+      else if (v === '0') level = bottom;
+      else level = mid;
+      if (prev !== null && level !== prev) {
+        s += `<line x1="${x0 + i * cell}" y1="${prev}" x2="${x0 + i * cell}" y2="${level}" stroke="#000"/>`;
+      }
+      s += `<line x1="${x0 + i * cell}" y1="${level}" x2="${x0 + (i + 1) * cell}" y2="${level}" stroke="#000"/>`;
+      if (v === 'x' || v === 'z') {
+        s += `<line x1="${x0 + i * cell}" y1="${top}" x2="${x0 + (i + 1) * cell}" y2="${bottom}" stroke="#999" stroke-dasharray="2,2"/>`;
+      }
+      prev = level;
     }
   }
-  s += '</svg>';
-  return s;
 }
 
-function mismatchSVG(a, e) {
-  const n = Math.max(a.length, e.length);
-  const w = Math.max(24, n * 8);
-  const h = 30;
-  let s = `<svg width="${w}" height="${h}" class="wsvg">`;
-  for (let i = 0; i < n; i++) {
+function drawMismatchRow(s, a, e, x0, y, cell, rowh) {
+  for (let i = 0; i < Math.max(a.length, e.length); i++) {
     if (a[i] !== e[i]) {
-      s += `<rect x="${i * 8 + 1}" y="4" width="6" height="22" fill="#f44336"/>`;
+      s += `<rect x="${x0 + i * cell + 0.5}" y="${y + 3}" width="${cell - 1}" height="${rowh - 6}" fill="#f44336"/>`;
     }
   }
-  s += '</svg>';
-  return s;
 }
 
 function renderHDLBits(actual, expected) {
@@ -360,30 +377,67 @@ function renderHDLBits(actual, expected) {
   const am = sigMap(actual.signal);
   const em = sigMap(expected.signal);
   const ports = detail.ports || [];
-  const names = [];
-  for (const p of ports) if (am[p.name] || em[p.name]) names.push(p.name);
-  for (const n of Object.keys(am)) if (!names.includes(n)) names.push(n);
-
-  const table = document.createElement('table');
-  table.className = 'hdlbits';
-  let html = '<tr><th>信号</th><th>Inputs</th><th>Yours</th><th>Ref</th><th>Mismatch</th></tr>';
-  for (const name of names) {
-    const p = ports.find(x => x.name === name);
-    const isOut = p && p.dir === 'out';
-    const a = am[name], e = em[name];
-    if (!a || !e) continue;
-    const len = Math.max(a.wave ? a.wave.length : 0, e.wave ? e.wave.length : 0);
-    const va = expandWave(a, len);
-    const ve = expandWave(e, len);
-    const dirLabel = p ? (p.dir === 'clk' ? 'clk' : (p.dir === 'in' ? 'in' : 'out')) : '?';
-    html += `<tr><td><code>${esc(name)}</code> <span class="muted">${dirLabel}</span></td>` +
-      `<td>${isOut ? '' : waveSVG(va)}</td>` +
-      `<td>${isOut ? waveSVG(va) : ''}</td>` +
-      `<td>${isOut ? waveSVG(ve) : ''}</td>` +
-      `<td>${isOut ? mismatchSVG(va, ve) : ''}</td></tr>`;
+  const inputs = [];
+  const outputs = [];
+  for (const p of ports) {
+    if (!am[p.name] || !em[p.name]) continue;
+    if (p.dir === 'out') outputs.push(p.name);
+    else inputs.push(p.name);
   }
-  table.innerHTML = html;
-  box.appendChild(table);
+  for (const n of Object.keys(am)) {
+    if (!inputs.includes(n) && !outputs.includes(n)) outputs.push(n);
+  }
+
+  let len = 1;
+  for (const n of inputs.concat(outputs)) {
+    len = Math.max(len, am[n].wave ? am[n].wave.length : 0, em[n].wave ? em[n].wave.length : 0);
+  }
+
+  const rowCount = WAVE_HEADH + inputs.length * WAVE_ROWH +
+    WAVE_HEADH + outputs.length * WAVE_ROWH +
+    WAVE_HEADH + outputs.length * WAVE_ROWH +
+    WAVE_HEADH + outputs.length * WAVE_ROWH;
+  const W = WAVE_LABEL + len * WAVE_CELL + 24;
+  const H = rowCount + WAVE_AXISH + 8;
+
+  let s = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg" style="background:#fff">`;
+  for (let i = 1; i <= len; i++) {
+    s += `<line x1="${WAVE_LABEL + i * WAVE_CELL}" y1="0" x2="${WAVE_LABEL + i * WAVE_CELL}" y2="${H - WAVE_AXISH}" stroke="#e8e8e8" stroke-dasharray="2,2"/>`;
+  }
+
+  let y = 0;
+  const addGroup = (label) => {
+    s += `<text x="12" y="${y + 15}" font-size="13" font-weight="bold" fill="${WAVE_BLUE}">${esc(label)}</text>`;
+    y += WAVE_HEADH;
+  };
+  const addRow = (label, vals) => {
+    s += `<text x="12" y="${y + 19}" font-size="12" fill="${WAVE_BLUE}">${esc(label)}</text>`;
+    drawSignalWave(s, vals, WAVE_LABEL, y, WAVE_CELL, WAVE_ROWH);
+    y += WAVE_ROWH;
+  };
+
+  addGroup('inputs');
+  for (const n of inputs) addRow(n, expandWave(am[n], len));
+
+  addGroup('Yours');
+  for (const n of outputs) addRow(n + ' (Yours)', expandWave(am[n], len));
+
+  addGroup('Ref');
+  for (const n of outputs) addRow(n + ' (Ref)', expandWave(em[n], len));
+
+  addGroup('Mismatch');
+  for (const n of outputs) {
+    s += `<text x="12" y="${y + 19}" font-size="12" fill="${WAVE_BLUE}">Mismatch: ${esc(n)}</text>`;
+    drawMismatchRow(s, expandWave(am[n], len), expandWave(em[n], len),
+                    WAVE_LABEL, y, WAVE_CELL, WAVE_ROWH);
+    y += WAVE_ROWH;
+  }
+
+  for (let i = 0; i <= len; i += 2) {
+    s += `<text x="${WAVE_LABEL + i * WAVE_CELL}" y="${H - 4}" font-size="9" fill="#999" text-anchor="middle">${i * 10}</text>`;
+  }
+  s += '</svg>';
+  box.innerHTML = s;
 }
 
 async function loadExpectedWave(actualWave) {
