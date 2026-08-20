@@ -316,7 +316,8 @@ const WAVE_ROWH = 30;
 const WAVE_HEADH = 20;
 const WAVE_AXISH = 18;
 
-function drawSignalWave(s, vals, x0, y, cell, rowh) {
+function drawSignalWave(vals, x0, y, cell, rowh) {
+  let s = '';
   const top = y + 5;
   const bottom = y + rowh - 8;
   const mid = y + rowh / 2;
@@ -357,14 +358,17 @@ function drawSignalWave(s, vals, x0, y, cell, rowh) {
       prev = level;
     }
   }
+  return s;
 }
 
-function drawMismatchRow(s, a, e, x0, y, cell, rowh) {
+function drawMismatchRow(a, e, x0, y, cell, rowh) {
+  let s = '';
   for (let i = 0; i < Math.max(a.length, e.length); i++) {
     if (a[i] !== e[i]) {
       s += `<rect x="${x0 + i * cell + 0.5}" y="${y + 3}" width="${cell - 1}" height="${rowh - 6}" fill="#f44336"/>`;
     }
   }
+  return s;
 }
 
 function renderHDLBits(actual, expected) {
@@ -412,7 +416,7 @@ function renderHDLBits(actual, expected) {
   };
   const addRow = (label, vals) => {
     s += `<text x="12" y="${y + 19}" font-size="12" fill="${WAVE_BLUE}">${esc(label)}</text>`;
-    drawSignalWave(s, vals, WAVE_LABEL, y, WAVE_CELL, WAVE_ROWH);
+    s += drawSignalWave(vals, WAVE_LABEL, y, WAVE_CELL, WAVE_ROWH);
     y += WAVE_ROWH;
   };
 
@@ -428,8 +432,8 @@ function renderHDLBits(actual, expected) {
   addGroup('Mismatch');
   for (const n of outputs) {
     s += `<text x="12" y="${y + 19}" font-size="12" fill="${WAVE_BLUE}">Mismatch: ${esc(n)}</text>`;
-    drawMismatchRow(s, expandWave(am[n], len), expandWave(em[n], len),
-                    WAVE_LABEL, y, WAVE_CELL, WAVE_ROWH);
+    s += drawMismatchRow(expandWave(am[n], len), expandWave(em[n], len),
+                         WAVE_LABEL, y, WAVE_CELL, WAVE_ROWH);
     y += WAVE_ROWH;
   }
 
