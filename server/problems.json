@@ -2754,6 +2754,88 @@
       ]
     },
     {
+      "id": "ShiftRegister",
+      "title": "ShiftRegister",
+      "project": "06",
+      "module": "n2t_shift_register",
+      "ports": [
+        {
+          "name": "clk",
+          "width": 1,
+          "dir": "clk"
+        },
+        {
+          "name": "arst",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "en",
+          "width": 1,
+          "dir": "in"
+        },
+        {
+          "name": "in",
+          "width": 8,
+          "dir": "in"
+        },
+        {
+          "name": "out",
+          "width": 8,
+          "dir": "out"
+        }
+      ],
+      "probes": [],
+      "description": "ShiftRegister：参数化移位寄存器。\n用途：\n- 脉动阵列的“斜输入”：第 row 行延迟 row 拍；\n- 脉动阵列的“输出对齐”：第 col 列延迟 N-1-col 拍。\n行为：\nen=1 时，每个 clk 上升沿把 in 移入第 0 级，旧数据依次右移；\nout 是最后一级的输出（延迟 DEPTH 拍）。\narst 为异步复位（高有效），复位后所有级清零。",
+      "initial_code": "`timescale 1ns/1ps\n\n// ShiftRegister：参数化移位寄存器。\n//\n// 用途：\n//   - 脉动阵列的“斜输入”：第 row 行延迟 row 拍；\n//   - 脉动阵列的“输出对齐”：第 col 列延迟 N-1-col 拍。\n//\n// 行为：\n//   en=1 时，每个 clk 上升沿把 in 移入第 0 级，旧数据依次右移；\n//   out 是最后一级的输出（延迟 DEPTH 拍）。\n//   arst 为异步复位（高有效），复位后所有级清零。\nmodule n2t_shift_register #(\n    parameter W       = 8,   // 数据位宽\n    parameter DEPTH   = 4,   // 寄存器级数（延迟拍数）\n    parameter RESET_VAL = 0  // 复位值\n) (\n    input  clk,\n    input  arst,             // async reset（异步复位，高有效）\n    input  en,               // 移位使能\n    input  [W-1:0] in,\n    output [W-1:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 docs/npu.md 与 solution/06/ 的完整实现。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-06 RTLDIR=assignment` 验证。\n\nendmodule\n",
+      "sol_file": "solution/06/ShiftRegister.v",
+      "deps": [
+        "solution/01/And.v",
+        "solution/01/And16.v",
+        "solution/01/DMux.v",
+        "solution/01/DMux4Way.v",
+        "solution/01/DMux8Way.v",
+        "solution/01/Mux.v",
+        "solution/01/Mux16.v",
+        "solution/01/Mux4Way16.v",
+        "solution/01/Mux8Way16.v",
+        "solution/01/Nand.v",
+        "solution/01/Not.v",
+        "solution/01/Not16.v",
+        "solution/01/Or.v",
+        "solution/01/Or16.v",
+        "solution/01/Or8Way.v",
+        "solution/01/Xor.v",
+        "solution/02/ALU.v",
+        "solution/02/Add16.v",
+        "solution/02/FullAdder.v",
+        "solution/02/HalfAdder.v",
+        "solution/02/Inc16.v",
+        "solution/03/Bit.v",
+        "solution/03/PC.v",
+        "solution/03/RAM16K.v",
+        "solution/03/RAM4K.v",
+        "solution/03/RAM512.v",
+        "solution/03/RAM64.v",
+        "solution/03/RAM8.v",
+        "solution/03/Register.v",
+        "solution/05/CPU.v",
+        "solution/05/Computer.v",
+        "solution/05/Memory.v",
+        "solution/05/ROM32K.v",
+        "solution/06/PE.v",
+        "solution/06/SystolicArray.v",
+        "solution/07/CPU.v",
+        "solution/07/Computer.v",
+        "solution/07/Memory.v",
+        "solution/07/RAM16K.v"
+      ],
+      "tb": "tb/06/ShiftRegister_tb.v",
+      "tb_top": "ShiftRegister_tb",
+      "wave_tb": "server/wave_tb/06/ShiftRegister.v",
+      "runtime_files": []
+    },
+    {
       "id": "PE",
       "title": "PE",
       "project": "06",
@@ -2940,88 +3022,6 @@
       "tb": "tb/06/SystolicArray_tb.v",
       "tb_top": "SystolicArray_tb",
       "wave_tb": "server/wave_tb/06/SystolicArray.v",
-      "runtime_files": []
-    },
-    {
-      "id": "ShiftRegister",
-      "title": "ShiftRegister",
-      "project": "06",
-      "module": "n2t_shift_register",
-      "ports": [
-        {
-          "name": "clk",
-          "width": 1,
-          "dir": "clk"
-        },
-        {
-          "name": "arst",
-          "width": 1,
-          "dir": "in"
-        },
-        {
-          "name": "en",
-          "width": 1,
-          "dir": "in"
-        },
-        {
-          "name": "in",
-          "width": 8,
-          "dir": "in"
-        },
-        {
-          "name": "out",
-          "width": 8,
-          "dir": "out"
-        }
-      ],
-      "probes": [],
-      "description": "ShiftRegister：参数化移位寄存器。\n用途：\n- 脉动阵列的“斜输入”：第 row 行延迟 row 拍；\n- 脉动阵列的“输出对齐”：第 col 列延迟 N-1-col 拍。\n行为：\nen=1 时，每个 clk 上升沿把 in 移入第 0 级，旧数据依次右移；\nout 是最后一级的输出（延迟 DEPTH 拍）。\narst 为异步复位（高有效），复位后所有级清零。",
-      "initial_code": "`timescale 1ns/1ps\n\n// ShiftRegister：参数化移位寄存器。\n//\n// 用途：\n//   - 脉动阵列的“斜输入”：第 row 行延迟 row 拍；\n//   - 脉动阵列的“输出对齐”：第 col 列延迟 N-1-col 拍。\n//\n// 行为：\n//   en=1 时，每个 clk 上升沿把 in 移入第 0 级，旧数据依次右移；\n//   out 是最后一级的输出（延迟 DEPTH 拍）。\n//   arst 为异步复位（高有效），复位后所有级清零。\nmodule n2t_shift_register #(\n    parameter W       = 8,   // 数据位宽\n    parameter DEPTH   = 4,   // 寄存器级数（延迟拍数）\n    parameter RESET_VAL = 0  // 复位值\n) (\n    input  clk,\n    input  arst,             // async reset（异步复位，高有效）\n    input  en,               // 移位使能\n    input  [W-1:0] in,\n    output [W-1:0] out\n);\n    // ==================== 作业：请补全本模块实现 ====================\n    // 提示：参考 docs/npu.md 与 solution/06/ 的完整实现。\n    // 可以例化更小的 n2t_* 模块（结构式写法），也可以用行为式写法；\n    // 完成后执行 `make sim-06 RTLDIR=assignment` 验证。\n\nendmodule\n",
-      "sol_file": "solution/06/ShiftRegister.v",
-      "deps": [
-        "solution/01/And.v",
-        "solution/01/And16.v",
-        "solution/01/DMux.v",
-        "solution/01/DMux4Way.v",
-        "solution/01/DMux8Way.v",
-        "solution/01/Mux.v",
-        "solution/01/Mux16.v",
-        "solution/01/Mux4Way16.v",
-        "solution/01/Mux8Way16.v",
-        "solution/01/Nand.v",
-        "solution/01/Not.v",
-        "solution/01/Not16.v",
-        "solution/01/Or.v",
-        "solution/01/Or16.v",
-        "solution/01/Or8Way.v",
-        "solution/01/Xor.v",
-        "solution/02/ALU.v",
-        "solution/02/Add16.v",
-        "solution/02/FullAdder.v",
-        "solution/02/HalfAdder.v",
-        "solution/02/Inc16.v",
-        "solution/03/Bit.v",
-        "solution/03/PC.v",
-        "solution/03/RAM16K.v",
-        "solution/03/RAM4K.v",
-        "solution/03/RAM512.v",
-        "solution/03/RAM64.v",
-        "solution/03/RAM8.v",
-        "solution/03/Register.v",
-        "solution/05/CPU.v",
-        "solution/05/Computer.v",
-        "solution/05/Memory.v",
-        "solution/05/ROM32K.v",
-        "solution/06/PE.v",
-        "solution/06/SystolicArray.v",
-        "solution/07/CPU.v",
-        "solution/07/Computer.v",
-        "solution/07/Memory.v",
-        "solution/07/RAM16K.v"
-      ],
-      "tb": "tb/06/ShiftRegister_tb.v",
-      "tb_top": "ShiftRegister_tb",
-      "wave_tb": "server/wave_tb/06/ShiftRegister.v",
       "runtime_files": []
     }
   ]

@@ -147,6 +147,9 @@ CHIPS = {
     # ---------------- Project 6（自定义 NPU 扩展）----------------
     # manual_tb=True 表示 testbench 是手工维护的（tb/06/*_tb.v），
     # tools/tst2tb.py 与 server/gen_wave.py 遇到时不会用 .tst/.cmp 覆盖。
+    'ShiftRegister': dict(manual_tb=True, inst='dut',
+                          ports=P(('clk', 1, 'clk'), ('arst', 1, 'in'), ('en', 1, 'in'),
+                                  ('in', 8, 'in'), ('out', 8, 'out'))),
     'PE': dict(manual_tb=True, inst='dut',
                ports=P(('clk', 1, 'clk'), ('arst', 1, 'in'), ('w_load', 1, 'in'),
                        ('w_in', 8, 'in'), ('a_in', 8, 'in'), ('psum_in', 32, 'in'),
@@ -155,9 +158,6 @@ CHIPS = {
                           ports=P(('clk', 1, 'clk'), ('arst', 1, 'in'), ('w_load', 1, 'in'),
                                   ('w_data', 512, 'in'), ('a_data', 64, 'in'),
                                   ('psum_out', 256, 'out'))),
-    'ShiftRegister': dict(manual_tb=True, inst='dut',
-                          ports=P(('clk', 1, 'clk'), ('arst', 1, 'in'), ('en', 1, 'in'),
-                                  ('in', 8, 'in'), ('out', 8, 'out'))),
 }
 
 MODULE = {
