@@ -155,6 +155,9 @@ CHIPS = {
                           ports=P(('clk', 1, 'clk'), ('arst', 1, 'in'), ('w_load', 1, 'in'),
                                   ('w_data', 512, 'in'), ('a_data', 64, 'in'),
                                   ('psum_out', 256, 'out'))),
+    'ShiftRegister': dict(manual_tb=True, inst='dut',
+                          ports=P(('clk', 1, 'clk'), ('arst', 1, 'in'), ('en', 1, 'in'),
+                                  ('in', 8, 'in'), ('out', 8, 'out'))),
 }
 
 MODULE = {
@@ -173,6 +176,7 @@ MODULE = {
     'ComputerAdd': 'n2t_computer', 'ComputerMax': 'n2t_computer',
     'ComputerRect': 'n2t_computer',
     'PE': 'n2t_pe', 'SystolicArray': 'n2t_systolic_array',
+    'ShiftRegister': 'n2t_shift_register',
 }
 
 PROJECT = {
@@ -184,6 +188,7 @@ PROJECT = {
     'RAM4K': '03', 'RAM16K': '03', 'PC': '03',
     'CPU': '05', 'ComputerAdd': '05', 'ComputerMax': '05', 'ComputerRect': '05',
     'PE': '06', 'SystolicArray': '06',
+    'ShiftRegister': '06',
 }
 
 

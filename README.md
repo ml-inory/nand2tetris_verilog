@@ -142,7 +142,7 @@ make sim-02              # 全部 PASS 即通过
 | 2 | 加法器与 ALU | 5 | ALU 用 mux16/not16/and16/add16 组合 |
 | 3 | 时序电路 | 8 | Bit/Register/RAM 系列/PC |
 | 5 | 整机 | 4+1 | CPU、Memory、Computer + ROM32K；Computer 跑通 Add/Max/Rect |
-| 6 | NPU 脉动阵列（自定义） | 2+ | PE、N×N SystolicArray；后续扩展 Conv/Act/Pool/MMIO |
+| 6 | NPU 脉动阵列（自定义） | 3+ | ShiftRegister、PE、N×N SystolicArray；后续扩展 Conv/Act/Pool/MMIO |
 | 7 | posedge Hack 整机（已知库，非作业） | 4 | CPU/Memory/RAM16K/Computer 上升沿版，供 NPU 集成 |
 
 ## Project 6（自定义 NPU 扩展）
@@ -157,6 +157,7 @@ make sim-02              # 全部 PASS 即通过
 
 目前已完成第一步的作业框架：
 
+- `solution/06/ShiftRegister.v`：参数化移位寄存器（斜输入/输出对齐）
 - `solution/06/PE.v`：单 PE（int8×int8 + int32 累加，异步复位 `arst`）
 - `solution/06/SystolicArray.v`：参数化 N×N 脉动阵列（异步复位 `arst`）
 - `assignment/06/`：对应作业模板
