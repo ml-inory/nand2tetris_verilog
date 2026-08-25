@@ -418,7 +418,7 @@ function renderHDLBits(actual, expected, focusStep) {
   const W = WAVE_LABEL + viewLen * WAVE_CELL + 24;
   const H = rowCount + WAVE_AXISH + 8;
 
-  let s = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:1200px;background:#fff">`;
+  let s = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg" style="background:#fff;display:block">`;
   for (let i = 1; i <= viewLen; i++) {
     s += `<line x1="${WAVE_LABEL + i * WAVE_CELL}" y1="0" x2="${WAVE_LABEL + i * WAVE_CELL}" y2="${H - WAVE_AXISH}" stroke="#e8e8e8" stroke-dasharray="2,2"/>`;
   }
