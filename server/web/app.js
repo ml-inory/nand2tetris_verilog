@@ -314,14 +314,14 @@ function expandWave(sig, len) {
 const WAVE_BLUE = '#1a4fd1';
 const WAVE_CELL = 28;
 const WAVE_LABEL = 150;
-const WAVE_ROWH = 20;
-const WAVE_HEADH = 12;
-const WAVE_AXISH = 14;
+const WAVE_ROWH = 30;
+const WAVE_HEADH = 14;
+const WAVE_AXISH = 16;
 
 function drawSignalWave(vals, x0, y, cell, rowh) {
   let s = '';
-  const top = y + 5;
-  const bottom = y + rowh - 8;
+  const top = y + 3;
+  const bottom = y + rowh - 5;
   const mid = y + rowh / 2;
   const isBus = vals.some(v => v !== '0' && v !== '1' && v !== 'x' && v !== 'z');
   if (isBus) {
@@ -454,8 +454,8 @@ function renderHDLBits(actual, expected, focusStep) {
     y += WAVE_ROWH;
   }
 
-  for (let i = 0; i <= viewLen; i += 2) {
-    s += `<text x="${WAVE_LABEL + i * WAVE_CELL}" y="${H - 4}" font-size="8" fill="#999" text-anchor="middle">${(i + start) * 10}</text>`;
+  for (let i = 0; i <= viewLen; i += 1) {
+    s += `<text x="${WAVE_LABEL + i * WAVE_CELL}" y="${H - 4}" font-size="8" fill="#999" text-anchor="middle">${i + start + 1}</text>`;
   }
   s += '</svg>';
   if (focusStep != null) {
