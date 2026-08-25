@@ -380,8 +380,11 @@ function renderHDLBits(actual, expected, focusStep) {
     box.textContent = '波形数据缺失';
     return;
   }
-  const am = sigMap(actual.signal);
-  const em = sigMap(expected.signal);
+  const normName = (n) => (n === 'rst' ? 'arst' : n);
+  const am = {};
+  const em = {};
+  for (const s of actual.signal) am[normName(s.name)] = s;
+  for (const s of expected.signal) em[normName(s.name)] = s;
   const ports = detail.ports || [];
   const inputs = [];
   const outputs = [];
@@ -391,7 +394,7 @@ function renderHDLBits(actual, expected, focusStep) {
     else inputs.push(p.name);
   }
   for (const n of Object.keys(am)) {
-    if (!inputs.includes(n) && !outputs.includes(n)) outputs.push(n);
+    if (em[n] && !inputs.includes(n) && !outputs.includes(n)) outputs.push(n);
   }
 
   let len = 1;
@@ -438,16 +441,26 @@ function renderHDLBits(actual, expected, focusStep) {
   };
 
   addGroup('inputs');
-  for (const n of inputs) addRow(n, slice(expandWave(am[n], len)));
+  for (const n of inputs) {
+    if (!am[n] || !em[n]) continue;
+    addRow(n, slice(expandWave(am[n], len)));
+  }
 
   addGroup('Yours');
-  for (const n of outputs) addRow(n + ' (Yours)', slice(expandWave(am[n], len)));
+  for (const n of outputs) {
+    if (!am[n] || !em[n]) continue;
+    addRow(n + ' (Yours)', slice(expandWave(am[n], len)));
+  }
 
   addGroup('Ref');
-  for (const n of outputs) addRow(n + ' (Ref)', slice(expandWave(em[n], len)));
+  for (const n of outputs) {
+    if (!am[n] || !em[n]) continue;
+    addRow(n + ' (Ref)', slice(expandWave(em[n], len)));
+  }
 
   addGroup('Mismatch');
   for (const n of outputs) {
+    if (!am[n] || !em[n]) continue;
     s += `<text x="12" y="${y + 13}" font-size="10" fill="${WAVE_BLUE}">Mismatch: ${esc(n)}</text>`;
     s += drawMismatchRow(slice(expandWave(am[n], len)), slice(expandWave(em[n], len)),
                          WAVE_LABEL, y, WAVE_CELL, WAVE_ROWH);
