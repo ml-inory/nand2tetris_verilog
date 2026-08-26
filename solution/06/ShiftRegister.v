@@ -10,6 +10,7 @@
 //   en=1 时，每个 clk 上升沿把 in 移入第 0 级，旧数据依次右移；
 //   out 是最后一级的输出（延迟 DEPTH 拍）。
 //   arst 为异步复位（高有效），复位后所有级清零。
+//   必须支持 DEPTH=0（直通）：脉动阵列第 0 行和最后一列需要 0 拍延迟。
 module n2t_shift_register #(
     parameter W       = 8,   // 数据位宽
     parameter DEPTH   = 4,   // 寄存器级数（延迟拍数）

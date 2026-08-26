@@ -1376,7 +1376,7 @@ CHAPTERS = [
                 'PE：psum_out = psum_in + a_in * w，全部使用有符号运算。',
                 '阵列：`w_data` 为 N*N*W_W 位，`a_data` 为 N*A_W 位，`psum_out` 为 N*P_W 位。',
                 '时序：使用正规上升沿（posedge）提交，与真实 FPGA 一致。',
-                '测试：ShiftRegister 8 项、PE 6 项、SystolicArray 64 项检查全部通过。',
+                '测试：ShiftRegister 9 项（含 DEPTH=0 直通）、PE 6 项、SystolicArray 64 项检查全部通过。',
             ],
             'resources': [
                 '`docs/npu.md`：数据布局、时序约定。',

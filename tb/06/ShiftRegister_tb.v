@@ -26,6 +26,18 @@ module ShiftRegister_tb;
         .out(out)
     );
 
+    wire [W-1:0] out0;
+    n2t_shift_register #(
+        .W(W),
+        .DEPTH(0)
+    ) dut0 (
+        .clk(clk),
+        .arst(arst),
+        .en(1'b1),
+        .in(in),
+        .out(out0)
+    );
+
     always #5 clk = ~clk;
 
     task tst_check;
@@ -51,6 +63,9 @@ module ShiftRegister_tb;
         arst = 1'b0;
         #1;
         tst_check(out, 8'h00, "reset");
+        in = 8'ha5;
+        #1;
+        tst_check(out0, 8'ha5, "depth0 passthrough");
 
         // 依次送入 1,2,3,4，第 4 拍后 out 才出现 1
         in = 8'h01;
