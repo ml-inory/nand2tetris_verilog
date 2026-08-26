@@ -26,6 +26,7 @@ def parse_vcd(path):
     events: {vcd_id: [(time, value_str), ...]}。
     """
     var_order = []
+    cur = 0
     with open(path, 'r', encoding='utf-8', errors='replace') as f:
         for line in f:
             line = line.strip()

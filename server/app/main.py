@@ -76,6 +76,11 @@ class WaveBody(BaseModel):
     signals: str = ''
 
 
+class DebugBody(BaseModel):
+    id: str
+    code: str
+
+
 def current_user(request: Request):
     auth = request.headers.get('Authorization', '')
     if auth.startswith('Bearer '):
@@ -273,6 +278,14 @@ def wave_view(body: WaveBody, request: Request):
     if r.get('error'):
         raise HTTPException(400, r['error'])
     return r
+
+
+@app.post('/api/debug_sim')
+def debug_sim_view(body: DebugBody, request: Request):
+    if current_user(request) is None:
+        raise HTTPException(401, '请先登录')
+    from .debug_sim import debug_sim
+    return debug_sim(body.id, body.code)
 
 
 @app.get('/api/recent')

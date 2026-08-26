@@ -615,6 +615,8 @@ async function loadProblem(id) {
   const dbg = $('array-debug');
   const dbgBtn = $('btn-array-debug');
   if (id === 'SystolicArray') {
+    document.querySelector('#array-debug .section-title').textContent =
+      'SystolicArray 逐拍调试（参考模型）';
     arrayDebug = buildArrayDebug();
     arrayDebug.t = 0;
     renderArrayDebug();
@@ -701,28 +703,73 @@ function buildArrayDebug() {
 
 function renderArrayDebug() {
   if (!arrayDebug) return;
-  const {N, W, states} = arrayDebug;
+  const {N, states} = arrayDebug;
+  const W = arrayDebug.W || null;
   const st = states[arrayDebug.t];
+  const isCode = !!st.pes;
+  const pesMap = {};
+  if (isCode) for (const p of st.pes) pesMap[p.row + ',' + p.col] = p;
+  const aData = st.aData || [];
+  const psumOut = isCode ? st.psumOut : st.curPout[N - 1];
   let html = '<table class="dbg-grid"><tr><th>a_data\\</th>';
   for (let c = 0; c < N; c++) html += `<th>col${c}</th>`;
   html += '</tr>';
   for (let r = 0; r < N; r++) {
-    html += `<tr><td class="dbg-a">a=${st.aData[r]}</td>`;
+    html += `<tr><td class="dbg-a">a=${aData[r]}</td>`;
     for (let c = 0; c < N; c++) {
-      html += `<td><div class="dbg-w">w=${W[r][c]}</div>` +
-        `<div class="dbg-a">a=${st.curA[r][c]}</div>` +
-        `<div class="dbg-p">p=${st.curPout[r][c]}</div></td>`;
+      const pe = isCode ? pesMap[r + ',' + c] : null;
+      const w = isCode ? pe.w : W[r][c];
+      const a = isCode ? pe.a : st.curA[r][c];
+      const p = isCode ? pe.p : st.curPout[r][c];
+      html += `<td><div class="dbg-w">w=${w}</div>` +
+        `<div class="dbg-a">a=${a}</div>` +
+        `<div class="dbg-p">p=${p}</div></td>`;
     }
     html += '</tr>';
   }
   html += '<tr><td>psum_out</td>';
-  for (let c = 0; c < N; c++) html += `<td class="dbg-p">${st.curPout[N - 1][c]}</td>`;
+  for (let c = 0; c < N; c++) html += `<td class="dbg-p">${psumOut[c]}</td>`;
   html += '</tr></table>';
   $('dbg-array').innerHTML = html;
   $('dbg-cycle').textContent = `cycle ${arrayDebug.t} / ${states.length - 1}`;
   $('dbg-desc').textContent =
-    `第 ${arrayDebug.t} 拍：输入 a_data=[${st.aData.join(', ')}]；` +
-    `底部输出=[${st.curPout[N - 1].join(', ')}]`;
+    `第 ${arrayDebug.t} 拍：输入 a_data=[${aData.join(', ')}]；` +
+    `底部输出=[${psumOut.join(', ')}]`;
+}
+
+async function debugSimMyCode() {
+  if (!currentId) return;
+  const btn = $('dbg-sim');
+  btn.disabled = true;
+  btn.textContent = '仿真中…';
+  $('dbg-desc').textContent = '正在用你的代码仿真，请稍候…';
+  try {
+    const r = await api('/api/debug_sim', {
+      method: 'POST',
+      body: JSON.stringify({id: currentId, code: getCode()})
+    });
+    if (r.error) {
+      $('dbg-desc').textContent = r.error + (r.log ? '\n' + r.log.slice(-800) : '');
+      return;
+    }
+    arrayDebug = {N: r.N, states: r.states, t: 0, source: 'code'};
+    document.querySelector('#array-debug .section-title').textContent =
+      'SystolicArray 逐拍调试（我的代码）';
+    renderArrayDebug();
+  } catch (e) {
+    $('dbg-desc').textContent = '仿真失败: ' + e.message;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '按我的代码仿真';
+  }
+}
+
+function debugRefModel() {
+  arrayDebug = buildArrayDebug();
+  arrayDebug.t = 0;
+  document.querySelector('#array-debug .section-title').textContent =
+    'SystolicArray 逐拍调试（参考模型）';
+  renderArrayDebug();
 }
 
 function arrayDebugStep(delta) {
@@ -814,6 +861,8 @@ async function init() {
   $('btn-logout').onclick = logout;
   $('btn-refresh-sub').onclick = refreshSubmissions;
   $('btn-wave-signals').onclick = showInternalWave;
+  $('dbg-ref').onclick = debugRefModel;
+  $('dbg-sim').onclick = debugSimMyCode;
   $('dbg-prev').onclick = () => arrayDebugStep(-1);
   $('dbg-next').onclick = () => arrayDebugStep(1);
   $('dbg-reset').onclick = arrayDebugReset;
