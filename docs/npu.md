@@ -18,7 +18,8 @@
 ```text
 solution/06/ShiftRegister.v  参数化移位寄存器（斜输入/输出对齐）
 solution/06/PE.v             单 PE：int8 x int8 + int32 累加
-solution/06/SystolicArray.v  参数化 N x N weight-stationary 脉动阵列
+solution/06/SystolicArray.v  参数化 N x N weight-stationary 脉动阵列（内部实例化
+                             n2t_shift_register 实现斜输入/输出对齐）
 assignment/06/               学生作业模板（实现留空）
 tb/06/ShiftRegister_tb.v     ShiftRegister 单元测试
 tb/06/PE_tb.v                PE 单元测试

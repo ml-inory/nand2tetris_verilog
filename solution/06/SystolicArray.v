@@ -38,23 +38,23 @@ module n2t_systolic_array #(
     output [N*P_W-1:0] psum_out  // 每拍一个长度为 N 的输出向量
 );
 
-    // ---- 输入对齐寄存器：行 i 延迟 i 拍 ----
-    reg [A_W-1:0] a_dly [0:N-1][0:N-1];
-    integer r, d;
-
-    always @(posedge clk or posedge arst) begin
-        if (arst) begin
-            for (r = 0; r < N; r = r + 1)
-                for (d = 0; d < N; d = d + 1)
-                    a_dly[r][d] <= {A_W{1'b0}};
-        end else begin
-            for (r = 0; r < N; r = r + 1) begin
-                a_dly[r][0] <= a_data[r*A_W +: A_W];
-                for (d = 1; d < N; d = d + 1)
-                    a_dly[r][d] <= a_dly[r][d-1];
-            end
+    // ---- 输入对齐：行 i 用移位寄存器延迟 i 拍 ----
+    wire [N*A_W-1:0] a_skewed;
+    genvar si;
+    generate
+        for (si = 0; si < N; si = si + 1) begin : gen_a_skew
+            n2t_shift_register #(
+                .W(A_W),
+                .DEPTH(si)
+            ) u_skew (
+                .clk(clk),
+                .arst(arst),
+                .en(1'b1),
+                .in(a_data[si*A_W +: A_W]),
+                .out(a_skewed[si*A_W +: A_W])
+            );
         end
-    end
+    endgenerate
 
     // ---- PE 阵列内部连线（扁平向量）----
     wire [N*N*A_W-1:0] a_link;
@@ -69,11 +69,7 @@ module n2t_systolic_array #(
 
                 // 每行最左侧 PE 接斜输入，其余 PE 接左侧邻居的 a_out
                 if (j == 0) begin : gen_a_in_first
-                    if (i == 0) begin : gen_a_in_row0
-                        assign pe_a_in = a_data[0 +: A_W];
-                    end else begin : gen_a_in_rowi
-                        assign pe_a_in = a_dly[i][i-1];
-                    end
+                    assign pe_a_in = a_skewed[i*A_W +: A_W];
                 end else begin : gen_a_in_next
                     assign pe_a_in = a_link[(i*N + j-1)*A_W +: A_W];
                 end
@@ -104,34 +100,29 @@ module n2t_systolic_array #(
         end
     endgenerate
 
-    // ---- 输出对齐：col 列延迟 (N-1-col) 拍，消除脉动阵列的斜输出 ----
-    reg [P_W-1:0] o_dly [0:N-1][0:N-1];
-    integer oc, od;
-
-    always @(posedge clk or posedge arst) begin
-        if (arst) begin
-            for (oc = 0; oc < N; oc = oc + 1)
-                for (od = 0; od < N; od = od + 1)
-                    o_dly[oc][od] <= {P_W{1'b0}};
-        end else begin
-            for (oc = 0; oc < N; oc = oc + 1) begin
-                o_dly[oc][0] <= psum_link[((N-1)*N + oc)*P_W +: P_W];
-                for (od = 1; od < N; od = od + 1)
-                    o_dly[oc][od] <= o_dly[oc][od-1];
-            end
+    // ---- 输出对齐：col 列用移位寄存器延迟 (N-1-col) 拍 ----
+    wire [N*P_W-1:0] o_aligned;
+    genvar so;
+    generate
+        for (so = 0; so < N; so = so + 1) begin : gen_o_align
+            n2t_shift_register #(
+                .W(P_W),
+                .DEPTH(N-1-so)
+            ) u_align (
+                .clk(clk),
+                .arst(arst),
+                .en(1'b1),
+                .in(psum_link[((N-1)*N + so)*P_W +: P_W]),
+                .out(o_aligned[so*P_W +: P_W])
+            );
         end
-    end
+    endgenerate
 
     // ---- 底部输出 ----
     genvar c;
     generate
         for (c = 0; c < N; c = c + 1) begin : gen_out
-            if (c == N-1) begin : gen_out_last
-                assign psum_out[c*P_W +: P_W] =
-                    psum_link[((N-1)*N + c)*P_W +: P_W];
-            end else begin : gen_out_aligned
-                assign psum_out[c*P_W +: P_W] = o_dly[c][N-2-c];
-            end
+            assign psum_out[c*P_W +: P_W] = o_aligned[c*P_W +: P_W];
         end
     endgenerate
 endmodule
