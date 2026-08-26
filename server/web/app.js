@@ -718,9 +718,9 @@ function renderArrayDebug() {
   html += '<tr><td>psum_out</td>';
   for (let c = 0; c < N; c++) html += `<td class="dbg-p">${st.curPout[N - 1][c]}</td>`;
   html += '</tr></table>';
-  $('#dbg-array').innerHTML = html;
-  $('#dbg-cycle').textContent = `cycle ${arrayDebug.t} / ${states.length - 1}`;
-  $('#dbg-desc').textContent =
+  $('dbg-array').innerHTML = html;
+  $('dbg-cycle').textContent = `cycle ${arrayDebug.t} / ${states.length - 1}`;
+  $('dbg-desc').textContent =
     `第 ${arrayDebug.t} 拍：输入 a_data=[${st.aData.join(', ')}]；` +
     `底部输出=[${st.curPout[N - 1].join(', ')}]`;
 }
