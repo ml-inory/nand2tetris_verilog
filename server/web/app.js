@@ -314,14 +314,14 @@ function expandWave(sig, len) {
 const WAVE_BLUE = '#1a4fd1';
 const WAVE_CELL = 28;
 const WAVE_LABEL = 150;
-const WAVE_ROWH = 30;
-const WAVE_HEADH = 14;
-const WAVE_AXISH = 16;
+const WAVE_ROWH = 36;
+const WAVE_HEADH = 18;
+const WAVE_AXISH = 18;
 
 function drawSignalWave(vals, x0, y, cell, rowh) {
   let s = '';
-  const top = y + 3;
-  const bottom = y + rowh - 5;
+  const top = y + 5;
+  const bottom = y + rowh - 7;
   const mid = y + rowh / 2;
   const isBus = vals.some(v => v !== '0' && v !== '1' && v !== 'x' && v !== 'z');
   if (isBus) {
@@ -431,11 +431,11 @@ function renderHDLBits(actual, expected, focusStep) {
 
   let y = 0;
   const addGroup = (label) => {
-    s += `<text x="12" y="${y + 9}" font-size="11" font-weight="bold" fill="${WAVE_BLUE}">${esc(label)}</text>`;
+    s += `<text x="12" y="${y + WAVE_HEADH / 2 + 4}" font-size="11" font-weight="bold" fill="${WAVE_BLUE}">${esc(label)}</text>`;
     y += WAVE_HEADH;
   };
   const addRow = (label, vals) => {
-    s += `<text x="12" y="${y + 13}" font-size="10" fill="${WAVE_BLUE}">${esc(label)}</text>`;
+    s += `<text x="12" y="${y + WAVE_ROWH / 2 + 3.5}" font-size="10" fill="${WAVE_BLUE}">${esc(label)}</text>`;
     s += drawSignalWave(vals, WAVE_LABEL, y, WAVE_CELL, WAVE_ROWH);
     y += WAVE_ROWH;
   };
@@ -461,7 +461,7 @@ function renderHDLBits(actual, expected, focusStep) {
   addGroup('Mismatch');
   for (const n of outputs) {
     if (!am[n] || !em[n]) continue;
-    s += `<text x="12" y="${y + 13}" font-size="10" fill="${WAVE_BLUE}">Mismatch: ${esc(n)}</text>`;
+    s += `<text x="12" y="${y + WAVE_ROWH / 2 + 3.5}" font-size="10" fill="${WAVE_BLUE}">Mismatch: ${esc(n)}</text>`;
     s += drawMismatchRow(slice(expandWave(am[n], len)), slice(expandWave(em[n], len)),
                          WAVE_LABEL, y, WAVE_CELL, WAVE_ROWH);
     y += WAVE_ROWH;
