@@ -613,13 +613,17 @@ async function loadProblem(id) {
   $('p-desc').textContent = detail.description || '（无说明）';
   renderPorts();
   const dbg = $('array-debug');
+  const dbgBtn = $('btn-array-debug');
   if (id === 'SystolicArray') {
     arrayDebug = buildArrayDebug();
     arrayDebug.t = 0;
     renderArrayDebug();
     dbg.classList.remove('hidden');
+    dbgBtn.classList.remove('hidden');
+    dbgBtn.onclick = () => dbg.scrollIntoView({behavior: 'smooth', block: 'start'});
   } else {
     dbg.classList.add('hidden');
+    dbgBtn.classList.add('hidden');
     if (arrayDebugTimer) {
       clearInterval(arrayDebugTimer);
       arrayDebugTimer = null;
