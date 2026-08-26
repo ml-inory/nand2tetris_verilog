@@ -612,6 +612,19 @@ async function loadProblem(id) {
   $('p-module').textContent = detail.module;
   $('p-desc').textContent = detail.description || '（无说明）';
   renderPorts();
+  const dbg = $('array-debug');
+  if (id === 'SystolicArray') {
+    arrayDebug = buildArrayDebug();
+    arrayDebug.t = 0;
+    renderArrayDebug();
+    dbg.classList.remove('hidden');
+  } else {
+    dbg.classList.add('hidden');
+    if (arrayDebugTimer) {
+      clearInterval(arrayDebugTimer);
+      arrayDebugTimer = null;
+    }
+  }
   renderList();
   $('result').classList.add('hidden');
   if (last) {
@@ -637,6 +650,105 @@ async function showTb() {
   } catch (e) {
     $('status-msg').textContent = '获取测试台失败: ' + e.message;
   }
+}
+
+// ---------------- SystolicArray 逐拍调试（参考模型） ----------------
+let arrayDebug = null;
+let arrayDebugTimer = null;
+
+function buildArrayDebug() {
+  const N = 4;
+  const T = 2 * N + 3;
+  const W = [];
+  for (let r = 0; r < N; r++) {
+    W[r] = [];
+    for (let c = 0; c < N; c++) W[r][c] = r * N + c + 1;
+  }
+  const aData = [];
+  for (let t = 0; t < T; t++) {
+    const row = [];
+    for (let i = 0; i < N; i++) row.push(i + 1);
+    aData.push(row);
+  }
+
+  const states = [];
+  let prevA = Array.from({length: N}, () => Array(N).fill(0));
+  let prevP = Array.from({length: N}, () => Array(N).fill(0));
+  for (let t = 0; t < T; t++) {
+    const curA = Array.from({length: N}, () => Array(N).fill(0));
+    const curPin = Array.from({length: N}, () => Array(N).fill(0));
+    const curPout = Array.from({length: N}, () => Array(N).fill(0));
+    for (let r = 0; r < N; r++) {
+      for (let c = 0; c < N; c++) {
+        // 斜输入：row r 的输入在第 t 拍看到的是 aData[t-r][r]
+        curA[r][c] = (c === 0)
+          ? (t >= r ? aData[t - r][r] : 0)
+          : prevA[r][c - 1];
+        curPin[r][c] = (r === 0) ? 0 : prevP[r - 1][c];
+        curPout[r][c] = curPin[r][c] + curA[r][c] * W[r][c];
+      }
+    }
+    states.push({t, aData: aData[t], curA, curPin, curPout});
+    prevA = curA;
+    prevP = curPout;
+  }
+  return {N, W, states};
+}
+
+function renderArrayDebug() {
+  if (!arrayDebug) return;
+  const {N, W, states} = arrayDebug;
+  const st = states[arrayDebug.t];
+  let html = '<table class="dbg-grid"><tr><th>a_data\\</th>';
+  for (let c = 0; c < N; c++) html += `<th>col${c}</th>`;
+  html += '</tr>';
+  for (let r = 0; r < N; r++) {
+    html += `<tr><td class="dbg-a">a=${st.aData[r]}</td>`;
+    for (let c = 0; c < N; c++) {
+      html += `<td><div class="dbg-w">w=${W[r][c]}</div>` +
+        `<div class="dbg-a">a=${st.curA[r][c]}</div>` +
+        `<div class="dbg-p">p=${st.curPout[r][c]}</div></td>`;
+    }
+    html += '</tr>';
+  }
+  html += '<tr><td>psum_out</td>';
+  for (let c = 0; c < N; c++) html += `<td class="dbg-p">${st.curPout[N - 1][c]}</td>`;
+  html += '</tr></table>';
+  $('#dbg-array').innerHTML = html;
+  $('#dbg-cycle').textContent = `cycle ${arrayDebug.t} / ${states.length - 1}`;
+  $('#dbg-desc').textContent =
+    `第 ${arrayDebug.t} 拍：输入 a_data=[${st.aData.join(', ')}]；` +
+    `底部输出=[${st.curPout[N - 1].join(', ')}]`;
+}
+
+function arrayDebugStep(delta) {
+  if (!arrayDebug) return;
+  arrayDebug.t = Math.max(0, Math.min(arrayDebug.states.length - 1, arrayDebug.t + delta));
+  renderArrayDebug();
+}
+
+function arrayDebugReset() {
+  if (!arrayDebug) return;
+  arrayDebug.t = 0;
+  renderArrayDebug();
+}
+
+function arrayDebugTogglePlay() {
+  if (!arrayDebug) return;
+  if (arrayDebugTimer) {
+    clearInterval(arrayDebugTimer);
+    arrayDebugTimer = null;
+    $('#dbg-play').textContent = '播放';
+    return;
+  }
+  $('#dbg-play').textContent = '暂停';
+  arrayDebugTimer = setInterval(() => {
+    if (arrayDebug.t >= arrayDebug.states.length - 1) {
+      arrayDebugReset();
+    } else {
+      arrayDebugStep(1);
+    }
+  }, 600);
 }
 
 // ---------------- 判题 ----------------
@@ -698,6 +810,10 @@ async function init() {
   $('btn-logout').onclick = logout;
   $('btn-refresh-sub').onclick = refreshSubmissions;
   $('btn-wave-signals').onclick = showInternalWave;
+  $('dbg-prev').onclick = () => arrayDebugStep(-1);
+  $('dbg-next').onclick = () => arrayDebugStep(1);
+  $('dbg-reset').onclick = arrayDebugReset;
+  $('dbg-play').onclick = arrayDebugTogglePlay;
   $('modal-close').onclick = () => $('modal').classList.add('hidden');
   $('modal').onclick = (e) => { if (e.target === $('modal')) $('modal').classList.add('hidden'); };
   $('editor-fallback').addEventListener('input', () => { if (currentId) saveCode(currentId, $('editor-fallback').value); });

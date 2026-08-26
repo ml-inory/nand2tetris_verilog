@@ -78,6 +78,14 @@ table.hdlbits th, table.hdlbits td {
 }
 table.hdlbits th { background: var(--panel2); }
 table.hdlbits .wsvg { display: block; }
+.dbg-controls { display: flex; gap: 8px; align-items: center; margin: 8px 0; }
+table.dbg-grid { border-collapse: collapse; font-size: 12px; color: var(--fg); }
+table.dbg-grid th, table.dbg-grid td {
+  border: 1px solid var(--border); padding: 5px 8px; text-align: center; min-width: 68px;
+}
+table.dbg-grid .dbg-w { color: #e8a33d; }
+table.dbg-grid .dbg-a { color: #7ec8e3; }
+table.dbg-grid .dbg-p { color: #a5d6a7; }
 .modal { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: flex;
   align-items: center; justify-content: center; z-index: 100; }
 .modal-box { background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
