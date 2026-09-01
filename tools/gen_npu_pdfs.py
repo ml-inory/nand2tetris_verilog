@@ -1674,13 +1674,35 @@ CHAPTERS = [
                 '本章作业包含控制器设计、RTL 实现与 golden 对比。',
             ],
             'content': [
-                {'title': '模块总览',
+                {'title': '本作业要完成什么',
                  'bullets': [
-                     '本章仓库新增三个模块，模板在 `assignment/07/`，参考实现在 `solution/07/`：',
-                     '`n2t_relu`：量化域 ReLU，out = max(in, 0)，纯组合逻辑，零乘法；',
-                     '`n2t_maxpool`：MaxPool 2x2，四个 int8 取最大，只用比较器；',
-                     '`n2t_conv_unit`：3x3 卷积控制器 + 数据通路，例化第 2 章的 `n2t_systolic_array` 作为计算核心。',
-                     '对应测试台：`tb/07/ReLU_tb.v`、`MaxPool_tb.v`、`ConvUnit_tb.v`。',
+                     '补全 `assignment/07/ReLU.v`：量化域 ReLU（负数清零）；',
+                     '补全 `assignment/07/MaxPool.v`：2x2 最大池化；',
+                     '补全 `assignment/07/ConvUnit.v`：3x3 卷积控制器 + 数据通路（接口与时序见下文）；',
+                     '模板里只有模块声明，实现全部留空；参考实现在 `solution/07/`。',
+                     '用 `make sim-07` 通过三个测试台：ReLU 256 项 + MaxPool 10 项 + ConvUnit 125 项，共 391 项检查。',
+                 ]},
+                {'title': 'ReLU 模块说明',
+                 'table': [
+                     ['端口', '方向', '位宽', '说明'],
+                     ['in', 'in', '8（有符号）', '输入激活'],
+                     ['out', 'out', '8（有符号）', '输出 = max(in, 0)'],
+                 ],
+                 'colWidths': [3.0, 2.0, 4.2, 7.4],
+                 'bullets': [
+                     '量化域 ReLU：int32 累加结果重新量化到 int8 后，负数直接清零。',
+                     '纯组合逻辑，零乘法；测试遍历 -128..127 全部输入。',
+                 ]},
+                {'title': 'MaxPool 模块说明',
+                 'table': [
+                     ['端口', '方向', '位宽', '说明'],
+                     ['in0 / in1 / in2 / in3', 'in', '8（有符号）', '2x2 窗口的四个元素'],
+                     ['out', 'out', '8（有符号）', '四个输入的最大值'],
+                 ],
+                 'colWidths': [4.0, 2.0, 3.2, 7.4],
+                 'bullets': [
+                     'stride=2 时输出宽高减半；只比较、不乘法，可跟在卷积输出后流式处理。',
+                     '测试覆盖负数、平局与边界值（-128/127）。',
                  ]},
                 {'title': 'ConvUnit 参数与端口',
                  'body': [
