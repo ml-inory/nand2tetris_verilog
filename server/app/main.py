@@ -288,6 +288,24 @@ def debug_sim_view(body: DebugBody, request: Request):
     return debug_sim(body.id, body.code)
 
 
+@app.get('/api/debug_sim_ref')
+def debug_sim_ref_view(request: Request):
+    """参考模型：用参考实现 + 与“我的代码”完全相同的调试激励跑逐拍仿真。
+
+    这样两个面板的权重、输入、复位/装载相位、输出对齐和 cycle 编号
+    完全一致，可以直接逐拍对比。
+    """
+    if current_user(request) is None:
+        raise HTTPException(401, '请先登录')
+    p = BY_ID.get('SystolicArray')
+    if p is None:
+        raise HTTPException(404, 'unknown problem')
+    from .debug_sim import debug_sim
+    with open(os.path.join(ROOT, p['sol_file']), encoding='utf-8') as f:
+        code = f.read()
+    return debug_sim('SystolicArray', code)
+
+
 @app.get('/api/recent')
 def recent(request: Request):
     if current_user(request) is None:

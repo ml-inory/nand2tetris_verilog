@@ -617,9 +617,8 @@ async function loadProblem(id) {
   if (id === 'SystolicArray') {
     document.querySelector('#array-debug .section-title').textContent =
       'SystolicArray 逐拍调试（参考模型）';
-    arrayDebug = buildArrayDebug();
-    arrayDebug.t = 0;
-    renderArrayDebug();
+    $('dbg-desc').textContent = '正在生成参考模型（编译+仿真）…';
+    loadRefModel();
     dbg.classList.remove('hidden');
     dbgBtn.classList.remove('hidden');
     dbgBtn.onclick = () => dbg.scrollIntoView({behavior: 'smooth', block: 'start'});
@@ -658,69 +657,45 @@ async function showTb() {
   }
 }
 
-// ---------------- SystolicArray 逐拍调试（参考模型） ----------------
+// ---------------- SystolicArray 逐拍调试 ----------------
 let arrayDebug = null;
 let arrayDebugTimer = null;
 
-function buildArrayDebug() {
-  const N = 4;
-  const T = 2 * N + 3;
-  const W = [];
-  for (let r = 0; r < N; r++) {
-    W[r] = [];
-    for (let c = 0; c < N; c++) W[r][c] = r * N + c + 1;
-  }
-  const aData = [];
-  for (let t = 0; t < T; t++) {
-    const row = [];
-    for (let i = 0; i < N; i++) row.push(i + 1);
-    aData.push(row);
-  }
-
-  const states = [];
-  let prevA = Array.from({length: N}, () => Array(N).fill(0));
-  let prevP = Array.from({length: N}, () => Array(N).fill(0));
-  for (let t = 0; t < T; t++) {
-    const curA = Array.from({length: N}, () => Array(N).fill(0));
-    const curPin = Array.from({length: N}, () => Array(N).fill(0));
-    const curPout = Array.from({length: N}, () => Array(N).fill(0));
-    for (let r = 0; r < N; r++) {
-      for (let c = 0; c < N; c++) {
-        // 斜输入：row r 的输入在第 t 拍看到的是 aData[t-r][r]
-        curA[r][c] = (c === 0)
-          ? (t >= r ? aData[t - r][r] : 0)
-          : prevA[r][c - 1];
-        curPin[r][c] = (r === 0) ? 0 : prevP[r - 1][c];
-        curPout[r][c] = curPin[r][c] + curA[r][c] * W[r][c];
-      }
+async function loadRefModel() {
+  if (!currentId) return;
+  try {
+    const r = await api('/api/debug_sim_ref');
+    if (r.error) {
+      $('dbg-desc').textContent = r.error + (r.log ? '\n' + r.log.slice(-800) : '');
+      return;
     }
-    states.push({t, aData: aData[t], curA, curPin, curPout});
-    prevA = curA;
-    prevP = curPout;
+    arrayDebug = {N: r.N, states: r.states, t: 0, source: 'ref'};
+    document.querySelector('#array-debug .section-title').textContent =
+      'SystolicArray 逐拍调试（参考模型）';
+    renderArrayDebug();
+  } catch (e) {
+    $('dbg-desc').textContent = '参考模型生成失败: ' + e.message;
   }
-  return {N, W, states};
 }
 
 function renderArrayDebug() {
   if (!arrayDebug) return;
   const {N, states} = arrayDebug;
-  const W = arrayDebug.W || null;
   const st = states[arrayDebug.t];
-  const isCode = !!st.pes;
   const pesMap = {};
-  if (isCode) for (const p of st.pes) pesMap[p.row + ',' + p.col] = p;
+  for (const p of st.pes) pesMap[p.row + ',' + p.col] = p;
   const aData = st.aData || [];
-  const psumOut = isCode ? st.psumOut : st.curPout[N - 1];
+  const psumOut = st.psumOut || [];
   let html = '<table class="dbg-grid"><tr><th>a_data\\</th>';
   for (let c = 0; c < N; c++) html += `<th>col${c}</th>`;
   html += '</tr>';
   for (let r = 0; r < N; r++) {
     html += `<tr><td class="dbg-a">a=${aData[r]}</td>`;
     for (let c = 0; c < N; c++) {
-      const pe = isCode ? pesMap[r + ',' + c] : null;
-      const w = isCode ? pe.w : W[r][c];
-      const a = isCode ? pe.a : st.curA[r][c];
-      const p = isCode ? pe.p : st.curPout[r][c];
+      const pe = pesMap[r + ',' + c] || {w: '-', a: '-', p: '-'};
+      const w = pe.w;
+      const a = pe.a;
+      const p = pe.p;
       html += `<td><div class="dbg-w">w=${w}</div>` +
         `<div class="dbg-a">a=${a}</div>` +
         `<div class="dbg-p">p=${p}</div></td>`;
@@ -765,11 +740,7 @@ async function debugSimMyCode() {
 }
 
 function debugRefModel() {
-  arrayDebug = buildArrayDebug();
-  arrayDebug.t = 0;
-  document.querySelector('#array-debug .section-title').textContent =
-    'SystolicArray 逐拍调试（参考模型）';
-  renderArrayDebug();
+  loadRefModel();
 }
 
 function arrayDebugStep(delta) {

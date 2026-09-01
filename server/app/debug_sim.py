@@ -69,7 +69,7 @@ def _value_at(events, t):
     return v
 
 
-def _to_int(val):
+def _to_int(val, width=None):
     if val is None:
         return 0
     s = str(val)
@@ -79,17 +79,24 @@ def _to_int(val):
         return 0
     if 'x' in s or 'z' in s:
         return 0
-    w = len(s)
+    if width is None:
+        width = len(s)
+    # VCD 里二进制向量会省略前导 0（如 8'h01 写成 b1），必须按声明位宽补齐
+    # 后才能做位宽正确的有符号解释，否则 0x01 会被当成 1 位有符号数 -1。
+    if len(s) > width:
+        s = s[-width:]
+    s = s.zfill(width)
     v = int(s, 2)
-    if w and v >= (1 << (w - 1)):
-        v -= (1 << w)
+    if v >= (1 << (width - 1)):
+        v -= (1 << width)
     return v
 
 
 def _parse_vcd_full(path):
-    """解析 VCD 并保留完整层级名（$scope/$upscope）。"""
+    """解析 VCD 并保留完整层级名（$scope/$upscope）与各信号声明位宽。"""
     var_order = []
     events = {}
+    widths = {}
     scope = []
     cur = 0
     in_defs = True
@@ -111,8 +118,10 @@ def _parse_vcd_full(path):
             if len(parts) >= 5:
                 vid = parts[3]
                 name = parts[4]
+                width = int(parts[2])
                 full = '.'.join(scope + [name]) if scope else name
                 var_order.append((vid, full))
+                widths[vid] = width
                 events[vid] = []
             continue
         if line.startswith('$enddefinitions'):
@@ -130,18 +139,24 @@ def _parse_vcd_full(path):
                     events[vid].append((cur, m.group(1).lower()))
         elif len(line) >= 2 and line[0] in '01xXzZ' and line[1] in events:
             events[line[1]].append((cur, line[0].lower()))
-    return var_order, events
+    return var_order, events, widths
 
 
-def _slice_vec(val, width, index):
-    """从 MSB-first 二进制向量里取第 index 个 width 位字，返回带符号整数。"""
+def _slice_vec(val, total_width, width, index):
+    """从 MSB-first 二进制向量里取第 index 个 width 位字，返回带符号整数。
+
+    total_width 是信号声明的总位宽；VCD 二进制值省略前导 0，因此先按
+    total_width 补齐再切片，否则高位字会被截掉/错位。
+    """
     s = str(val or '')
     if s.startswith('b'):
         s = s[1:]
     if not re.fullmatch(r'[01xz]+', s):
         return 0
-    total = len(s)
-    start = total - (index + 1) * width
+    if len(s) > total_width:
+        s = s[-total_width:]
+    s = s.zfill(total_width)
+    start = total_width - (index + 1) * width
     if start < 0:
         return 0
     part = s[start:start + width]
@@ -187,13 +202,13 @@ def debug_sim(problem_id, code):
         if rc != 0:
             return {'error': 'simulation failed', 'log': out[-3000:]}
 
-        var_order, events = _parse_vcd_full(os.path.join(workdir, 'wave.vcd'))
-        return _parse_states(var_order, events)
+        var_order, events, widths = _parse_vcd_full(os.path.join(workdir, 'wave.vcd'))
+        return _parse_states(var_order, events, widths)
     finally:
         shutil.rmtree(workdir, ignore_errors=True)
 
 
-def _parse_states(var_order, events):
+def _parse_states(var_order, events, widths):
     N = DEBUG_N
     pe_map = {}
     clk_id = None
@@ -224,9 +239,13 @@ def _parse_states(var_order, events):
         entry = pe_map.setdefault((r, c), {})
         if tail == 'w':
             entry['w'] = vid
-        elif tail in ('a_out', 'a_in'):
+        elif tail == 'a_in':
+            entry['a'] = vid
+        elif tail == 'a_out':
             entry.setdefault('a', vid)
-        elif tail in ('psum_out', 'psum_in'):
+        elif tail == 'psum_out':
+            entry['p'] = vid
+        elif tail == 'psum_in':
             entry.setdefault('p', vid)
 
     if not pe_map:
@@ -241,18 +260,21 @@ def _parse_states(var_order, events):
         a_data = []
         if a_id is not None:
             val = _value_at(events.get(a_id, []), t)
-            a_data = [_slice_vec(val, 8, r) for r in range(N)]
+            a_data = [_slice_vec(val, widths.get(a_id, N * 8), 8, r) for r in range(N)]
         psum_out = []
         if pout_id is not None:
             val = _value_at(events.get(pout_id, []), t)
-            psum_out = [_slice_vec(val, 32, c) for c in range(N)]
+            psum_out = [_slice_vec(val, widths.get(pout_id, N * 32), 32, c) for c in range(N)]
         pes = []
         for (r, c), ids in sorted(pe_map.items()):
             pes.append({
                 'row': r, 'col': c,
-                'w': _to_int(_value_at(events.get(ids.get('w'), []), t)),
-                'a': _to_int(_value_at(events.get(ids.get('a'), []), t)),
-                'p': _to_int(_value_at(events.get(ids.get('p'), []), t)),
+                'w': _to_int(_value_at(events.get(ids.get('w'), []), t),
+                             widths.get(ids.get('w'))),
+                'a': _to_int(_value_at(events.get(ids.get('a'), []), t),
+                             widths.get(ids.get('a'))),
+                'p': _to_int(_value_at(events.get(ids.get('p'), []), t),
+                             widths.get(ids.get('p'))),
             })
         states.append({'cycle': ci, 'aData': a_data, 'psumOut': psum_out, 'pes': pes})
     return {'N': N, 'states': states, 'peCount': len(pe_map)}
