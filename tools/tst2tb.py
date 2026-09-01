@@ -109,41 +109,6 @@ CHIPS = {
                         ('outM', 16, 'out'), ('writeM', 1, 'out'),
                         ('addressM', 15, 'out'), ('pc', 15, 'out')),
                 probes={'DRegister[]': ('cpu.d_reg', 16)}),
-    'ComputerAdd': dict(tst='ref/05/ComputerAdd.tst', cmp='ref/05/ComputerAdd.cmp', inst='u_comp',
-                        ports=P(('clk', 1, 'clk'), ('reset', 1, 'in'),
-                                ('outM', 16, 'out'), ('writeM', 1, 'out'),
-                                ('addressM', 15, 'out'), ('pc', 15, 'out'),
-                                ('dbg_we', 1, 'in'), ('dbg_addr', 14, 'in'), ('dbg_wdata', 16, 'in')),
-                        probes={'ARegister[]': ('u_comp.u_cpu.a_reg', 16),
-                                'ARegister[0]': ('u_comp.u_cpu.a_reg', 16),
-                                'DRegister[]': ('u_comp.u_cpu.d_reg', 16),
-                                'DRegister[0]': ('u_comp.u_cpu.d_reg', 16),
-                                'PC[]': ('u_comp.u_cpu.pc_reg', 15),
-                                'RAM16K[0]': ('u_comp.u_mem.u_ram.mem[0]', 16),
-                                'RAM16K[1]': ('u_comp.u_mem.u_ram.mem[1]', 16),
-                                'RAM16K[2]': ('u_comp.u_mem.u_ram.mem[2]', 16)}),
-    'ComputerMax': dict(tst='ref/05/ComputerMax.tst', cmp='ref/05/ComputerMax.cmp', inst='u_comp',
-                        ports=P(('clk', 1, 'clk'), ('reset', 1, 'in'),
-                                ('outM', 16, 'out'), ('writeM', 1, 'out'),
-                                ('addressM', 15, 'out'), ('pc', 15, 'out'),
-                                ('dbg_we', 1, 'in'), ('dbg_addr', 14, 'in'), ('dbg_wdata', 16, 'in')),
-                        probes={'ARegister[]': ('u_comp.u_cpu.a_reg', 16),
-                                'DRegister[]': ('u_comp.u_cpu.d_reg', 16),
-                                'PC[]': ('u_comp.u_cpu.pc_reg', 15),
-                                'RAM16K[0]': ('u_comp.u_mem.u_ram.mem[0]', 16),
-                                'RAM16K[1]': ('u_comp.u_mem.u_ram.mem[1]', 16),
-                                'RAM16K[2]': ('u_comp.u_mem.u_ram.mem[2]', 16)}),
-    'ComputerRect': dict(tst='ref/05/ComputerRect.tst', cmp='ref/05/ComputerRect.cmp', inst='u_comp',
-                         ports=P(('clk', 1, 'clk'), ('reset', 1, 'in'),
-                                 ('outM', 16, 'out'), ('writeM', 1, 'out'),
-                                 ('addressM', 15, 'out'), ('pc', 15, 'out'),
-                                 ('dbg_we', 1, 'in'), ('dbg_addr', 14, 'in'), ('dbg_wdata', 16, 'in')),
-                         probes={'ARegister[]': ('u_comp.u_cpu.a_reg', 16),
-                                 'DRegister[]': ('u_comp.u_cpu.d_reg', 16),
-                                 'PC[]': ('u_comp.u_cpu.pc_reg', 15),
-                                 'RAM16K[0]': ('u_comp.u_mem.u_ram.mem[0]', 16),
-                                 'RAM16K[1]': ('u_comp.u_mem.u_ram.mem[1]', 16),
-                                 'RAM16K[2]': ('u_comp.u_mem.u_ram.mem[2]', 16)}),
     # ---------------- Project 6（自定义 NPU 扩展）----------------
     # manual_tb=True 表示 testbench 是手工维护的（tb/06/*_tb.v），
     # tools/tst2tb.py 与 server/gen_wave.py 遇到时不会用 .tst/.cmp 覆盖。
@@ -158,6 +123,17 @@ CHIPS = {
                           ports=P(('clk', 1, 'clk'), ('arst', 1, 'in'), ('w_load', 1, 'in'),
                                   ('w_data', 512, 'in'), ('a_data', 64, 'in'),
                                   ('psum_out', 256, 'out'))),
+    # ---------------- Project 7（Chapter 3：GEMM 控制器与卷积数据通路）----------------
+    # 框架默认 C_IN=C_OUT=4（阵列 N=4），iverilog 逐拍仿真开销可控。
+    'ReLU': dict(manual_tb=True, inst='dut',
+                 ports=P(('in', 8, 'in'), ('out', 8, 'out'))),
+    'MaxPool': dict(manual_tb=True, inst='dut',
+                    ports=P(('in0', 8, 'in'), ('in1', 8, 'in'),
+                            ('in2', 8, 'in'), ('in3', 8, 'in'), ('out', 8, 'out'))),
+    'ConvUnit': dict(manual_tb=True, inst='dut',
+                     ports=P(('clk', 1, 'clk'), ('arst', 1, 'in'), ('wr_ifmap', 1, 'in'),
+                             ('ifmap_in', 32, 'in'), ('w_data', 1152, 'in'), ('start', 1, 'in'),
+                             ('out_data', 32, 'out'), ('out_valid', 1, 'out'), ('done', 1, 'out'))),
 }
 
 MODULE = {
@@ -173,10 +149,9 @@ MODULE = {
     'RAM8': 'n2t_ram8', 'RAM64': 'n2t_ram64', 'RAM512': 'n2t_ram512',
     'RAM4K': 'n2t_ram4k', 'RAM16K': 'n2t_ram16k', 'PC': 'n2t_pc',
     'CPU': 'n2t_cpu',
-    'ComputerAdd': 'n2t_computer', 'ComputerMax': 'n2t_computer',
-    'ComputerRect': 'n2t_computer',
     'PE': 'n2t_pe', 'SystolicArray': 'n2t_systolic_array',
     'ShiftRegister': 'n2t_shift_register',
+    'ReLU': 'n2t_relu', 'MaxPool': 'n2t_maxpool', 'ConvUnit': 'n2t_conv_unit',
 }
 
 PROJECT = {
@@ -186,9 +161,10 @@ PROJECT = {
     'HalfAdder': '02', 'FullAdder': '02', 'Add16': '02', 'Inc16': '02', 'ALU': '02',
     'Bit': '03', 'Register': '03', 'RAM8': '03', 'RAM64': '03', 'RAM512': '03',
     'RAM4K': '03', 'RAM16K': '03', 'PC': '03',
-    'CPU': '05', 'ComputerAdd': '05', 'ComputerMax': '05', 'ComputerRect': '05',
+    'CPU': '05',
     'PE': '06', 'SystolicArray': '06',
     'ShiftRegister': '06',
+    'ReLU': '07', 'MaxPool': '07', 'ConvUnit': '07',
 }
 
 

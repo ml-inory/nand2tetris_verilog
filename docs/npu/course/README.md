@@ -41,6 +41,6 @@ python3 -m venv /tmp/pdfenv
 | 0 | 预备知识：概念自测与手算练习（无代码） |
 | 1 | 设计文档 + `n2t_npu_top` 端口草案（未实现） |
 | 2 | `assignment/06`：ShiftRegister、PE 与 SystolicArray（已搭好框架） |
-| 3 | 后续 `assignment/07`：控制器、激活/池化、FC |
+| 3 | `assignment/07`：ReLU、MaxPool、ConvUnit（框架已搭，参考实现在 `solution/07`） |
 | 4 | 后续 `tools/npu_mnist.py` 与 `npu_data/` |
 | 5 | `solution/07` posedge Hack 整机 + NPU 的 MMIO 集成 |

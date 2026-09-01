@@ -919,6 +919,38 @@ def render_assignment(ch, meta, st):
     story.append(Paragraph('Introduction', st['h1']))
     story += [Paragraph(x, st['body']) for x in a['intro']]
 
+    # 作业内容说明（可选）：以后每章的 assignment 都应提供 'content'，
+    # 把作业涉及的模块/接口/时序/验证方法讲清楚，而不是只有书面题。
+    content = a.get('content')
+    if content:
+        story.append(Paragraph('作业内容说明', st['h1']))
+        for sec in content:
+            story.append(Paragraph(sec['title'], st['h2']))
+            if 'body' in sec:
+                story += [Paragraph(x, st['body']) for x in sec['body']]
+            if 'bullets' in sec:
+                story += bullets(st, sec['bullets'])
+            if 'table' in sec:
+                cols = len(sec['table'][0])
+                widths = sec.get('colWidths') or [16.6 / cols] * cols
+                tbl = Table(sec['table'], colWidths=[float(w) * cm for w in widths])
+                tbl.setStyle(TableStyle([
+                    ('FONTNAME', (0, 0), (-1, -1), FONT),
+                    ('BACKGROUND', (0, 0), (-1, 0), ORANGE),
+                    ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+                    ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#CCCCCC')),
+                    ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, LIGHT]),
+                    ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                    ('LEFTPADDING', (0, 0), (-1, -1), 5),
+                    ('RIGHTPADDING', (0, 0), (-1, -1), 5),
+                    ('TOPPADDING', (0, 0), (-1, -1), 4),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+                ]))
+                story.append(tbl)
+                if sec.get('note'):
+                    story.append(Paragraph('注：' + sec['note'], st['hint']))
+            story.append(Spacer(1, 0.2 * cm))
+
     story.append(Paragraph('Questions', st['h1']))
     for i, item in enumerate(a['questions'], 1):
         story.append(Paragraph('Q%d. %s' % (i, item['q']), st['q']))
@@ -1465,6 +1497,37 @@ CHAPTERS = [
             'intro': [
                 '本章作业分两部分：补全 RTL 并跑通测试；完成书面推导题。',
             ],
+            'content': [
+                {'title': '模块总览',
+                 'bullets': [
+                     '本章仓库提供三个模块，模板在 `assignment/06/`，参考实现在 `solution/06/`：',
+                     '`n2t_shift_register`：参数化移位寄存器，用于斜输入与输出对齐；',
+                     '`n2t_pe`：单 PE，int8 x int8 + int32 累加；',
+                     '`n2t_systolic_array`：N x N weight-stationary 脉动阵列，内部例化上面两个模块。',
+                     '对应测试台：`tb/06/ShiftRegister_tb.v`、`PE_tb.v`、`SystolicArray_tb.v`。',
+                 ]},
+                {'title': '端口要点',
+                 'table': [
+                     ['模块', '关键端口/参数', '行为'],
+                     ['ShiftRegister', 'clk/arst/en/in/out；DEPTH 参数', 'en=1 时每拍移入，out 延迟 DEPTH 拍；DEPTH=0 直通'],
+                     ['PE', 'w_load/w_in/a_in/psum_in；A_W/W_W/P_W', 'w_load 时写入权重；psum_out = psum_in + a_in*w（有符号）'],
+                     ['SystolicArray', 'w_load/w_data/a_data/psum_out；N/A_W/W_W/P_W', 'w_data 行主序 N*N*W_W；每拍送一个 N 通道向量；行 i 输入延迟 i 拍；底部按列对齐输出'],
+                 ],
+                 'colWidths': [2.8, 5.4, 8.4]},
+                {'title': '时序契约',
+                 'bullets': [
+                     'w_load 高电平批量装载权重（1 拍）；之后每拍送一个 a_data 向量；',
+                     '最后一个输入送入后再等 N-1 拍，开始逐拍输出；第 col 列额外延迟 N-1-col 拍对齐。',
+                     '总周期数 ≈ 装载 1 拍 + 输入 N 拍 + 排空 2N-2 拍。',
+                     '端口全部 posedge，异步复位 arst 高有效。',
+                 ]},
+                {'title': '验证方法',
+                 'bullets': [
+                     '运行 `make sim-06`（学生模式）或 `make sim-06 RTLDIR=solution`（答案回归）。',
+                     'ShiftRegister 覆盖 DEPTH=0 直通与多级延迟；PE 覆盖正负权重/激活；SystolicArray 用 8x8 矩阵乘验证 C[k][col] = sum_row A[row][k]*W[row][col]。',
+                     '常见错误：忘记 signed 导致负数乘法错；w_data 位宽写成 N*W_W；复位不完整导致初值 x 传播。',
+                 ]},
+            ],
             'questions': [
                 {'q': '手工模拟一个 3x3 脉动阵列计算 C = A^T * B（A、B 均为 3x3 int8），画出前 5 拍每个 PE 的输入与 psum。',
                  'hint': '用表格列出 cycle、row、a、psum。'},
@@ -1609,6 +1672,67 @@ CHAPTERS = [
         'assignment': {
             'intro': [
                 '本章作业包含控制器设计、RTL 实现与 golden 对比。',
+            ],
+            'content': [
+                {'title': '模块总览',
+                 'bullets': [
+                     '本章仓库新增三个模块，模板在 `assignment/07/`，参考实现在 `solution/07/`：',
+                     '`n2t_relu`：量化域 ReLU，out = max(in, 0)，纯组合逻辑，零乘法；',
+                     '`n2t_maxpool`：MaxPool 2x2，四个 int8 取最大，只用比较器；',
+                     '`n2t_conv_unit`：3x3 卷积控制器 + 数据通路，例化第 2 章的 `n2t_systolic_array` 作为计算核心。',
+                     '对应测试台：`tb/07/ReLU_tb.v`、`MaxPool_tb.v`、`ConvUnit_tb.v`。',
+                 ]},
+                {'title': 'ConvUnit 参数与端口',
+                 'body': [
+                     '框架默认 C_IN=C_OUT=4（阵列 N=4）以控制 iverilog 仿真时间；把参数调成 8 即复用 8x8 阵列，逻辑不变。',
+                 ],
+                 'table': [
+                     ['参数', '默认', '说明'],
+                     ['H / W', '8 / 8', '输入特征图高/宽'],
+                     ['C_IN / C_OUT', '4 / 4', '输入/输出通道（须等于阵列 N）'],
+                     ['K', '3', '卷积核尺寸'],
+                     ['STRIDE / PAD', '1 / 0', '支持 stride=1/2、pad=0/1'],
+                     ['A_W / W_W / P_W', '8 / 8 / 32', '激活/权重/累加位宽（有符号）'],
+                 ],
+                 'colWidths': [3.0, 2.2, 11.4],
+                 'note': '阵列延迟 LAT = 2*(N-1) 拍（本框架 N=4 时为 6 拍）。'},
+                {'title': 'ConvUnit 端口',
+                 'table': [
+                     ['端口', '方向', '说明'],
+                     ['clk / arst', '时钟/复位', 'posedge；异步复位，高有效'],
+                     ['wr_ifmap', 'in', '装载特征图：为 1 时每拍写入一个像素'],
+                     ['ifmap_in', 'in', '一个像素的 C_IN 个通道（int8）'],
+                     ['w_data', 'in', '扁平权重 W[oc][ic][ky][kx]，start 时整体写入'],
+                     ['start', 'in', '特征图装载完成后启动一次推理'],
+                     ['out_data', 'out', '一拍一个输出像素的 C_OUT 个通道'],
+                     ['out_valid / done', 'out', '输出有效 / 整幅图推理完成（脉冲一拍）'],
+                 ],
+                 'colWidths': [3.0, 2.2, 11.4]},
+                {'title': '计算语义',
+                 'bullets': [
+                     'out[oy][ox][oc] = relu_clamp( sum_{ky,kx,ic} ifmap[oy*STRIDE+ky-PAD][ox*STRIDE+kx-PAD][ic] * W[oc][ic][ky][kx] )',
+                     '窗口越界按 0 补齐；relu_clamp(x) = (x<0) ? 0 : (x>127 ? 127 : x)。',
+                     '3x3xC_IN 的 im2col 行长度 9*C_IN 超过阵列宽度，按 (ky,kx) 拆成 9 个 tap；',
+                     '每个 tap 是一次 C_IN x C_OUT GEMM，外部 int32 累加器跨 tap 累加，得到一个输出像素的所有输出通道。',
+                 ]},
+                {'title': '时序与状态机',
+                 'bullets': [
+                     'FSM：IDLE -> LOAD_W -> RUN -> DRAIN -> EMIT -> DONE。',
+                     'IDLE：wr_ifmap=1 期间逐拍装载特征图；start 后进入 LOAD_W。',
+                     'LOAD_W：拉高 w_load 两拍，把第 tap 个权重矩阵写入阵列。',
+                     'RUN：逐拍送 OPIX 个输入向量并收集输出；控制器用 warmup=LAT+1 跳过阵列填充期的无效输出，保证累加索引对齐。',
+                     '每个 tap 送完后补 FLUSH 个 0 冲掉流水，否则上一 tap 残留在阵列里的激活会污染下一 tap。',
+                     'DRAIN：pending==0（本 tap 全部结果收完、流水已清）后切下一个 tap。',
+                     'EMIT：逐拍输出 relu_clamp 后的像素（out_valid=1）；DONE：done 脉冲一拍，回 IDLE。',
+                 ]},
+                {'title': '验证方法',
+                 'bullets': [
+                     'golden 内嵌在 testbench 中（int8 整数运算，避免浮点误差），与 RTL 逐元素比对。',
+                     'ConvUnit_tb 四组配置并行：stride=1/pad=0（36 像素）、stride=1/pad=1（64 像素）、stride=2/pad=0（9 像素）、stride=2/pad=1（16 像素），共 125 项检查。',
+                     '运行：`make sim-07`（学生模式，只跑 NPU 三题）；`make sim-07 RTLDIR=solution`（答案回归，含 posedge Hack 已知库）。',
+                     '全连接层 = ConvUnit 配 K=1：没有滑动窗口，直接逐拍喂输入向量，复用同一套控制器与阵列。',
+                     '常见错误：忘记 signed 导致负数乘法错；tap 之间不冲流水；累加器不复位；warmup 错一拍导致输出整体平移。',
+                 ]},
             ],
             'questions': [
                 {'q': '画出卷积控制器的 FSM，标注每个状态做什么、什么时候跳转。',

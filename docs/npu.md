@@ -24,6 +24,16 @@ assignment/06/               学生作业模板（实现留空）
 tb/06/ShiftRegister_tb.v     ShiftRegister 单元测试
 tb/06/PE_tb.v                PE 单元测试
 tb/06/SystolicArray_tb.v     8x8 阵列矩阵乘测试
+
+solution/07/ReLU.v           量化域 ReLU（负数清零）
+solution/07/MaxPool.v        MaxPool 2x2（比较器 + 计数器语义）
+solution/07/ConvUnit.v       3x3 卷积控制器 + 数据通路（复用 06 阵列，tap 外循环
+                             累加，FSM：IDLE/LOAD_W/RUN/DRAIN/EMIT/DONE）
+assignment/07/               学生作业模板（实现留空）
+tb/07/ReLU_tb.v              ReLU 全量 int8 测试
+tb/07/MaxPool_tb.v           MaxPool 典型窗口测试
+tb/07/ConvUnit_tb.v          卷积 golden 测试：stride=1/2、pad=0/1 四组配置
+                             （内嵌 int8 参考实现，逐元素比对）
 ```
 
 运行：
@@ -31,6 +41,8 @@ tb/06/SystolicArray_tb.v     8x8 阵列矩阵乘测试
 ```bash
 make sim-06 RTLDIR=solution   # 答案回归
 make sim-06                   # 学生模式（需要先补全模板）
+make sim-07 RTLDIR=solution   # Chapter 3 答案回归（含 posedge Hack 已知库）
+make sim-07                   # 学生模式：只跑 ReLU/MaxPool/ConvUnit 三题
 ```
 
 官方 Hack（Project 5）为对齐官方测试向量使用 negedge；为了让 NPU 与 Hack
@@ -93,6 +105,9 @@ Hack 官方部分（Project 1/2/3/5）仍使用 negedge，以对齐官方测试�
 1. 阅读 `docs/npu.md` 与 `solution/06/` 的注释；
 2. 补全 `assignment/06/PE.v` 与 `assignment/06/SystolicArray.v`；
 3. 跑 `make sim-06`，全部 PASS 即通过。
+4. 阅读 `docs/npu/course/Chapter03/` 与 `solution/07/` 的注释；
+5. 补全 `assignment/07/ReLU.v`、`MaxPool.v`、`ConvUnit.v`；
+6. 跑 `make sim-07`，全部 PASS 即通过。
 
 实现提示：
 
@@ -104,9 +119,9 @@ Hack 官方部分（Project 1/2/3/5）仍使用 negedge，以对齐官方测试�
 
 ```text
 [x] PE + 8x8 SystolicArray + 测试台
-[ ] 权重/输入 SRAM + GEMM 控制器
-[ ] 卷积数据通路（padding/stride/im2col 或 line buffer）
-[ ] ReLU / MaxPool / 全连接
+[x] Chapter 3 作业框架：ReLU / MaxPool / ConvUnit 控制器
+    （内部特征图/权重缓冲 + tap 外循环 + 四组 stride/pad golden 测试）
+[ ] 学生完成 Chapter 3（全连接 = ConvUnit 配 K=1 即可复用阵列）
 [ ] Python：训练 MNIST 小模型 -> int8 量化 -> 导出 hex + golden
 [ ] 端到端分类仿真
 [ ] MMIO 挂进 Hack Computer（地址段 0x7000+）+ Hack 驱动

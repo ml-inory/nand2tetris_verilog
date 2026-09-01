@@ -44,7 +44,9 @@ sim-01 sim-02 sim-03 sim-05 sim-06 sim-07: sim-%: tb
 	@mkdir -p $(SIMDIR)
 	@echo "RTLDIR = $(RTLDIR)"
 	@fail=0; \
-	for tb in tb/$*/*_tb.v; do \
+	tbs="$(filter-out %Posedge_tb.v,$(wildcard tb/$*/*_tb.v))"; \
+	if [ "$(RTLDIR)" = "solution" ]; then tbs="$$tbs $(wildcard tb/$*/*_Posedge_tb.v)"; fi; \
+	for tb in $$tbs; do \
 		mod=$$(basename $$tb .v); \
 		echo "== $$mod =="; \
 		if $(IVERILOG) -g2012 -s $$mod -o $(SIMDIR)/$$mod.vvp $(RTL) $$tb && \
